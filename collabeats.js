@@ -4,7 +4,7 @@ if (Meteor.isClient) {
   };
 
   Template.hello.getInterval = function() {
-    return getInterval();
+    return tempo;
   };
 
   var sound = new Howl({
@@ -27,7 +27,7 @@ if (Meteor.isClient) {
   };
 
   var getInterval = function() {
-    return tempo;
+    return 60/tempo*1000;
   };
 
   Template.hello.events({
@@ -36,12 +36,19 @@ if (Meteor.isClient) {
       if (typeof console !== 'undefined')
         sound.play();
     },
-    'click input#start-beat': function() {
-      looping = true;
-      loopFunc();
+    'click input#start-beat': function(event) {
+      if (looping) {
+        looping = false;
+        event.currentTarget.value = "Start Loop";
+      }
+      else {
+        looping = true;
+        loopFunc();
+        event.currentTarget.value = "Stop Loop";
+      }
     },
-    'change input#tempo': function() {
-      console.log(this);
+    'change input#tempo': function(event) {
+      tempo = event.currentTarget.value;
     }
   });
 }
