@@ -9,5 +9,9 @@
 <template name="hello">
   <h1>Hello World!</h1>
   {{greeting}}
-  <input type="button" value="Click" />
+  <input type="button" value="Play Sound" id='play-once'/>
+  <input type="button" value="Start Loop" id='start-beat'/>
+  <br/>
+  Tempo:
+  <input type='text' value='{{getInterval}}' id='tempo'/>
 </template>
