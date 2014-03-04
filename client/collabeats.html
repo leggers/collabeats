@@ -3,14 +3,14 @@
 </head>
 
 <body>
-  {{> hello}}
+  <div class='container'>
+    {{> hello}}
+  </div>
 </body>
 
 <template name="hello">
-  <h1>Collabeats</h1>
-  <br/>
+  {{> header}}
   {{greeting}}
-
   <input type="button" value="Play Sound" id='play-once'/>
   <input type="button" value="Start Loop" id='start-beat'/>
   <br/>
@@ -19,7 +19,11 @@
   {{#each getSteps}}
     <br/>
     <div class='step {{#if active}} active {{else}} inactive {{/if}}'>
-      {{_id}}
     </div>
   {{/each}}
+</template>
+
+<template name='header'>
+  <h1>Collabeats</h1>
+  <br/>
 </template>

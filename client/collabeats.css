@@ -1,1 +1,12 @@
 /* CSS declarations go here */
+
+body {
+    background-color: rgb(83, 87, 89);
+    color: rgb(254, 119, 45);
+}
+
+.step {
+    width: 50px;
+    background-color: black;
+    height: 50px;
+}
