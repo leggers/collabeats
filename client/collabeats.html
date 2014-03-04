@@ -14,4 +14,10 @@
   <br/>
   Tempo:
   <input type='text' value='{{getInterval}}' id='tempo'/>
+  {{#each getSteps}}
+    <br/>
+    <div class='step {{#if active}} active {{else}} inactive {{/if}}'>
+        {{_id}}
+    </div>
+  {{/each}}
 </template>

@@ -6,6 +6,10 @@ Template.hello.getInterval = function() {
   return tempo;
 };
 
+Template.hello.getSteps = function () {
+  return Steps.find();
+};
+
 var sound = new Howl({
   urls: ['/808-sample-pack/closed-hihat/closedHat1.mp3'],
   onloaderror: function() {console.log('error!');},

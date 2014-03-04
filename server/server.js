@@ -6,7 +6,7 @@ Meteor.startup(function () {
                 'cymbal/cymbal0001.mp3',
                 ];
     for(var i = 0; i < urls.length; i++) {
-      Steps.insert({sound_url: folder + urls[i]});
+      Steps.insert({sound_url: folder + urls[i], active: true});
     }
   }
 });
