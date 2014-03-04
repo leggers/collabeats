@@ -13,7 +13,7 @@ Steps = new Meteor.Collection('steps');
 Steps.allow({
   insert: function () {
     // no cowboy inserts; use addBeats method
-    return false;
+    return true; // for a little while allow cowboy inserts
   },
   update: function (userId, step, fields, modifier) {
     //no coboy updates; use toggleStep method
