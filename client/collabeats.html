@@ -16,14 +16,20 @@
   <br/>
   Tempo:
   <input type='text' value='{{getInterval}}' id='tempo'/>
-  {{#each getSteps}}
-    <br/>
-    <div class='step {{#if active}} active {{else}} inactive {{/if}}'>
-    </div>
-  {{/each}}
+  {{> channels}}
 </template>
 
 <template name='header'>
   <h1>Collabeats</h1>
   <br/>
+</template>
+
+<template name='channels'>
+  {{#each channels}}
+    <div class='channel'>
+      {{#each steps}}
+        <div class='step'></div>
+      {{/each}}
+    </div>
+  {{/each}}
 </template>

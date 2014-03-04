@@ -54,3 +54,13 @@ Template.hello.events({
     tempo = event.currentTarget.value;
   }
 });
+
+Template.channels.channels = function () {
+  return Channels.find();
+};
+
+Template.channels.events({
+  'click .step': function (event) {
+    console.log(event.currentTarget);
+  }
+});
