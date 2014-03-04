@@ -4,7 +4,7 @@
   Each step is a doc in the Steps collection:
     sound_url: url string of the sample on the server
     active: boolean indicating if the sound should be played on that step
-    last_change: UUID of last person to change the step
+    lastChanger: UUID of last person to change the step
     ****there will be more here (once sound manipulation happens)*****
 */
 
@@ -22,5 +22,11 @@ Steps.allow({
   remove: function () {
     // no cowboy removes; use removeBeats method
     return false;
+  }
+});
+
+Meteor.methods({
+  toggleStep: function (stepId, activeValue) {
+    Steps.update({_id: stepId}, {lastChanger: this.userId, active: activeValue});
   }
 });
