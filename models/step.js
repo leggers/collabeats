@@ -10,3 +10,17 @@
 
 Steps = new Meteor.Collection('steps');
 
+Steps.allow({
+  insert: function () {
+    // no cowboy inserts; use addBeats method
+    return false;
+  },
+  update: function (userId, step, fields, modifier) {
+    //no coboy updates; use toggleStep method
+    return false;
+  },
+  remove: function () {
+    // no cowboy removes; use removeBeats method
+    return false;
+  }
+});
