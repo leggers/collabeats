@@ -30,17 +30,16 @@
       <div class='controls'>
         {{name}}
       </div>
-      <div class='step-container'>
-        {{#each steps}}
-          <div class='step'>
-            {{#if active}}
-              <div class='active'></div>
-            {{else}}
-              <div class='inactive'></div>
-            {{/if}}
-          </div>
-        {{/each}}
-      </div>
+      {{> steps}}
     </div>
   {{/each}}
+</template>
+
+<template name='steps'>
+  <div class='step-container'>
+    {{#getStep this}}
+      <div class='step{{#if active}} active{{else}} inactive{{/if}}'>
+      </div>
+    {{/getStep}}
+  </div>
 </template>

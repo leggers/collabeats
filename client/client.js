@@ -59,9 +59,18 @@ Template.channels.channels = function () {
   return Channels.find();
 };
 
-Template.channels.events({
+Template.steps.events({
   'click .step': function (event) {
     console.log(event.currentTarget);
     console.log(this);
   }
 });
+
+Template.steps.getStep = function (channel, options) {
+  var contents = '';
+  for (var i = 0; i < channel.steps.length; i++) {
+    stepId = channel.steps[i];
+    contents += options.fn(Steps.find({_id: stepId}));
+  }
+  return contents;
+};
