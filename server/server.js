@@ -11,7 +11,7 @@ Meteor.startup(function () {
               'cymbal/cymbal0001.mp3',
               ];
   for(var i = 0; i < urls.length; i++) {
-    Meteor.call('addChannel', {numSteps: 8, channelSoundUrl: urls[i], roomId: 0, name: 'channel' + i});
+    Meteor.call('addChannel', {numSteps: 16, channelSoundUrl: urls[i], roomId: 0, name: 'channel' + i});
   }
 });
 
