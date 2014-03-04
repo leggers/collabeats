@@ -8,7 +8,7 @@ if (Meteor.isClient) {
   };
 
   var sound = new Howl({
-    urls: ['/808-sample-pack/Closed-Hihat/closedHat1.mp3'],
+    urls: ['/808-sample-pack/closed-hihat/closedHat1.mp3'],
     onloaderror: function() {console.log('error!');},
     onload: function() {console.log('loaded');}
   });
