@@ -5,15 +5,27 @@ body {
     color: rgb(254, 119, 45);
 }
 
-.step {
+.channel {
+    margin-top: 5px;
+    height: 50px;
+}
+
+.channel > .controls {
+    width: 200px;
+    background-color: black;
+    float: left;
+}
+
+.channel > .step-container {
+    height: inherit;
+    width: 900px;
+    float: left;
+}
+
+.channel > .step-container > .step {
     width: 5%;
     background-color: black;
     height: inherit;
     float: left;
     margin-left: 5px;
-}
-
-.channel {
-    margin-top: 5px;
-    height: 50px;
 }

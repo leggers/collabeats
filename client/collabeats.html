@@ -27,9 +27,14 @@
 <template name='channels'>
   {{#each channels}}
     <div class='channel'>
-      {{#each steps}}
-        <div class='step'></div>
-      {{/each}}
+      <div class='controls'>
+        {{name}}
+      </div>
+      <div class='step-container'>
+        {{#each steps}}
+          <div class='step'></div>
+        {{/each}}
+      </div>
     </div>
   {{/each}}
 </template>
