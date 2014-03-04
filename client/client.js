@@ -62,5 +62,6 @@ Template.channels.channels = function () {
 Template.channels.events({
   'click .step': function (event) {
     console.log(event.currentTarget);
+    console.log(this);
   }
 });

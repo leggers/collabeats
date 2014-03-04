@@ -32,7 +32,13 @@
       </div>
       <div class='step-container'>
         {{#each steps}}
-          <div class='step'></div>
+          <div class='step'>
+            {{#if active}}
+              <div class='active'></div>
+            {{else}}
+              <div class='inactive'></div>
+            {{/if}}
+          </div>
         {{/each}}
       </div>
     </div>
