@@ -1,5 +1,5 @@
 Template.hello.greeting = function () {
-  return "Welcome to collabeats.";
+  return "808 meets Google Docs.";
 };
 
 Template.hello.getInterval = function() {

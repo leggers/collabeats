@@ -7,8 +7,10 @@
 </body>
 
 <template name="hello">
-  <h1>Hello World!</h1>
+  <h1>Collabeats</h1>
+  <br/>
   {{greeting}}
+
   <input type="button" value="Play Sound" id='play-once'/>
   <input type="button" value="Start Loop" id='start-beat'/>
   <br/>
@@ -17,7 +19,7 @@
   {{#each getSteps}}
     <br/>
     <div class='step {{#if active}} active {{else}} inactive {{/if}}'>
-        {{_id}}
+      {{_id}}
     </div>
   {{/each}}
 </template>
