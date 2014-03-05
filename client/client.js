@@ -11,7 +11,7 @@ Template.hello.getSteps = function () {
 };
 
 var sound = new Howl({
-  urls: ['/808-sample-pack/closed-hihat/closedHat1.mp3'],
+  urls: ['/808-sample-pack/cymbal/cymbal0007.mp3'],
   onloaderror: function() {console.log('error!');},
   onload: function() {console.log('loaded');}
 });
@@ -78,6 +78,6 @@ Template.channels.events({
   }
 });
 
-Template.channels.getStep = function (stepId, options) {
-  return options.fn(Steps.findOne({_id: stepId}));
+Template.step.getStep = function (stepId, options) {
+  return Steps.findOne({_id: stepId});
 };
