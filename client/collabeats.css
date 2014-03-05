@@ -10,30 +10,58 @@ body {
     height: 50px;
 }
 
-.channel > .controls {
+.channel .controls {
     width: 200px;
     background-color: black;
     float: left;
     height: inherit;
 }
 
-.channel > .step-container {
+.channel .step-container {
     height: inherit;
     width: 900px;
     float: left;
 }
 
-.channel > .step-container > .step {
-    width: 5%;
+.channel .step-container .step {
+    width: 50px;
     height: inherit;
     float: left;
     margin-left: 5px;
 }
 
+.step:nth-of-type(16n+1),
+.step:nth-of-type(16n+2),
+.step:nth-of-type(16n+3),
+.step:nth-of-type(16n+4) {
+    background-color: #5a84e5;
+}
+
+.step:nth-of-type(16n+5),
+.step:nth-of-type(16n+6),
+.step:nth-of-type(16n+7),
+.step:nth-of-type(16n+8) {
+    background-color: #83a8ff;
+}
+
+.step:nth-of-type(16n+9),
+.step:nth-of-type(16n+10),
+.step:nth-of-type(16n+11),
+.step:nth-of-type(16n+12) {
+    background-color: #c1d3ff;
+}
+
+.step:nth-of-type(16n+13),
+.step:nth-of-type(16n+14),
+.step:nth-of-type(16n+15),
+.step:nth-of-type(16n+16) {
+    background-color: #eff4ff;
+}
+
 .active {
-    background-color: white;
+    opacity: 1;
 }
 
 .inactive {
-    background-color: black;
+    opacity: .5;
 }
