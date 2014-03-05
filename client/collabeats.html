@@ -32,9 +32,9 @@
       </div>
       <div class='step-container'>
         {{#each stepIds}}
-          {{#getStep this}}
+          {{#with getStep this}}
             {{> step}}
-          {{/getStep}}
+          {{/with}}
         {{/each}}
       </div>
     </div>
