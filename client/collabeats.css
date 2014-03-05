@@ -25,8 +25,15 @@ body {
 
 .channel > .step-container > .step {
     width: 5%;
-    background-color: black;
     height: inherit;
     float: left;
     margin-left: 5px;
+}
+
+.active {
+    background-color: white;
+}
+
+.inactive {
+    background-color: black;
 }

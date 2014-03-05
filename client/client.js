@@ -62,8 +62,6 @@ Template.channels.channels = function () {
 Template.step.events({
   'click .step': function (event) {
     Meteor.call('toggleStep', this._id, !this.active);
-    console.log(this._id);
-    console.log(this.active);
   }
 });
 
