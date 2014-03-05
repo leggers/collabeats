@@ -59,6 +59,20 @@ Template.channels.channels = function () {
   return Channels.find();
 };
 
+Template.channels.rendered = function () {
+  console.log(this);
+  console.log(Template.channels.channels().count(0));
+  this.sounds = {};
+  Template.channels.channels().forEach(function (channel) {
+    console.log(channel);
+    this.sounds[channel._id] = new Howl({
+      urls: [channel.soundUrl],
+      onload: function() {console.log('loaded ' + channel.soundUrl);},
+      onloaderror: function() {console.log('error loading ' + channel.soundUrl);},
+    });
+  });
+};
+
 Template.step.events({
   'click .step': function (event) {
     Meteor.call('toggleStep', this._id, !this.active);
