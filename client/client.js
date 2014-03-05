@@ -68,14 +68,12 @@ Template.channels.rendered = function () {
       onloaderror: function() {console.log('error loading ' + channel.soundUrl);},
     });
   });
-  console.log(this.sounds);
   this.sounds = sounds;
 };
 
 Template.channels.events({
   'click .step': function (event, template) {
     Meteor.call('toggleStep', this._id, !this.active);
-    console.log(this);
     template.sounds[this.channelId].play();
   }
 });
