@@ -79,5 +79,5 @@ Template.channels.events({
 });
 
 Template.channels.getStep = function (stepId, options) {
-  return Steps.findOne({_id: stepId});
+  return options.fn(Steps.findOne({_id: stepId}));
 };

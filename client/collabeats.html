@@ -31,16 +31,14 @@
         {{name}}
       </div>
       <div class='step-container'>
-        {{#each stepIds}}
-          {{#with getStep this}}
-            {{> step}}
-          {{/with}}
-        {{/each}}
+        {{#isolate}}
+          {{#each stepIds}}
+            {{#getStep this}}
+              <div class='step{{#if active}} active{{else}} inactive{{/if}}'></div>
+            {{/getStep}}
+          {{/each}}
+        {{/isolate}}
       </div>
     </div>
   {{/each}}
-</template>
-
-<template name='step'>
-  <div class='step{{#if active}} active{{else}} inactive{{/if}}'></div>
 </template>
