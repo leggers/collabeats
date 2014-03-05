@@ -59,18 +59,15 @@ Template.channels.channels = function () {
   return Channels.find();
 };
 
-Template.steps.events({
+Template.step.events({
   'click .step': function (event) {
-    console.log(event.currentTarget);
-    console.log(this);
+    Meteor.call('toggleStep', this._id, !this.active);
+    console.log(this._id);
+    console.log(this.active);
   }
 });
 
-Template.steps.getStep = function (channel, options) {
-  var contents = '';
-  for (var i = 0; i < channel.steps.length; i++) {
-    stepId = channel.steps[i];
-    contents += options.fn(Steps.find({_id: stepId}));
-  }
+Template.channels.getStep = function (stepId, options) {
+  var contents = options.fn(Steps.findOne({_id: stepId}));
   return contents;
 };

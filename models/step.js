@@ -27,6 +27,6 @@ Steps.allow({
 
 Meteor.methods({
   toggleStep: function (stepId, activeValue) {
-    Steps.update({_id: stepId}, {lastChangerId: this.userId, active: activeValue});
+    Steps.update({_id: stepId}, {active: activeValue});
   }
 });

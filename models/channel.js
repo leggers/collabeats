@@ -2,7 +2,7 @@
 
 /*
   Each channel is a doc in the Channels collection:
-  steps: array of stepIds in the channel
+  stepIds: array of stepIds in the channel
   roomId: id of the room the channel belongs in
   volume: volume of the channel
   name: instrument name
@@ -33,7 +33,7 @@ Meteor.methods({
       stepArray.push(Steps.insert({soundUrl: options.channelSoundUrl, active: false, lastChangerId: this.userId}));
     }
     Channels.insert({
-      steps: stepArray,
+      stepIds: stepArray,
       roomId: options.channelRoomId,
       volume: 1,
       name: options.channelName,
@@ -41,11 +41,11 @@ Meteor.methods({
       creatorId: this.userId
     });
   },
-  removeChannel: function (options) {
-    toRemove = Channels.findOne({_id: options.channelId});
-    for (var i = 0; i < toRemove.steps.length; i++) {
-      Steps.remove({_id: toRemove.steps[i]._id});
+  removeChannel: function (channelId) {
+    toRemove = Channels.findOne({_id: channelId});
+    for (var i = 0; i < toRemove.stepIds.length; i++) {
+      Steps.remove({_id: toRemove.stepIds[i]});
     }
-    Channels.remove({_id: options.channelId});
+    Channels.remove({_id: channelId});
   }
 });

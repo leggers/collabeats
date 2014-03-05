@@ -1,6 +1,6 @@
 Meteor.startup(function () {
   Channels.find().forEach(function (channel) {
-    Meteor.call('removeChannel', {channelId: channel._id});
+    Meteor.call('removeChannel', channel._id);
   });
   Steps.find().forEach(function (step) {
     Steps.remove({_id: step._id});
