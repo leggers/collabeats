@@ -32,7 +32,7 @@ Meteor.methods({
     for (var i = 0; i < options.numSteps; i++) {
       stepArray.push(Steps.insert({soundUrl: options.channelSoundUrl, active: false, lastChangerId: this.userId}));
     }
-    Channels.insert({
+    thisChannelId = Channels.insert({
       stepIds: stepArray,
       roomId: options.channelRoomId,
       volume: 1,
@@ -40,6 +40,9 @@ Meteor.methods({
       soundUrl: options.channelSoundUrl,
       creatorId: this.userId
     });
+    for (var i = 0; i < stepArray.length; i++) {
+      Steps.update({_id: stepArray[i]}, {channelId: thisChannelId});
+    }
   },
   removeChannel: function (channelId) {
     toRemove = Channels.findOne({_id: channelId});

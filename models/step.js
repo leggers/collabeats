@@ -4,7 +4,8 @@
   Each step is a doc in the Steps collection:
     soundUrl: url string of the sample on the server
     active: boolean indicating if the sound should be played on that step
-    lastChangerId: UUID of last person to change the step
+    lastChangerId: id of last person to change the step
+    channelId: the id of the channel that has the sound
     ****there will be more here (once sound manipulation happens)*****
 */
 
@@ -27,6 +28,6 @@ Steps.allow({
 
 Meteor.methods({
   toggleStep: function (stepId, activeValue) {
-    Steps.update({_id: stepId}, {active: activeValue});
+    Steps.update({_id: stepId}, {$set: {active: activeValue}});
   }
 });
