@@ -60,17 +60,15 @@ Template.channels.channels = function () {
 };
 
 Template.channels.rendered = function () {
-  console.log(this);
-  console.log(Template.channels.channels().count(0));
-  this.sounds = {};
+  sounds = this.sounds || {};
   Template.channels.channels().forEach(function (channel) {
-    console.log(channel);
-    this.sounds[channel._id] = new Howl({
+    sounds[channel._id] = this.sounds[channel._id] || new Howl({
       urls: [channel.soundUrl],
       onload: function() {console.log('loaded ' + channel.soundUrl);},
       onloaderror: function() {console.log('error loading ' + channel.soundUrl);},
     });
   });
+  this.sounds = sounds;
 };
 
 Template.step.events({
