@@ -15,7 +15,7 @@ Meteor.startup(function () {
   }
 });
 
-Meteor.publish('steps', function () {
-  // homepage room example beat
+// Meteor.publish('steps', function () {
+//   // homepage room example beat
 
-});
+// });
