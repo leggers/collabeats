@@ -10,12 +10,6 @@ Template.hello.getSteps = function () {
   return Steps.find();
 };
 
-var sound = new Howl({
-  urls: ['/808-sample-pack/bass-drum/kickdrum0001.mp3'],
-  onloaderror: function() {console.log('error!');},
-  onload: function() {console.log('loaded');}
-});
-
 var looping = false;
 var tempo = 124;
 
@@ -34,11 +28,6 @@ var getInterval = function() {
 };
 
 Template.hello.events({
-  'click input#play-once': function () {
-    // template data, if any, is available in 'this'
-    if (typeof console !== 'undefined')
-      sound.play();
-  },
   'click input#start-beat': function(event) {
     if (looping) {
       looping = false;
@@ -70,6 +59,7 @@ Template.channels.created = function () {
 
 Template.channels.rendered = function () {
   sounds = Session.sounds || {};
+  Session.sounds = Session.sounds;
   Template.channels.channels().forEach(function (channel) {
     sounds[channel._id] = Session.sounds[channel._id] || new Howl({
       urls: [channel.soundUrl],
