@@ -59,6 +59,15 @@ Template.channels.channels = function () {
   return Channels.find();
 };
 
+Template.channels.created = function () {
+  amplify.subscribe('tick', function (tickCount) {
+    Channels.find().forEach(function (channel) {
+      step = Steps.findOne({_id: channel.stepIds[tickCount]});
+      if (step.active) Session.sounds[channel._id].play();
+    });
+  });
+};
+
 Template.channels.rendered = function () {
   sounds = Session.sounds || {};
   Template.channels.channels().forEach(function (channel) {
@@ -78,6 +87,6 @@ Template.channels.events({
   }
 });
 
-Template.step.getStep = function (stepId, options) {
+Template.step.getStep = function (stepId) {
   return Steps.findOne({_id: stepId});
 };

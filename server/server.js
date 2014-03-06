@@ -1,19 +1,21 @@
 Meteor.startup(function () {
-  Channels.find().forEach(function (channel) {
-    Meteor.call('removeChannel', channel._id);
-  });
-  var folder = '/808-sample-pack/';
-  var urls = ['bass-drum/kickdrum0001.mp3',
-              'closed-hihat/closed-hihat0001.mp3',
-              'cymbal/cymbal0001.mp3'
-              ];
-  for(var i = 0; i < urls.length; i++) {
-    Meteor.call('addChannel', {
-      numSteps: 16,
-      channelSoundUrl: folder + urls[i],
-      roomId: 0,
-      channelName: 'channel' + i
+  if (Channels.find().count() == 0) {
+    Channels.find().forEach(function (channel) {
+      Meteor.call('removeChannel', channel._id);
     });
+    var folder = '/808-sample-pack/';
+    var urls = ['bass-drum/kickdrum0001.mp3',
+                'closed-hihat/closed-hihat0001.mp3',
+                'cymbal/cymbal0001.mp3'
+                ];
+    for(var i = 0; i < urls.length; i++) {
+      Meteor.call('addChannel', {
+        numSteps: 16,
+        channelSoundUrl: folder + urls[i],
+        roomId: 0,
+        channelName: 'channel' + i
+      });
+    }
   }
 });
 
