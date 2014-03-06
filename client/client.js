@@ -60,21 +60,21 @@ Template.channels.channels = function () {
 };
 
 Template.channels.rendered = function () {
-  sounds = this.sounds || {};
+  sounds = Session.sounds || {};
   Template.channels.channels().forEach(function (channel) {
-    sounds[channel._id] = this.sounds[channel._id] || new Howl({
+    sounds[channel._id] = Session.sounds[channel._id] || new Howl({
       urls: [channel.soundUrl],
       onload: function() {console.log('loaded ' + channel.soundUrl);},
       onloaderror: function() {console.log('error loading ' + channel.soundUrl);},
     });
   });
-  this.sounds = sounds;
+  Session.sounds = sounds;
 };
 
 Template.channels.events({
   'click .step': function (event, template) {
     Meteor.call('toggleStep', this._id, !this.active);
-    template.sounds[this.channelId].play();
+    Session.sounds[this.channelId].play();
   }
 });
 
