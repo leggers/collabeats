@@ -11,7 +11,7 @@ Template.hello.getSteps = function () {
 };
 
 var sound = new Howl({
-  urls: ['/808-sample-pack/cymbal/cymbal0007.mp3'],
+  urls: ['/808-sample-pack/bass-drum/kickdrum0001.mp3'],
   onloaderror: function() {console.log('error!');},
   onload: function() {console.log('loaded');}
 });
@@ -19,18 +19,18 @@ var sound = new Howl({
 var looping = false;
 var tempo = 124;
 
-var loopFunc = function() {
+var loopFunc = function(tickCount) {
   console.log('looping');
   if (looping) {
-    sound.play();
+    amplify.publish('tick', tickCount);
     setTimeout(function(){
-      loopFunc();
+      loopFunc((tickCount+= 1) % 16);
     }, getInterval());
   }
 };
 
 var getInterval = function() {
-  return 60/tempo*1000;
+  return 60/tempo*1000/4;
 };
 
 Template.hello.events({
@@ -46,7 +46,7 @@ Template.hello.events({
     }
     else {
       looping = true;
-      loopFunc();
+      loopFunc(0);
       event.currentTarget.value = "Stop Loop";
     }
   },
