@@ -30,7 +30,11 @@ Meteor.methods({
   addChannel: function (options) {
     var stepArray = [];
     for (var i = 0; i < options.numSteps; i++) {
-      stepArray.push(Steps.insert({soundUrl: options.channelSoundUrl, active: false, lastChangerId: this.userId}));
+      stepArray.push(Steps.insert({
+        active: false,
+        lastChangerId: this.userId,
+        position: i
+      }));
     }
     thisChannelId = Channels.insert({
       stepIds: stepArray,
@@ -41,7 +45,7 @@ Meteor.methods({
       creatorId: this.userId
     });
     for (var i = 0; i < stepArray.length; i++) {
-      Steps.update({_id: stepArray[i]}, {channelId: thisChannelId});
+      Steps.update({_id: stepArray[i]}, {$set: {channelId: thisChannelId}});
     }
   },
   removeChannel: function (channelId) {

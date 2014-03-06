@@ -2,10 +2,10 @@
 
 /*
   Each step is a doc in the Steps collection:
-    soundUrl: url string of the sample on the server
     active: boolean indicating if the sound should be played on that step
     lastChangerId: id of last person to change the step
     channelId: the id of the channel that has the sound
+    position: number representing where the in the channel the step is
     ****there will be more here (once sound manipulation happens)*****
 */
 
