@@ -12,7 +12,7 @@ Meteor.startup(function () {
           numSteps: 16,
           channelSoundUrl: folder + urls[i],
           roomId: 0,
-          channelName: 'channel' + i
+          channelName: urls[i].substr(0, urls[i].indexOf('/'))
         });
       }
     }
