@@ -33,7 +33,8 @@ Meteor.methods({
       stepArray.push(Steps.insert({
         active: false,
         lastChangerId: this.userId,
-        position: i
+        position: i,
+        roomId: options.roomId
       }));
     }
     thisChannelId = Channels.insert({
@@ -47,6 +48,7 @@ Meteor.methods({
     for (var i = 0; i < stepArray.length; i++) {
       Steps.update({_id: stepArray[i]}, {$set: {channelId: thisChannelId}});
     }
+    return thisChannelId;
   },
   removeChannel: function (channelId) {
     toRemove = Channels.findOne({_id: channelId});
