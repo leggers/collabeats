@@ -65,3 +65,7 @@ body {
 .inactive {
     opacity: .5;
 }
+
+.container {
+    margin-bottom: 50px;
+}
