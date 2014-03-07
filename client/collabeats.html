@@ -11,16 +11,23 @@
 <template name="hello">
   {{> header}}
   {{greeting}}
-  <input type="button" value="Start Loop" id='start-beat'/>
   <br/>
-  Tempo:
-  <input type='text' value='{{getInterval}}' id='tempo'/>
+  {{> controls}}
   {{> channels}}
 </template>
 
 <template name='header'>
   <h1>Collabeats</h1>
   <br/>
+</template>
+
+<template name='controls'>
+  <button value="Start Loop" id='play' class='btn'>
+    <i class='icon-play'></i>
+    <i class='icon-stop' style='display:none;'></i>
+  </button>
+  Tempo:
+  <input type='text' value='{{getInterval}}' id='tempo'/>
 </template>
 
 <template name='channels'>

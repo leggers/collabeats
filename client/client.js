@@ -2,12 +2,12 @@ Template.hello.greeting = function () {
   return "808 meets Google Docs.";
 };
 
-Template.hello.getInterval = function() {
-  return tempo;
-};
-
 Template.hello.getSteps = function () {
   return Steps.find();
+};
+
+Template.controls.getInterval = function() {
+  return tempo;
 };
 
 var looping = false;
@@ -28,15 +28,17 @@ var getInterval = function() {
 };
 
 Template.hello.events({
-  'click input#start-beat': function(event) {
+  'click button#play': function(event) {
     if (looping) {
       looping = false;
-      event.currentTarget.value = "Start Loop";
+      $('.icon-stop').hide();
+      $('.icon-play').show();
     }
     else {
       looping = true;
       loopFunc(0);
-      event.currentTarget.value = "Stop Loop";
+      $('.icon-play').hide();
+      $('.icon-stop').show();
     }
   },
   'change input#tempo': function(event) {
