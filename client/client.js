@@ -14,7 +14,6 @@ var looping = false;
 var tempo = 124;
 
 var loopFunc = function(tickCount) {
-  console.log('looping');
   if (looping) {
     amplify.publish('tick', tickCount);
     setTimeout(function(){
