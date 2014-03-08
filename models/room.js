@@ -20,3 +20,12 @@ Rooms.allow({
     return true;
   }
 });
+
+Meteor.methods({
+  addChannelToRoom: function (roomId, channelId) {
+    Rooms.update({_id: roomId}, {$push: {channelIds: channelId}});
+  },
+  changeRoomTempo: function (roomId, tempo) {
+    Rooms.update({_id: roomId}, {$set: {tempo: tempo}});
+  }
+});

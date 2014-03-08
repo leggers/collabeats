@@ -14,12 +14,17 @@
 </template>
 
 <template name='room'>
-  <button value="Start Loop" id='play' class='btn'>
-    <i class='icon-play'></i>
-    <i class='icon-stop' style='display:none;'></i>
-  </button>
-  Tempo:
-  <input type='text' value='{{getInterval}}' id='tempo'/>
+  {{#with room}}
+    <div class='controls'>
+      <button value="Start Loop" id='play' class='btn'>
+        <i class='icon-play'></i>
+        <i class='icon-stop' style='display:none;'></i>
+      </button>
+      Tempo:
+      <input type='text' value='{{tempo}}' id='tempo'/>
+      <input type='text' value='{{name}}' id='room-name'/>
+    </div>
+  {{/with}}
   {{> channels}}
 </template>
 

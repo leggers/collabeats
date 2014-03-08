@@ -1,16 +1,23 @@
 ////////////////////////////////////////////////////////////////////////////////
+// Startup
+
+Meteor.startup(function () {
+  room = Session.get('room') || "home";
+  Session.set('room', room);
+  Session.set('looping', false);
+});
+
+
+
+////////////////////////////////////////////////////////////////////////////////
 // Rooms
 
-
-Template.room.getInterval = function() {
-  return tempo;
+Template.room.room = function () {
+  return Rooms.findOne({name: Session.get('room')});
 };
 
-var looping = false;
-var tempo = 124;
-
 var loopFunc = function(tickCount) {
-  if (looping) {
+  if (Session.get('looping')) {
     amplify.publish('tick', tickCount);
     setTimeout(function(){
       loopFunc((tickCount+= 1) % 16);
@@ -24,20 +31,20 @@ var getInterval = function() {
 
 Template.room.events({
   'click button#play': function(event) {
-    if (looping) {
-      looping = false;
+    if (Session.get('looping')) {
+      Session.set('looping', false);
       $('.icon-stop').hide();
       $('.icon-play').show();
     }
     else {
-      looping = true;
+      Session.set('looping', true);
       loopFunc(0);
       $('.icon-play').hide();
       $('.icon-stop').show();
     }
   },
   'change input#tempo': function(event) {
-    tempo = event.currentTarget.value;
+    Meteor.call('changeRoomTempo', this._id, event.currentTarget.value);
   }
 });
 
