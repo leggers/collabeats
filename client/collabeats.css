@@ -1,8 +1,17 @@
 /* CSS declarations go here */
 
 body {
-    background-color: rgb(83, 87, 89);
-    color: rgb(254, 119, 45);
+    background-color: #535759;
+    color: #fe772d;
+}
+
+.room-controls {
+    background-color: #6b6d6e;
+}
+
+.room-controls input {
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .channel {

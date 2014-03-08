@@ -7,6 +7,7 @@ Meteor.startup(function () {
     Session.set('roomName', roomName);
     Meteor.subscribe('rooms', roomName, function () {
       var room = Rooms.findOne({name: Session.get('roomName')});
+      tempo = room.tempo;
       var channelIds = room.channelIds;
       Session.set('channels', channelIds);
       Meteor.subscribe('channels', room._id, function () {
@@ -35,8 +36,12 @@ var loopFunc = function(tickCount) {
   }
 };
 
+var tempo;
+
 var getInterval = function() {
-  return 60/tempo*1000/4;
+  interval = 60/tempo*1000/4;
+  console.log(interval);
+  return interval;
 };
 
 Template.room.events({
@@ -54,6 +59,7 @@ Template.room.events({
     }
   },
   'change input#tempo': function(event) {
+    tempo = event.currentTarget.value;
     Meteor.call('changeRoomTempo', this._id, event.currentTarget.value);
   }
 });
