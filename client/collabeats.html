@@ -3,24 +3,24 @@
 </head>
 
 <body>
-  <div class='container'>
-    {{> layout}}
-  </div>
+  {{> layout}}
 </body>
 
 <template name="layout">
-  <h1>Collabeats</h1>
-  {{> rooms}}
-  {{> channels}}
+  <div class='container'>
+    <h1>Collabeats</h1>
+    {{> room}}
+  </div>
 </template>
 
-<template name='rooms'>
+<template name='room'>
   <button value="Start Loop" id='play' class='btn'>
     <i class='icon-play'></i>
     <i class='icon-stop' style='display:none;'></i>
   </button>
   Tempo:
   <input type='text' value='{{getInterval}}' id='tempo'/>
+  {{> channels}}
 </template>
 
 <template name='channels'>

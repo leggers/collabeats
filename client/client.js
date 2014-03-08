@@ -45,7 +45,7 @@ Template.layout.events({
 ////////////////////////////////////////////////////////////////////////////////
 // Rooms
 
-Template.rooms.getInterval = function() {
+Template.room.getInterval = function() {
   return tempo;
 };
 
