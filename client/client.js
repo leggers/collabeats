@@ -1,5 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Layout
+// Rooms
+
+
+Template.room.getInterval = function() {
+  return tempo;
+};
 
 Template.layout.getSteps = function () {
   return Steps.find();
@@ -21,7 +26,7 @@ var getInterval = function() {
   return 60/tempo*1000/4;
 };
 
-Template.layout.events({
+Template.room.events({
   'click button#play': function(event) {
     if (looping) {
       looping = false;
@@ -39,15 +44,6 @@ Template.layout.events({
     tempo = event.currentTarget.value;
   }
 });
-
-
-
-////////////////////////////////////////////////////////////////////////////////
-// Rooms
-
-Template.room.getInterval = function() {
-  return tempo;
-};
 
 
 
