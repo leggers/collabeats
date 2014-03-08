@@ -6,10 +6,6 @@ Template.room.getInterval = function() {
   return tempo;
 };
 
-Template.layout.getSteps = function () {
-  return Steps.find();
-};
-
 var looping = false;
 var tempo = 124;
 
