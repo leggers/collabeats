@@ -2,8 +2,11 @@
 // Startup
 
 Meteor.startup(function () {
-  room = Session.get('room') || "home";
-  Session.set('room', room);
+  Deps.autorun(function () {
+    room = Session.get('room') || "home";
+    Session.set('room', room);
+    Session.set('channels', Rooms.findOne({name: room}).channelIds);
+  });
   Session.set('looping', false);
 });
 
@@ -54,7 +57,7 @@ Template.room.events({
 // Channels
 
 Template.channels.channels = function () {
-  return Channels.find();
+  return Channels.find({_id: {$in: Session.get('channels')}});
 };
 
 Template.channels.created = function () {

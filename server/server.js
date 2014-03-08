@@ -17,7 +17,7 @@ Meteor.startup(function () {
               'hi-tom/hi-tom0001.mp3'
               ];
   if (Channels.find().count() != urls.length) {
-    room = Rooms.findOne({name: 'home'}) || Rooms.insert({name: 'home', tempo: 120, channelIds: []});
+    room = Rooms.findOne({name: 'home'})._id || Rooms.insert({name: 'home', tempo: 120, channelIds: []});
     var folder = '/808-sample-pack/';
     for(var i = 0; i < urls.length; i++) {
       if (Channels.findOne({soundUrl: folder + urls[i]}) === undefined) {
