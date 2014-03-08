@@ -1,13 +1,8 @@
-Template.hello.greeting = function () {
-  return "808 meets Google Docs.";
-};
+////////////////////////////////////////////////////////////////////////////////
+// Layout
 
-Template.hello.getSteps = function () {
+Template.layout.getSteps = function () {
   return Steps.find();
-};
-
-Template.controls.getInterval = function() {
-  return tempo;
 };
 
 var looping = false;
@@ -26,7 +21,7 @@ var getInterval = function() {
   return 60/tempo*1000/4;
 };
 
-Template.hello.events({
+Template.layout.events({
   'click button#play': function(event) {
     if (looping) {
       looping = false;
@@ -44,6 +39,20 @@ Template.hello.events({
     tempo = event.currentTarget.value;
   }
 });
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Rooms
+
+Template.rooms.getInterval = function() {
+  return tempo;
+};
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Channels
 
 Template.channels.channels = function () {
   return Channels.find();
@@ -77,6 +86,11 @@ Template.channels.events({
     Session.sounds[this.channelId].play();
   }
 });
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Steps
 
 Template.step.getStep = function (stepId) {
   return Steps.findOne({_id: stepId});
