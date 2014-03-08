@@ -16,7 +16,7 @@
 <template name='room'>
   {{#if room}}
     {{#with room}}
-      <div class='controls'>
+      <div class='room-controls'>
         <button value="Start Loop" id='play' class='btn'>
           <i class='icon-play'></i>
           <i class='icon-stop' style='display:none;'></i>
@@ -33,7 +33,7 @@
 <template name='channels'>
   {{#each channels}}
     <div class='channel'>
-      <div class='controls'>
+      <div class='channel-controls'>
         {{name}}
       </div>
       <div class='step-container'>

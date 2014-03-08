@@ -10,7 +10,7 @@ body {
     height: 50px;
 }
 
-.channel .controls {
+.channel-controls {
     width: 200px;
     background-color: black;
     float: left;
