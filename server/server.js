@@ -16,8 +16,8 @@ Meteor.startup(function () {
               'mid-tom/mid-tom0001.mp3',
               'hi-tom/hi-tom0001.mp3'
               ];
-  if (Channels.find().count() != urls.length) {
-    room = Rooms.findOne({name: 'home'})._id || Rooms.insert({name: 'home', tempo: 120, channelIds: []});
+  if (Rooms.find().count() != 1) {
+    room = Rooms.insert({name: 'home', tempo: 120, channelIds: []});
     var folder = '/808-sample-pack/';
     for(var i = 0; i < urls.length; i++) {
       if (Channels.findOne({soundUrl: folder + urls[i]}) === undefined) {
@@ -30,6 +30,9 @@ Meteor.startup(function () {
           channelName: name
         });
         Meteor.call('addChannelToRoom', room, channelId);
+      }
+      else {
+        Channels.update({soundUrl: folder + urls[i]}, {$set: {roomId: room._id}});
       }
     }
   }

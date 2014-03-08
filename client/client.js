@@ -78,13 +78,14 @@ Template.channels.created = function () {
 
 Template.channels.rendered = function () {
   sounds = Session.sounds || {};
-  Session.sounds = Session.sounds;
-  Template.channels.channels().forEach(function (channel) {
-    sounds[channel._id] = Session.sounds[channel._id] || new Howl({
-      urls: [channel.soundUrl],
-      onload: function() {console.log('loaded ' + channel.soundUrl);},
-      onloaderror: function() {console.log('error loading ' + channel.soundUrl);},
-    });
+  Session.sounds = sounds;
+  Channels.find({roomId: Rooms.findOne({name: Session.get('roomName')})._id})
+    .forEach(function (channel) {
+      sounds[channel._id] = Session.sounds[channel._id] || new Howl({
+        urls: [channel.soundUrl],
+        onload: function() {console.log('loaded ' + channel.soundUrl);},
+        onloaderror: function() {console.log('error loading ' + channel.soundUrl);},
+      });
   });
   Session.sounds = sounds;
 };
