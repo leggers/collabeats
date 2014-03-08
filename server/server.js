@@ -35,7 +35,14 @@ Meteor.startup(function () {
   }
 });
 
-// Meteor.publish('steps', function () {
-//   // homepage room example beat
+Meteor.publish('rooms', function (roomName) {
+  return Rooms.find({name: roomName});
+});
 
-// });
+Meteor.publish('channels', function (parentRoomId) {
+  return Channels.find({roomId: parentRoomId});
+});
+
+Meteor.publish('steps', function (channelIds) {
+  return Steps.find({channelId: {$in: channelIds}});
+});

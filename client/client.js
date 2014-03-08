@@ -3,9 +3,16 @@
 
 Meteor.startup(function () {
   Deps.autorun(function () {
-    room = Session.get('room') || "home";
-    Session.set('room', room);
-    Session.set('channels', Rooms.findOne({name: room}).channelIds);
+    var roomName = Session.get('roomName') || "home";
+    Session.set('roomName', roomName);
+    Meteor.subscribe('rooms', roomName, function () {
+      var room = Rooms.findOne({name: Session.get('roomName')});
+      var channelIds = room.channelIds;
+      Session.set('channels', channelIds);
+      Meteor.subscribe('channels', room._id, function () {
+        Meteor.subscribe('steps', channelIds);
+      });
+    });
   });
   Session.set('looping', false);
 });
@@ -16,7 +23,7 @@ Meteor.startup(function () {
 // Rooms
 
 Template.room.room = function () {
-  return Rooms.findOne({name: Session.get('room')});
+  return Rooms.findOne({name: Session.get('roomName')});
 };
 
 var loopFunc = function(tickCount) {
