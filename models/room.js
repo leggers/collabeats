@@ -17,7 +17,7 @@ Rooms.allow({
     return true;
   },
   remove: function () {
-    return true;
+    return false;
   }
 });
 
@@ -27,5 +27,12 @@ Meteor.methods({
   },
   changeRoomTempo: function (roomId, tempo) {
     Rooms.update({_id: roomId}, {$set: {tempo: tempo}});
+  },
+  removeRoom: function (roomId) {
+    room = Rooms.findOne({_id: roomId});
+    for (var i = room.channelIds.length - 1; i >= 0; i--) {
+      Meteor.call('removeChannel', room.channelIds[i]);
+    }
+    Rooms.remove({_id: roomId});
   }
 });
