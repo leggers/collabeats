@@ -26,6 +26,7 @@ body {
 */
 
 @height: 45px;
+@barColor: #6b6d6e;
 
 .fixed-wrap {
     height: @height + 10px + 25px;
@@ -34,7 +35,7 @@ body {
 }
 
 .room-controls {
-    background-color: #6b6d6e;
+    background-color: @barColor;
     height: @height + 10px;
     width: 100%;
 
@@ -66,7 +67,12 @@ body {
 
 .fixed {
     position: fixed;
-    padding-top: 20;
+    top: 0px;
+    z-index: 5;
+
+    .room-controls {
+        background-color: fade(lighten(@barColor, 10%), 50%);
+    }
 }
 
 /*******************************************************************************

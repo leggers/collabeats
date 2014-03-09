@@ -28,6 +28,21 @@ Template.layout.render = function () {
 ////////////////////////////////////////////////////////////////////////////////
 // Rooms
 
+Template.room.created = function () {
+  var win = $(window);
+  win.load(function () {
+    win.scroll(function (event) {
+      var controlBar = $('.fixed-wrap');
+      if (win.scrollTop() >= 70){
+        controlBar.addClass('fixed');
+      }
+      else {
+        controlBar.removeClass('fixed');
+      }
+    });
+  });
+};
+
 Template.room.room = function () {
   return Rooms.findOne({name: Session.get('roomName')});
 };
