@@ -74,11 +74,17 @@ Template.channels.channels = function () {
 };
 
 Template.channels.created = function () {
+  // Cache the channel-step arrays as a single object for sound loop
+  Session.rhythm = {};
   amplify.subscribe('tick', function (tickCount) {
-    Channels.find().forEach(function (channel) {
-      step = Steps.findOne({_id: channel.stepIds[tickCount]});
-      if (step.active) Session.sounds[channel._id].play();
-    });
+    var rhythm = Session.rhythm;
+    var channelIds = Object.keys(rhythm);
+    for (var i = channelIds.length - 1; i >= 0; i--) {
+      channelId = channelIds[i];
+      if (rhythm[channelId][tickCount]) {
+        Session.sounds[channelId].play();
+      }
+    }
   });
 };
 
@@ -110,4 +116,12 @@ Template.channels.events({
 
 Template.step.getStep = function (stepId) {
   return Steps.findOne({_id: stepId});
+};
+
+Template.step.rendered = function () {
+  step = Steps.findOne({_id: this.data});
+  if (step) {
+    Session.rhythm[step.channelId] = Session.rhythm[step.channelId] || [];
+    Session.rhythm[step.channelId][step.position] = step.active;
+  }
 };
