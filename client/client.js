@@ -39,9 +39,7 @@ var loopFunc = function(tickCount) {
 var tempo;
 
 var getInterval = function() {
-  interval = 60/tempo*1000/4;
-  console.log(interval);
-  return interval;
+  return 60/tempo*1000/4;
 };
 
 Template.room.events({
