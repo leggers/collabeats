@@ -19,47 +19,51 @@
 <template name='room'>
   {{#if room}}
     {{#with room}}
-      <div class='room-controls'>
+      <div class='fixed-wrap'>
+        <div class='room-controls'>
 
-        <button value="Start Loop" id='play' class='btn btn-default'>
-          {{#unless looping}}
-            <span class='glyphicon glyphicon-play'></span>
-          {{else}}
-            <span class='glyphicon glyphicon-stop'></span>
-          {{/unless}}
-        </button>
+          <button value="Start Loop" id='play' class='btn btn-default'>
+            {{#unless looping}}
+              <span class='glyphicon glyphicon-play'></span>
+            {{else}}
+              <span class='glyphicon glyphicon-stop'></span>
+            {{/unless}}
+          </button>
 
-        <div class="btn-group">
-          <button type="button" class="btn btn-default" id='slower'><span class='glyphicon glyphicon-chevron-down' </button>
-          <button type="button" class="btn btn-default" id='tempo'>{{tempo}}</button>
-          <button type="button" class="btn btn-default" id='faster'><span class='glyphicon glyphicon-chevron-up' </button>
+          <div class="btn-group">
+            <button type="button" class="btn btn-default" id='slower'><span class='glyphicon glyphicon-chevron-down' </button>
+            <button type="button" class="btn btn-default" id='tempo'>{{tempo}}</button>
+            <button type="button" class="btn btn-default" id='faster'><span class='glyphicon glyphicon-chevron-up' </button>
+          </div>
+
+          <!-- <input type='text' value='{{name}}' id='room-name'/> -->
+
+          <button id='clear' class='btn btn-warning'>Clear All</button>
+
         </div>
-
-        <!-- <input type='text' value='{{name}}' id='room-name'/> -->
-
-        <button id='clear' class='btn btn-warning'>Clear All</button>
-
       </div>
     {{/with}}
   {{/if}}
 </template>
 
 <template name='channels'>
-  {{#each channels}}
-    <div class='channel'>
-      <div class='channel-controls'>
-        {{name}}
-        <!-- <button class='btn btn-warning'></button> -->
+  <div class='channels'>
+    {{#each channels}}
+      <div class='channel'>
+        <div class='channel-controls'>
+          {{name}}
+          <!-- <button class='btn btn-warning'></button> -->
+        </div>
+        <div class='step-container'>
+          {{#isolate}}
+            {{#each stepIds}}
+              {{> step}}
+            {{/each}}
+          {{/isolate}}
+        </div>
       </div>
-      <div class='step-container'>
-        {{#isolate}}
-          {{#each stepIds}}
-            {{> step}}
-          {{/each}}
-        {{/isolate}}
-      </div>
-    </div>
-  {{/each}}
+    {{/each}}
+  </div>
 </template>
 
 <template name='step'>

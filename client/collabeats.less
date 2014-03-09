@@ -27,34 +27,40 @@ body {
 
 @height: 45px;
 
-#play {
-    color: black;
-    background-color: white;
-    height: @height;
-    width: @height;
-
-    span {
-        font-size: 20px;
-    }
-}
-
-#clear {
-    float: right;
-    height: @height;
-}
-
-.input-group {
-    width: 100px;
+.fixed-wrap {
+    height: @height + 10px + 25px;
+    position: absolute;
+    width: inherit;
 }
 
 .room-controls {
     background-color: #6b6d6e;
     height: @height + 10px;
-    margin-bottom: 25px;
-    margin-top: 15px;
+    width: 100%;
 
     #play, #clear {
         margin: 5px;
+    }
+
+    input {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    #clear {
+        float: right;
+        height: @height;
+    }
+
+    #play {
+        color: black;
+        background-color: white;
+        height: @height;
+        width: @height;
+
+        span {
+            font-size: 20px;
+        }
     }
 }
 
@@ -63,9 +69,12 @@ body {
     padding-top: 20;
 }
 
-.room-controls input {
-    margin-top: 5px;
-    margin-bottom: 5px;
+/*******************************************************************************
+    Channel(s)
+*/
+
+.channels {
+    padding-top: 65px;
 }
 
 .channel {
