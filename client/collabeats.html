@@ -9,7 +9,10 @@
 <template name="layout">
   <div class='container'>
     <h1>Collabeats</h1>
-    {{> room}}
+    {{#if render}}
+      {{> room}}
+      {{> channels}}
+    {{/if}}
   </div>
 </template>
 
@@ -19,8 +22,11 @@
       <div class='room-controls'>
 
         <button value="Start Loop" id='play' class='btn btn-default'>
-          <span class='glyphicon glyphicon-play'></span>
-          <span class='glyphicon glyphicon-stop' style='display:none;'></span>
+          {{#unless looping}}
+            <span class='glyphicon glyphicon-play'></span>
+          {{else}}
+            <span class='glyphicon glyphicon-stop'></span>
+          {{/unless}}
         </button>
 
         <div class="btn-group">
@@ -32,10 +38,9 @@
         <!-- <input type='text' value='{{name}}' id='room-name'/> -->
 
         <button id='clear' class='btn btn-warning'>Clear All</button>
-        
+
       </div>
     {{/with}}
-    {{> channels}}
   {{/if}}
 </template>
 
@@ -47,9 +52,11 @@
         <button class='btn btn-warning'></button>
       </div>
       <div class='step-container'>
-        {{#each stepIds}}
-          {{> step}}
-        {{/each}}
+        {{#isolate}}
+          {{#each stepIds}}
+            {{> step}}
+          {{/each}}
+        {{/isolate}}
       </div>
     </div>
   {{/each}}

@@ -3,11 +3,13 @@
 
 Meteor.startup(function () {
   Deps.autorun(function () {
+    console.log('deps');
     var roomName = Session.get('roomName') || "home";
     Session.set('roomName', roomName);
     Meteor.subscribe('rooms', roomName, function () {
       var room = Rooms.findOne({name: Session.get('roomName')});
-      tempo = room.tempo;
+      tempo = room.tempo; // pull this out to another Deps to fix tempo change problem?
+      Session.set('roomId', room._id);
       var channelIds = room.channelIds;
       Session.set('channels', channelIds);
       Meteor.subscribe('channels', room._id, function () {
@@ -30,16 +32,14 @@ Template.room.room = function () {
 var loopFunc = function(tickCount) {
   if (Session.get('looping')) {
     amplify.publish('tick', tickCount);
-    setTimeout(function(){
+    setTimeout(function() {
       loopFunc((tickCount+= 1) % 16);
     }, getInterval());
   }
 };
 
-var tempo;
-
 var getInterval = function() {
-  return 60/tempo*1000/4;
+  return 60/Rooms.findOne({name: Session.get('roomName')}).tempo*1000/4;
 };
 
 Template.room.events({
@@ -56,21 +56,35 @@ Template.room.events({
       $('.glyphicon-stop').show();
     }
   },
-  'change input#tempo': function(event) {
-    tempo = event.currentTarget.value;
-    Meteor.call('changeRoomTempo', this._id, event.currentTarget.value);
-  },
   'click #clear': function (event) {
     Steps.find().forEach(function (step) {
       Meteor.call('toggleStep', step._id, false);
     });
+  },
+  'click #slower': function (event) {
+    Meteor.call('deltaRoomTempo', this._id, -5);
+  },
+  'click #faster': function (event) {
+    Meteor.call('deltaRoomTempo', this._id, 5);
   }
 });
+
+Template.room.rendered = function () {
+  console.log('room rendered');
+};
+
+Template.room.looping = function () {
+  return Session.get('looping');
+};
 
 
 
 ////////////////////////////////////////////////////////////////////////////////
 // Channels
+
+Template.layout.render = function () {
+  return Session.get('channels') && Session.get('roomId');
+};
 
 Template.channels.channels = function () {
   return Channels.find({_id: {$in: Session.get('channels')}});
@@ -94,7 +108,7 @@ Template.channels.created = function () {
 Template.channels.rendered = function () {
   sounds = Session.sounds || {};
   Session.sounds = sounds;
-  Channels.find({roomId: Rooms.findOne({name: Session.get('roomName')})._id})
+  Channels.find({roomId: Session.get('roomId')})
     .forEach(function (channel) {
       sounds[channel._id] = Session.sounds[channel._id] || new Howl({
         urls: [channel.soundUrl],
@@ -122,6 +136,7 @@ Template.step.getStep = function (stepId) {
 };
 
 Template.step.rendered = function () {
+  console.log('step rendered');
   step = Steps.findOne({_id: this.data});
   if (step) {
     Session.rhythm[step.channelId] = Session.rhythm[step.channelId] || [];

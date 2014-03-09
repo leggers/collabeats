@@ -28,6 +28,9 @@ Meteor.methods({
   changeRoomTempo: function (roomId, tempo) {
     Rooms.update({_id: roomId}, {$set: {tempo: tempo}});
   },
+  deltaRoomTempo: function (roomId, delta) {
+    Rooms.update({_id: roomId}, {$inc: {tempo: delta}});
+  },
   removeRoom: function (roomId) {
     room = Rooms.findOne({_id: roomId});
     for (var i = room.channelIds.length - 1; i >= 0; i--) {
@@ -37,6 +40,6 @@ Meteor.methods({
   },
   addRoom: function (name) {
     room = Rooom.insert({name: name, tempo: 120});
-    
+
   }
 });
