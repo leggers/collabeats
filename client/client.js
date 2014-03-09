@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Startup
+// Startup & Layout
 
 Meteor.startup(function () {
   Deps.autorun(function () {
@@ -20,6 +20,9 @@ Meteor.startup(function () {
   Session.set('looping', false);
 });
 
+Template.layout.render = function () {
+  return Session.get('channels') && Session.get('roomId');
+};
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -81,10 +84,6 @@ Template.room.looping = function () {
 
 ////////////////////////////////////////////////////////////////////////////////
 // Channels
-
-Template.layout.render = function () {
-  return Session.get('channels') && Session.get('roomId');
-};
 
 Template.channels.channels = function () {
   return Channels.find({_id: {$in: Session.get('channels')}});
