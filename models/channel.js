@@ -8,6 +8,7 @@
   name: instrument name
   soundUrl: url of the sound file for the channel
   creatorId: person who added the channel
+  position: vertical ordering of channels in a room
 */
 
 Channels = new Meteor.Collection('channels');
@@ -43,7 +44,8 @@ Meteor.methods({
       volume: 1,
       name: options.channelName,
       soundUrl: options.channelSoundUrl,
-      creatorId: this.userId
+      creatorId: this.userId,
+      position: options.position
     });
     for (var i = 0; i < stepArray.length; i++) {
       Steps.update({_id: stepArray[i]}, {$set: {channelId: thisChannelId}});
