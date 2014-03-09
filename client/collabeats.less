@@ -9,11 +9,11 @@
 */
 
 @corange: #fe772d;
-@cgrey: #535759;
+@cgrey: #212223;
 
 body {
-    background-color: #535759;
-    color: #fe772d;
+    background-color: @cgrey;
+    color: @corange;
 }
 
 .btn-warning {
@@ -26,7 +26,7 @@ body {
 */
 
 @height: 45px;
-@barColor: #6b6d6e;
+@barColor: lighten(@cgrey, 20%);
 
 .fixed-wrap {
     height: @height + 10px + 25px;
