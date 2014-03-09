@@ -8,6 +8,9 @@
     General
 */
 
+@corange: #fe772d;
+@cgrey: #535759;
+
 body {
     background-color: #535759;
     color: #fe772d;
@@ -15,11 +18,34 @@ body {
 
 .btn-warning {
     background-color: #fe772d;
+    border-color: #fe772d;
 }
 
 /*******************************************************************************
     Room
 */
+
+@height: 45px;
+
+#play {
+    color: black;
+    background-color: white;
+    height: @height;
+    width: @height;
+
+    span {
+        font-size: 20px;
+    }
+}
+
+#clear {
+    float: right;
+    height: @height;
+}
+
+.input-group {
+    width: 100px;
+}
 
 .room-controls {
     background-color: #6b6d6e;

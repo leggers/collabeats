@@ -17,12 +17,17 @@
   {{#if room}}
     {{#with room}}
       <div class='room-controls'>
-        <button value="Start Loop" id='play' class='btn'>
-          <i class='icon-play'></i>
-          <i class='icon-stop' style='display:none;'></i>
+
+        <button value="Start Loop" id='play' class='btn btn-default'>
+          <span class='glyphicon glyphicon-play'></span>
+          <span class='glyphicon glyphicon-stop' style='display:none;'></span>
         </button>
-        Tempo:
-        <input type='text' value='{{tempo}}'id='tempo'/>
+
+        <div class="btn-group">
+          <button type="button" class="btn btn-default" id='slower'><span class='glyphicon glyphicon-chevron-down' </button>
+          <button type="button" class="btn btn-default" id='tempo'>{{tempo}}</button>
+          <button type="button" class="btn btn-default" id='faster'><span class='glyphicon glyphicon-chevron-up' </button>
+        </div>
         <!-- <input type='text' value='{{name}}' id='room-name'/> -->
         <button id='clear' class='btn btn-warning'>Clear All</button>
       </div>

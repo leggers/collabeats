@@ -46,14 +46,14 @@ Template.room.events({
   'click button#play': function(event) {
     if (Session.get('looping')) {
       Session.set('looping', false);
-      $('.icon-stop').hide();
-      $('.icon-play').show();
+      $('.glyphicon-stop').hide();
+      $('.glyphicon-play').show();
     }
     else {
       Session.set('looping', true);
       loopFunc(0);
-      $('.icon-play').hide();
-      $('.icon-stop').show();
+      $('.glyphicon-play').hide();
+      $('.glyphicon-stop').show();
     }
   },
   'change input#tempo': function(event) {
