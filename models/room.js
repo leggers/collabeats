@@ -34,5 +34,9 @@ Meteor.methods({
       Meteor.call('removeChannel', room.channelIds[i]);
     }
     Rooms.remove({_id: roomId});
+  },
+  addRoom: function (name) {
+    room = Rooom.insert({name: name, tempo: 120});
+    
   }
 });

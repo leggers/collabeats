@@ -59,6 +59,11 @@ Template.room.events({
   'change input#tempo': function(event) {
     tempo = event.currentTarget.value;
     Meteor.call('changeRoomTempo', this._id, event.currentTarget.value);
+  },
+  'click #clear': function (event) {
+    Steps.find().forEach(function (step) {
+      Meteor.call('toggleStep', step._id, false);
+    });
   }
 });
 
