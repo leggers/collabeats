@@ -6,6 +6,7 @@
 standard-app-packages
 insecure
 preserve-inputs
-bootstrap
 jquery
 amplify
+less
+bootstrap3-less

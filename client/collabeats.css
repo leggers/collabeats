@@ -1,9 +1,25 @@
 /* CSS declarations go here */
 
+/* Orange: #fe772d */
+
+/*******************************************************************************
+    General
+*/
+
 body {
     background-color: #535759;
     color: #fe772d;
 }
+
+.btn-warning {
+    background-color: #fe772d;
+}
+
+
+
+/*******************************************************************************
+    Room
+*/
 
 .room-controls {
     background-color: #6b6d6e;

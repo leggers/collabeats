@@ -1,6 +1,6 @@
 Meteor.startup(function () {
   var urls = ['bass-drum/kickdrum0001.mp3',
-              'snare-drum/snaredrum0001.mp3',
+              'snare-drum/snaredrum0003.mp3',
               'misc/clap.mp3',
               'misc/rimshot.mp3',
               'misc/maraca.mp3',
