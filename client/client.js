@@ -135,8 +135,16 @@ Template.channels.rendered = function () {
 
 Template.channels.events({
   'click .step': function (event, template) {
+    console.log('click');
     Meteor.call('toggleStep', this._id, !this.active);
     Session.sounds[this.channelId].play();
+  },
+  'mousedown .step': function (event, template) {
+    Session.set('mousedown', true);
+    Meteor.call('toggleStep', this._id, !this.active);
+  },
+  'mouseup': function () {
+    Session.set('mousedown', false);
   }
 });
 
@@ -150,10 +158,21 @@ Template.step.getStep = function (stepId) {
 };
 
 Template.step.rendered = function () {
-  console.log('step rendered');
   step = Steps.findOne({_id: this.data});
   if (step) {
     Session.rhythm[step.channelId] = Session.rhythm[step.channelId] || [];
     Session.rhythm[step.channelId][step.position] = step.active;
   }
 };
+
+Template.step.events({
+  'mouseenter .step': function (event, template) {
+    if (Session.get('mousedown') && this._id !== Session.get('insideStep')) {
+      Session.set('insideStep', this._id);
+      Meteor.call('toggleStep', this._id, !this.active);
+    }
+  },
+  'mouseleave .step': function (event, template) {
+    Session.set('insideStep', undefined);
+  }
+});
