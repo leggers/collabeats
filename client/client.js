@@ -147,10 +147,8 @@ Template.channels.events({
     Session.set('mousedown', false);
     Session.set('insideStep', undefined);
   },
-  'click #clear-row': function (event, template) {
-    console.log(this);
+  'click .clear-row': function (event, template) {
     for (var i = this.stepIds.length - 1; i >= 0; i--) {
-      console.log(this.stepIds[i]);
       Meteor.call('toggleStep', this.stepIds[i], false);
     }
   }
