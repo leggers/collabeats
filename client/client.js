@@ -135,16 +135,24 @@ Template.channels.rendered = function () {
 
 Template.channels.events({
   'click .step': function (event, template) {
-    console.log('click');
     Meteor.call('toggleStep', this._id, !this.active);
     Session.sounds[this.channelId].play();
   },
   'mousedown .step': function (event, template) {
     Session.set('mousedown', true);
+    Session.set('insideStep', this._id);
     Meteor.call('toggleStep', this._id, !this.active);
   },
   'mouseup': function () {
     Session.set('mousedown', false);
+    Session.set('insideStep', undefined);
+  },
+  'click #clear-row': function (event, template) {
+    console.log(this);
+    for (var i = this.stepIds.length - 1; i >= 0; i--) {
+      console.log(this.stepIds[i]);
+      Meteor.call('toggleStep', this.stepIds[i], false);
+    }
   }
 });
 
