@@ -10,6 +10,7 @@
 
 @corange: #fe772d;
 @cgrey: #212223;
+@darkBlue: #5a84e5;
 
 body {
     background-color: @cgrey;
@@ -17,12 +18,27 @@ body {
 }
 
 .btn-warning {
-    background-color: #fe772d;
-    border-color: #fe772d;
+    background-color: @corange;
+    border-color: darken(@corange, 5%);
+}
+
+.btn-warning:hover {
+    background: darken(@corange, 10%);
+    border-color: darken(@corange, 15%);
 }
 
 a {
     cursor: pointer;
+}
+
+.btn-info {
+    background-color: @darkBlue;
+    border-color: darken(@darkBlue, 5%);
+}
+
+.btn-info:hover, .btn-info:focus {
+    background: darken(@darkBlue, 10%);
+    border-color: darken(@darkBlue, 15%)
 }
 
 /*******************************************************************************
@@ -66,6 +82,10 @@ a {
         span {
             font-size: 20px;
         }
+    }
+
+    .dropdown-menu {
+        color: black;
     }
 }
 
@@ -140,28 +160,28 @@ a {
 .step:nth-of-type(16n+2),
 .step:nth-of-type(16n+3),
 .step:nth-of-type(16n+4) {
-    background-color: #5a84e5;
+    background-color: @darkBlue;
 }
 
 .step:nth-of-type(16n+5),
 .step:nth-of-type(16n+6),
 .step:nth-of-type(16n+7),
 .step:nth-of-type(16n+8) {
-    background-color: #83a8ff;
+    background-color: lighten(@darkBlue, 15%);
 }
 
 .step:nth-of-type(16n+9),
 .step:nth-of-type(16n+10),
 .step:nth-of-type(16n+11),
 .step:nth-of-type(16n+12) {
-    background-color: #c1d3ff;
+    background-color: lighten(@darkBlue, 30%);
 }
 
 .step:nth-of-type(16n+13),
 .step:nth-of-type(16n+14),
 .step:nth-of-type(16n+15),
 .step:nth-of-type(16n+16) {
-    background-color: #eff4ff;
+    background-color: lighten(@darkBlue, 45%);
 }
 
 .active {

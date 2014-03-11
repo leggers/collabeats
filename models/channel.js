@@ -9,6 +9,7 @@
   soundUrl: url of the sound file for the channel
   creatorId: person who added the channel
   position: vertical ordering of channels in a room
+  volume: channel volume
 */
 
 Channels = new Meteor.Collection('channels');
