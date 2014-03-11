@@ -66,12 +66,14 @@ Template.room.events({
       Session.set('looping', false);
       $('.glyphicon-stop').hide();
       $('.glyphicon-play').show();
+      $('.loop-indicator').hide();
     }
     else {
       Session.set('looping', true);
       loopFunc(0);
       $('.glyphicon-play').hide();
       $('.glyphicon-stop').show();
+      $('.loop-indicator').show();
     }
   },
   'click #clear': function (event) {
@@ -116,6 +118,8 @@ Template.channels.created = function () {
         Session.sounds[channelId].play();
       }
     }
+    left = ($(window).width() - $('#top-div').width()) / 2 + 205 + 55 * tickCount;
+    $('.loop-indicator').css('left', left);
   });
 };
 
@@ -131,6 +135,7 @@ Template.channels.rendered = function () {
       });
   });
   Session.sounds = sounds;
+  $('.loop-indicator').css('height', 55 * Session.get('channels').length - 5);
 };
 
 Template.channels.events({
