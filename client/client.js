@@ -8,7 +8,7 @@ Meteor.startup(function () {
     Session.set('roomName', roomName);
     Meteor.subscribe('rooms', roomName, function () {
       var room = Rooms.findOne({name: Session.get('roomName')});
-      tempo = room.tempo; // pull this out to another Deps to fix tempo change problem?
+      tempo = room.tempo;
       Session.set('roomId', room._id);
       var channelIds = room.channelIds;
       Session.set('channels', channelIds);
