@@ -86,6 +86,9 @@ Template.room.events({
   },
   'click #faster': function (event) {
     Meteor.call('deltaRoomTempo', this._id, 5);
+  },
+  'change #sound-on-change': function (event) {
+    Session.set('sound-on-change', event.target.checked);;
   }
 });
 
@@ -141,12 +144,13 @@ Template.channels.rendered = function () {
 Template.channels.events({
   'click .step': function (event, template) {
     Meteor.call('toggleStep', this._id, !this.active);
-    Session.sounds[this.channelId].play();
+    if (Session.get('sound-on-change')) Session.sounds[this.channelId].play();
   },
   'mousedown .step': function (event, template) {
     Session.set('mousedown', true);
     Session.set('insideStep', this._id);
     Meteor.call('toggleStep', this._id, !this.active);
+    if (Session.get('sound-on-change')) Session.sounds[this.channelId].play();
   },
   'mouseup': function () {
     Session.set('mousedown', false);
@@ -181,6 +185,7 @@ Template.step.events({
     if (Session.get('mousedown') && this._id !== Session.get('insideStep')) {
       Session.set('insideStep', this._id);
       Meteor.call('toggleStep', this._id, !this.active);
+      if (Session.get('sound-on-change')) Session.sounds[this.channelId].play();
     }
   },
   'mouseleave .step': function (event, template) {
