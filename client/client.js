@@ -64,15 +64,11 @@ Template.room.events({
   'click button#play': function(event) {
     if (Session.get('looping')) {
       Session.set('looping', false);
-      $('.glyphicon-stop').hide();
-      $('.glyphicon-play').show();
       $('.loop-indicator').hide();
     }
     else {
       Session.set('looping', true);
       loopFunc(0);
-      $('.glyphicon-play').hide();
-      $('.glyphicon-stop').show();
       $('.loop-indicator').show();
     }
   },
@@ -88,7 +84,7 @@ Template.room.events({
     Meteor.call('deltaRoomTempo', this._id, 5);
   },
   'change #sound-on-change': function (event) {
-    Session.set('sound-on-change', event.target.checked);;
+    Session.set('sound-on-change', event.target.checked);
   }
 });
 
