@@ -42,7 +42,7 @@ Meteor.methods({
     thisChannelId = Channels.insert({
       stepIds: stepArray,
       roomId: options.channelRoomId,
-      volume: 1,
+      volume: options.volume,
       name: options.channelName,
       soundUrl: options.channelSoundUrl,
       creatorId: this.userId,
@@ -60,5 +60,10 @@ Meteor.methods({
       Steps.remove({_id: toRemove.stepIds[i]});
     }
     Channels.remove({_id: channelId});
+  },
+  changeChannelVolume: function (channelId, delta) {
+    if (delta > 0 || Channels.findOne(channelId).volume > 0) {
+      Channels.update(channelId, {$inc: {volume: delta}});
+    }
   }
 });

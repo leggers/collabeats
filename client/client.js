@@ -112,12 +112,12 @@ Template.channels.created = function () {
     var rhythm = Session.rhythm;
     var channelIds = Object.keys(rhythm);
     for (var i = channelIds.length - 1; i >= 0; i--) {
-      channelId = channelIds[i];
+      var channelId = channelIds[i];
       if (rhythm[channelId][tickCount]) {
         Session.sounds[channelId].play();
       }
     }
-    left = ($(window).width() - $('#top-div').width()) / 2 + 205 + 55 * tickCount;
+    var left = ($(window).width() - $('#top-div').width()) / 2 + 205 + 55 * tickCount;
     $('.loop-indicator').css('left', left);
   });
 };
@@ -131,6 +131,7 @@ Template.channels.rendered = function () {
         urls: [channel.soundUrl],
         onload: function() {console.log('loaded ' + channel.soundUrl);},
         onloaderror: function() {console.log('error loading ' + channel.soundUrl);},
+        volume: channel.volume
       });
   });
   Session.sounds = sounds;
@@ -156,6 +157,18 @@ Template.channels.events({
     for (var i = this.stepIds.length - 1; i >= 0; i--) {
       Meteor.call('toggleStep', this.stepIds[i], false);
     }
+  },
+  'click .glyphicon-volume-down': function (event, template) {
+    Meteor.call('changeChannelVolume', this._id, -0.1);
+    Session.sounds[this._id]._volume = Channels.findOne(this._id).volume;
+  },
+  'click .glyphicon-volume-up': function (event, template) {
+    Meteor.call('changeChannelVolume', this._id, 0.1);
+    Session.sounds[this._id]._volume = Channels.findOne(this._id).volume;
+  },
+  'click .glyphicon-volume-off': function (event, template) {
+    Meteor.call('changeChannelVolume', this._id, -this.volume || 0.5);
+    Session.sounds[this._id]._volume = Channels.findOne(this._id).volume;
   }
 });
 

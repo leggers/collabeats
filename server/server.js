@@ -28,7 +28,8 @@ Meteor.startup(function () {
           channelSoundUrl: folder + urls[i],
           roomId: room._id,
           channelName: name,
-          position: i
+          position: i,
+          volume: 0.5
         });
         Meteor.call('addChannelToRoom', room, channelId);
       }
