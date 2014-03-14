@@ -123,6 +123,7 @@ Template.channels.created = function () {
 };
 
 Template.channels.rendered = function () {
+  console.log('channel rendered');
   sounds = Session.sounds || {};
   Session.sounds = sounds;
   Channels.find({roomId: Session.get('roomId')})
@@ -133,6 +134,7 @@ Template.channels.rendered = function () {
         onloaderror: function() {console.log('error loading ' + channel.soundUrl);},
         volume: channel.volume
       });
+      sounds[channel._id]._volume = channel.volume;
   });
   Session.sounds = sounds;
   $('.loop-indicator').css('height', 55 * Session.get('channels').length - 5);
@@ -160,15 +162,12 @@ Template.channels.events({
   },
   'click .glyphicon-volume-down': function (event, template) {
     Meteor.call('changeChannelVolume', this._id, -0.1);
-    Session.sounds[this._id]._volume = Channels.findOne(this._id).volume;
   },
   'click .glyphicon-volume-up': function (event, template) {
     Meteor.call('changeChannelVolume', this._id, 0.1);
-    Session.sounds[this._id]._volume = Channels.findOne(this._id).volume;
   },
   'click .glyphicon-volume-off': function (event, template) {
     Meteor.call('changeChannelVolume', this._id, -this.volume || 0.5);
-    Session.sounds[this._id]._volume = Channels.findOne(this._id).volume;
   }
 });
 
