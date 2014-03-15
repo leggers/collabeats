@@ -10,4 +10,19 @@
       (else pull the sound from the room)
 */
 
-// Sounds = new Meteor.Collection('sto')
+Sounds = new Meteor.Collection('sounds');
+
+Sounds.allow({
+  insert: function () {
+    // no cowboy inserts; use createSound method
+    return true; // for a little while allow cowboy inserts
+  },
+  update: function (userId, step, fields, modifier) {
+    //no coboy updates; use various update methods
+    return false;
+  },
+  remove: function () {
+    // no cowboy removes; use removeSound method
+    return false;
+  }
+});

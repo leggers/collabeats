@@ -22,7 +22,7 @@ Steps.allow({
   },
   remove: function () {
     // no cowboy removes; use removeBeats method
-    return true;
+    return true; // for a little while allow cowboy removes
   }
 });
 
