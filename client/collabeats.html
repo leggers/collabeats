@@ -61,19 +61,25 @@
     {{#each channels}}
       <div class='channel'>
         <div class='channel-controls'>
-          <div class='btn-group'>
-            <div class='dropdown-toggle', data-toggle='dropdown'>
-              <span class='glyphicon glyphicon-remove-circle'></span>
+          <div class='channel-buttons'>
+            <div class='btn-group'>
+              <div class='dropdown-toggle', data-toggle='dropdown'>
+                <span class='glyphicon glyphicon-remove-circle'></span>
+              </div>
+              <ul class='dropdown-menu' role='menu'>
+                <li><a class='clear-row'>Clear Row</a></li>
+                <!-- <li><a>Remove Channel</a></li> -->
+              </ul>
             </div>
-            <ul class='dropdown-menu' role='menu'>
-              <li><a class='clear-row'>Clear Row</a></li>
-              <!-- <li><a>Remove Channel</a></li> -->
-            </ul>
+            <div class='volume-controls'>
+              <span class='glyphicon glyphicon-volume-down volume'></span>
+              <span class='glyphicon glyphicon-volume-off volume'></span>
+              <span class='glyphicon glyphicon-volume-up volume'></span>
+            </div>
           </div>
-          {{name}}
-          <span class='glyphicon glyphicon-volume-off'></span>
-          <span class='glyphicon glyphicon-volume-down'></span>
-          <span class='glyphicon glyphicon-volume-up'></span>
+          <div class='name'>
+            {{name}}
+          </div>
         </div>
         <div class='step-container'>
           {{#isolate}}
