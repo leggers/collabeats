@@ -28,12 +28,12 @@ Sounds.allow({
 });
 
 Meteor.methods({
-  addSound: function (name, variantName, variantUrl, privateSound) {
+  addSound: function (options) {
     Sounds.insert({
       ownerId: this.userId,
-      name: name,
-      variants: [ {variantName: variantUrl} ],
-      privateSound: privateSound
+      name: options.soundName,
+      variants: options.variants,
+      privateSound: options.privateSound
     });
   },
   addVariant: function (soundId, variantName, variantUrl) {
