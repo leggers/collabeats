@@ -4,8 +4,7 @@
   Each channel is a doc in the Channels collection:
   stepIds: array of stepIds in the channel
   roomId: id of the room the channel belongs in
-  volume: volume of the channel
-  soundId: id of the Sounds model for the channel
+  soundName: name of the Sounds model for the channel
   selectedSound: name of the variant of the Sounds model
   creatorId: person who added the channel
   position: vertical ordering of channels in a room
@@ -35,18 +34,17 @@ Meteor.methods({
       stepArray.push(Steps.insert({
         active: false,
         lastChangerId: this.userId,
-        position: i,
-        roomId: options.roomId
+        position: i
       }));
     }
     thisChannelId = Channels.insert({
       stepIds: stepArray,
       roomId: options.channelRoomId,
-      volume: options.volume,
-      name: options.channelName,
-      soundUrl: options.channelSoundUrl,
+      soundName: options.soundName,
+      selectedSound: options.selectedSound,
       creatorId: this.userId,
-      position: options.position
+      position: options.position,
+      volume: options.volume
     });
     for (var i = 0; i < stepArray.length; i++) {
       Steps.update({_id: stepArray[i]}, {$set: {channelId: thisChannelId}});

@@ -2,7 +2,7 @@
 
 /*
   Each sample is a doc in the Steps collection:
-    name: sound name
+    name: sound name (must be unique)
     variants: an Array that stores variations of a sound (say, different pitch, or sustain or whatever),
       in the form {variantName: soundUrl, ...}
     ownerId: ID of person who created the sound
@@ -29,12 +29,14 @@ Sounds.allow({
 
 Meteor.methods({
   addSound: function (options) {
-    Sounds.insert({
-      ownerId: this.userId,
-      name: options.soundName,
-      variants: options.variants,
-      privateSound: options.privateSound
-    });
+    if (Sounds.findOne({name: options.name}) === undefined) {
+      Sounds.insert({
+        ownerId: this.userId,
+        name: options.soundName,
+        variants: options.variants,
+        privateSound: options.privateSound
+      });
+    }
   },
   addVariant: function (soundId, variantName, variantUrl) {
     sound = Sounds.findOne(soundId);

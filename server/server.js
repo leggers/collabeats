@@ -217,23 +217,20 @@ Meteor.startup(function () {
     }
   }
   if (Rooms.find().count() != 1) {
-    room = Rooms.insert({name: 'home', tempo: 120, channelIds: []});
-    var folder = '/808-sample-pack/';
-    for(var i = 0; i < urls.length; i++) {
-      if (Channels.findOne({soundUrl: folder + urls[i]}) === undefined) {
-        var name = urls[i].substr(0, urls[i].indexOf('/'));
-        if (name === 'misc') name = urls[i].substr(urls[i].indexOf('/') + 1, urls[i].indexOf('.'));
+    var room = Rooms.insert({name: 'home', tempo: 120, channelIds: []});
+    for(var i = 0; i < soundNames.length; i++) {
+      if (Channels.findOne({soundName: soundNames[i], roomId: room._id}) === undefined) {
         channelId = Meteor.call('addChannel', {
           numSteps: 16,
-          channelSoundUrl: folder + urls[i],
           roomId: room._id,
           channelName: name,
           position: i,
-          volume: 0.5
+          volume: 0.5,
+          soundName: soundNames[i],
+          selectedSound: '1'
         });
         Meteor.call('addChannelToRoom', room, channelId);
       }
-      Channels.update({soundUrl: folder + urls[i]}, {$set: {roomId: room._id}});
     }
   }
 });
