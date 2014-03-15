@@ -3,6 +3,7 @@
 
 Meteor.startup(function () {
   Deps.autorun(function () {
+    Meteor.subscribe('sounds');
     console.log('deps');
     var roomName = Session.get('roomName') || "home";
     Session.set('roomName', roomName);
@@ -128,10 +129,11 @@ Template.channels.rendered = function () {
   Session.sounds = sounds;
   Channels.find({roomId: Session.get('roomId')})
     .forEach(function (channel) {
+      sound = Sounds.findOne({name: channel.soundName});
       sounds[channel._id] = Session.sounds[channel._id] || new Howl({
-        urls: [channel.soundUrl],
-        onload: function() {console.log('loaded ' + channel.soundUrl);},
-        onloaderror: function() {console.log('error loading ' + channel.soundUrl);},
+        urls: [sound.variants[channel.selectedSound]],
+        onload: function() {console.log('loaded ' + sound.variants[channel.selectedSound]);},
+        onloaderror: function() {console.log('error loading ' + sound.variants[channel.selectedSound]);},
         volume: channel.volume
       });
       sounds[channel._id]._volume = channel.volume;

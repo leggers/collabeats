@@ -39,15 +39,15 @@ Meteor.methods({
     }
     thisChannelId = Channels.insert({
       stepIds: stepArray,
-      roomId: options.channelRoomId,
+      roomId: options.roomId,
       soundName: options.soundName,
       selectedSound: options.selectedSound,
       creatorId: this.userId,
       position: options.position,
       volume: options.volume
     });
-    for (var i = 0; i < stepArray.length; i++) {
-      Steps.update({_id: stepArray[i]}, {$set: {channelId: thisChannelId}});
+    for (var j = 0; j < stepArray.length; j++) {
+      Steps.update({_id: stepArray[j]}, {$set: {channelId: thisChannelId}});
     }
     return thisChannelId;
   },

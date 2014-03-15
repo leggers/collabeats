@@ -209,27 +209,31 @@ Meteor.startup(function () {
   var soundNames = Object.keys(soundsData);
   if (Sounds.find().count() != soundNames.length) {
     for (var i = soundNames.length - 1; i >= 0; i--) {
-      Meteor.call('addSound', {
-        soundName: soundNames[i],
-        variants: soundsData[ soundNames[i] ],
-        privateSound: false
-      });
+      if (Sounds.findOne({name: soundNames[i]}) === undefined) {
+        Meteor.call('addSound', {
+          soundName: soundNames[i],
+          variants: soundsData[ soundNames[i] ],
+          privateSound: false
+        });
+      }
     }
   }
-  if (Rooms.find().count() != 1) {
-    var room = Rooms.insert({name: 'home', tempo: 120, channelIds: []});
-    for(var i = 0; i < soundNames.length; i++) {
-      if (Channels.findOne({soundName: soundNames[i], roomId: room._id}) === undefined) {
+  if (Rooms.findOne({name: 'home'}) === undefined) {
+    Rooms.insert({name: 'home', tempo: 120, channelIds: []});
+  }
+  var roomId = Rooms.findOne({name: 'home'})._id;
+  if (Channels.find({roomId: roomId}).count() !== 16) {
+    for(var j = 0; j < soundNames.length; j++) {
+      if (Channels.findOne({soundName: soundNames[j], roomId: roomId}) === undefined) {
         channelId = Meteor.call('addChannel', {
           numSteps: 16,
-          roomId: room._id,
-          channelName: name,
-          position: i,
+          roomId: roomId,
+          position: j,
           volume: 0.5,
-          soundName: soundNames[i],
+          soundName: soundNames[j],
           selectedSound: '1'
         });
-        Meteor.call('addChannelToRoom', room, channelId);
+        Meteor.call('addChannelToRoom', roomId, channelId);
       }
     }
   }
@@ -245,4 +249,8 @@ Meteor.publish('channels', function (parentRoomId) {
 
 Meteor.publish('steps', function (channelIds) {
   return Steps.find({channelId: {$in: channelIds}});
+});
+
+Meteor.publish('sounds', function () {
+  return Sounds.find();
 });
