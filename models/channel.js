@@ -5,8 +5,8 @@
   stepIds: array of stepIds in the channel
   roomId: id of the room the channel belongs in
   volume: volume of the channel
-  name: instrument name
-  soundUrl: url of the sound file for the channel
+  soundId: id of the Sounds model for the channel
+  selectedSound: name of the variant of the Sounds model
   creatorId: person who added the channel
   position: vertical ordering of channels in a room
   volume: channel volume
