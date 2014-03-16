@@ -130,6 +130,10 @@ Template.channels.created = function () {
   });
 };
 
+var newSound = function (url, volume, autoplay) {
+  return new Howl({ urls: [url], volume: volume, autoplay: autoplay });
+};
+
 Template.channels.rendered = function () {
   console.log('channel rendered');
   var sounds = Session.sounds || {};
@@ -140,16 +144,8 @@ Template.channels.rendered = function () {
     .forEach(function (channel) {
       var sound = Sounds.findOne({name: channel.soundName});
       var url = sound.variants[channel.selectedSound - 1].url;
-      sounds[channel._id] = Session.sounds[channel._id] || new Howl({
-        urls: [url],
-        onloaderror: function() {console.log('error loading ' + url);},
-        volume: channel.volume
-      });
-      variants[url] = Session.variants[url] || new Howl({
-        urls: [url],
-        volume: 1,
-        onloaderror: function () {console.log('error loading ' + url);},
-      });
+      sounds[channel._id] = Session.sounds[channel._id] || newSound(url, channel.volume);
+      variants[url] = Session.variants[url] || newSound(url, 1);
       sounds[channel._id]._volume = channel.volume;
   });
   Session.sounds = sounds;
@@ -186,21 +182,32 @@ Template.channels.events({
   },
   'click #variant-menu > li > a > .glyphicon': function (event, template) {
     event.stopPropagation();
-    var url = event.srcElement.parentElement.dataset.url;
+    var url = this.url;
     var existingSound = Session.variants[url];
     if (existingSound) {
       existingSound.play();
     }
     else {
-      Session.variants[url] = new Howl({
-        urls: [url],
-        volume: 1,
-        autoplay: true
-      });
+      Session.variants[url] = newSound(url, 1, true);
     }
   },
   'click #variant-menu > li > a': function (event, template) {
-    console.log('dropdown clicked');
+    var channelId = event.srcElement.parentElement.parentElement.dataset.channel;
+    var channel = Channels.findOne(channelId);
+
+    var url = this.url;
+    var existingSound = Session.variants[url];
+    if (existingSound) {
+      var replacementSound = jQuery.extend({}, existingSound);
+      replacementSound._volume = channel.volume;
+      Session.sounds[channelId] = replacementSound;
+    }
+    else {
+      Session.sounds[channelId] = newSound(url, channel.volume);
+      Session.variants[url] = newSound(url, 1);
+    }
+    
+    Meteor.call('changeSound', channelId, this.name);
   }
 });
 

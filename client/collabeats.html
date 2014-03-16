@@ -86,7 +86,7 @@
                   {{selectedSound}}
                   <span class="caret"></span>
                 </a>
-                <ul class="dropdown-menu" id='variant-menu'>
+                <ul class="dropdown-menu" id='variant-menu' data-channel='{{_id}}'>
                   {{#each variants}}
                     <li><a data-url='{{url}}'>
                       {{name}}

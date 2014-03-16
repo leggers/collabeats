@@ -63,5 +63,8 @@ Meteor.methods({
     if (delta > 0 || Channels.findOne(channelId).volume > 0) {
       Channels.update(channelId, {$inc: {volume: delta}});
     }
+  },
+  changeSound: function (channelId, variantName) {
+    Channels.update(channelId, {$set: {selectedSound: variantName}});
   }
 });
