@@ -91,6 +91,9 @@ Template.room.events({
 
 Template.room.rendered = function () {
   console.log('room rendered');
+  if (Session.get('sound-on-change') && !$('#sound-on-change').is(':checked')) {
+    $('#sound-on-change').click();
+  }
 };
 
 Template.room.looping = function () {
