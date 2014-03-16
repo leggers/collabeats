@@ -44,7 +44,7 @@
               Options <span class='caret'></span>
             </button>
             <ul class='dropdown-menu' role='menu'>
-              <li> Sound on change: <input type='checkbox' id='sound-on-change' {{#if sounding}} checked {{/if}}/></li>
+              <li> Sound on change: <input type='checkbox' id='sound-on-change'/></li>
             </ul>
           </div>
 
@@ -78,12 +78,12 @@
             </div>
           </div>
           <div class='name'>
-            {{soundName}}
+            {{soundName}} sound 
             <div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                  ({{selectedSound}})
+                <a class="dropdown-toggle" data-toggle="dropdown">
+                  {{selectedSound}}
                   <span class="caret"></span>
-                </button>
+                </a>
                 <ul class="dropdown-menu">
                   {{#each variants}}
                     <li><a>{{name}}</a><li>
