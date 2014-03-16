@@ -150,7 +150,6 @@ Template.channels.rendered = function () {
 Template.channels.events({
   'click .step': function (event, template) {
     Meteor.call('toggleStep', this._id, !this.active);
-    if (Session.get('sound-on-change')) Session.sounds[this.channelId].play();
   },
   'mousedown .step': function (event, template) {
     Session.set('mousedown', true);
