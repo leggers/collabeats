@@ -106,6 +106,10 @@ Template.channels.channels = function () {
   return Channels.find({_id: {$in: Session.get('channels')}});
 };
 
+Template.channels.variants = function () {
+  return Sounds.findOne({name: this.soundName}).variants;
+};
+
 Template.channels.created = function () {
   // Cache the channel-step arrays as a single object for sound loop
   Session.rhythm = {};
@@ -125,15 +129,16 @@ Template.channels.created = function () {
 
 Template.channels.rendered = function () {
   console.log('channel rendered');
-  sounds = Session.sounds || {};
+  var sounds = Session.sounds || {};
   Session.sounds = sounds;
   Channels.find({roomId: Session.get('roomId')})
     .forEach(function (channel) {
-      sound = Sounds.findOne({name: channel.soundName});
+      var sound = Sounds.findOne({name: channel.soundName});
+      var url = sound.variants[channel.selectedSound - 1].url;
       sounds[channel._id] = Session.sounds[channel._id] || new Howl({
-        urls: [sound.variants[channel.selectedSound]],
-        onload: function() {console.log('loaded ' + sound.variants[channel.selectedSound]);},
-        onloaderror: function() {console.log('error loading ' + sound.variants[channel.selectedSound]);},
+        urls: [url],
+        onload: function() {console.log('loaded ' + url);},
+        onloaderror: function() {console.log('error loading ' + url);},
         volume: channel.volume
       });
       sounds[channel._id]._volume = channel.volume;

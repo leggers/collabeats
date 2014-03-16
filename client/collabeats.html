@@ -79,6 +79,17 @@
           </div>
           <div class='name'>
             {{soundName}}
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                  ({{selectedSound}})
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                  {{#each variants}}
+                    <li><a>{{name}}</a><li>
+                  {{/each}}
+                </ul>
+              </div>
           </div>
         </div>
         <div class='step-container'>
