@@ -78,15 +78,20 @@
             </div>
           </div>
           <div class='name'>
-            {{soundName}} sound 
+            <span class='sound-name'>
+              {{soundName}}
+            </span>
             <div class="btn-group">
                 <a class="dropdown-toggle" data-toggle="dropdown">
                   {{selectedSound}}
                   <span class="caret"></span>
                 </a>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu" id='variant-menu'>
                   {{#each variants}}
-                    <li><a>{{name}}</a><li>
+                    <li><a data-url='{{url}}'>
+                      {{name}}
+                      <span class='glyphicon glyphicon-bell pull-right'></span>
+                    </a><li>
                   {{/each}}
                 </ul>
               </div>

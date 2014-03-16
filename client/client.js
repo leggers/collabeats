@@ -134,15 +134,21 @@ Template.channels.rendered = function () {
   console.log('channel rendered');
   var sounds = Session.sounds || {};
   Session.sounds = sounds;
+  var variants = Session.variants || {};
+  Session.variants = variants;
   Channels.find({roomId: Session.get('roomId')})
     .forEach(function (channel) {
       var sound = Sounds.findOne({name: channel.soundName});
       var url = sound.variants[channel.selectedSound - 1].url;
       sounds[channel._id] = Session.sounds[channel._id] || new Howl({
         urls: [url],
-        onload: function() {console.log('loaded ' + url);},
         onloaderror: function() {console.log('error loading ' + url);},
         volume: channel.volume
+      });
+      variants[url] = Session.variants[url] || new Howl({
+        urls: [url],
+        volume: 1,
+        onloaderror: function () {console.log('error loading ' + url);},
       });
       sounds[channel._id]._volume = channel.volume;
   });
@@ -177,6 +183,24 @@ Template.channels.events({
   },
   'click .glyphicon-volume-off': function (event, template) {
     Meteor.call('changeChannelVolume', this._id, -this.volume || 0.5);
+  },
+  'click #variant-menu > li > a > .glyphicon': function (event, template) {
+    event.stopPropagation();
+    var url = event.srcElement.parentElement.dataset.url;
+    var existingSound = Session.variants[url];
+    if (existingSound) {
+      existingSound.play();
+    }
+    else {
+      Session.variants[url] = new Howl({
+        urls: [url],
+        volume: 1,
+        autoplay: true
+      });
+    }
+  },
+  'click #variant-menu > li > a': function (event, template) {
+    console.log('dropdown clicked');
   }
 });
 
