@@ -52,8 +52,28 @@ Meteor.startup(function () {
           channelObserver = Channels.find({_id: {$in: Session.get('channels')}})
             .observeChanges({
               changed: function (id, fields) {
-                if (fields.volume > -1) {
+                if (fields.volume !== undefined) {
                   _sounds[id]._volume = fields.volume;
+                }
+                if (fields.selectedSound) {
+                  var channel = Channels.findOne(id);
+                  var sound = Sounds.findOne({name: channel.soundName});
+                  var url = sound.variants[channel.selectedSound - 1].url;
+                  
+                  var existingSound = _variants[url];
+                  if (existingSound) {
+                    var replacementSound = jQuery.extend({}, existingSound);
+                    replacementSound._volume = channel.volume;
+                    _sounds[id] = replacementSound;
+                  }
+                  else {
+                    newSound(url, channel.volume, false, function () {
+                      _sounds[id] = this;
+                    });
+                    newSound(url, 1, false, function () {
+                      _variants[url] = this;
+                    });
+                  }
                 }
               }
             });
@@ -77,8 +97,8 @@ Meteor.startup(function () {
   });
 });
 
-newSound = function (url, volume, autoplay) {
-  return new Howl({ urls: [url], volume: volume, autoplay: autoplay });
+newSound = function (url, volume, autoplay, onload) {
+  return new Howl({ urls: [url], volume: volume, autoplay: autoplay, onload: onload });
 };
 
 Template.layout.shouldRender = function () {
@@ -236,21 +256,7 @@ Template.channelControls.events({
     }
   },
   'click #variant-menu > li > a': function (event, template) {
-    var channelId = event.srcElement.parentElement.parentElement.dataset.channel;
-    var channel = Channels.findOne(channelId);
-
-    var url = this.url;
-    var existingSound = _variants[url];
-    if (existingSound) {
-      var replacementSound = jQuery.extend({}, existingSound);
-      replacementSound._volume = channel.volume;
-      _sounds[channelId] = replacementSound;
-    }
-    else {
-      _sounds[channelId] = newSound(url, channel.volume);
-      _variants[url] = newSound(url, 1);
-    }
-    
+    var channelId = event.currentTarget.parentElement.parentElement.dataset.channel;
     Meteor.call('changeSound', channelId, this.name);
   }
 });
