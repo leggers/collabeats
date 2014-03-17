@@ -21,7 +21,7 @@ Meteor.startup(function () {
   Session.set('looping', false);
 });
 
-Template.layout.render = function () {
+Template.layout.shouldRender = function () {
   return Session.get('channels') && Session.get('roomId');
 };
 
