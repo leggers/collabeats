@@ -218,8 +218,9 @@ Meteor.startup(function () {
       }
     }
   }
-  if (Rooms.findOne({name: 'home'}) === undefined) {
+  if (Rooms.find().count() !== 2) {
     Rooms.insert({name: 'home', tempo: 120, channelIds: []});
+    Rooms.insert({name: 'other', tempo: 120, channelIds: []});
   }
   var roomId = Rooms.findOne({name: 'home'})._id;
   if (Channels.find({roomId: roomId}).count() !== 16) {

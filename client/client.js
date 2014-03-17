@@ -2,24 +2,63 @@
 // Startup & Layout
 
 Meteor.startup(function () {
-  Deps.autorun(function () {
-    Meteor.subscribe('sounds');
-    console.log('deps');
-    var roomName = Session.get('roomName') || "home";
-    Session.set('roomName', roomName);
-    Meteor.subscribe('rooms', roomName, function () {
-      var room = Rooms.findOne({name: Session.get('roomName')});
-      tempo = room.tempo;
-      Session.set('roomId', room._id);
-      var channelIds = room.channelIds;
-      Session.set('channels', channelIds);
-      Meteor.subscribe('channels', room._id, function () {
-        Meteor.subscribe('steps', channelIds);
+  Meteor.subscribe('sounds', function () {
+    Deps.autorun(function () {
+      _rhythm = {}; // cache to prevent database lookups each tick
+      _sounds = {}; // mapping of channel ids to their respective sounds
+      _variants = {}; // stores variants of sounds as a mapping of sound urls to their sounds
+
+      var room = Session.get('room') || "home";
+      Session.set('room', room);
+      Meteor.subscribe('rooms', room, function () {
+        var room = Rooms.findOne({name: Session.get('room')});
+        tempo = room.tempo;
+        Session.set('roomId', room._id);
+
+        var channelIds = room.channelIds;
+        Session.set('channels', channelIds);
+        Meteor.subscribe('channels', room._id, function () {
+
+          Meteor.subscribe('steps', channelIds, function () {
+
+            for (var i = channelIds.length - 1; i >= 0; i--) {
+              var channelId = channelIds[i];
+
+              var channel = Channels.findOne(channelId);
+              var sound = Sounds.findOne({name: channel.soundName});
+              var url = sound.variants[channel.selectedSound - 1].url;
+
+              _sounds[channelId] = newSound(url, channel.volume);
+              _variants[url] = newSound(url, 1);
+
+              _rhythm[channelId] = [];
+              Steps.find({channelId: channelId}).forEach(function (step) {
+                _rhythm[channelId][step.position] = step.active;
+              });
+            }
+          });
+        });
       });
     });
+    Session.set('looping', false);
   });
-  Session.set('looping', false);
+
+  $(window).load(function () {
+    $(window).scroll(function (event) {
+      var controlBar = $('.fixed-wrap');
+      if ($(window).scrollTop() >= 70){
+        controlBar.addClass('fixed');
+      }
+      else {
+        controlBar.removeClass('fixed');
+      }
+    });
+  });
 });
+
+var newSound = function (url, volume, autoplay) {
+  return new Howl({ urls: [url], volume: volume, autoplay: autoplay });
+};
 
 Template.layout.shouldRender = function () {
   return Session.get('channels') && Session.get('roomId');
@@ -29,23 +68,8 @@ Template.layout.shouldRender = function () {
 ////////////////////////////////////////////////////////////////////////////////
 // Rooms
 
-Template.room.created = function () {
-  var win = $(window);
-  win.load(function () {
-    win.scroll(function (event) {
-      var controlBar = $('.fixed-wrap');
-      if (win.scrollTop() >= 70){
-        controlBar.addClass('fixed');
-      }
-      else {
-        controlBar.removeClass('fixed');
-      }
-    });
-  });
-};
-
 Template.room.room = function () {
-  return Rooms.findOne({name: Session.get('roomName')});
+  return Rooms.findOne({name: Session.get('room')});
 };
 
 var loopFunc = function(tickCount) {
@@ -58,7 +82,7 @@ var loopFunc = function(tickCount) {
 };
 
 var getInterval = function() {
-  return 60/Rooms.findOne({name: Session.get('roomName')}).tempo*1000/4;
+  return 60/Rooms.findOne({name: Session.get('room')}).tempo*1000/4;
 };
 
 Template.room.events({
@@ -111,16 +135,12 @@ Template.channels.channels = function () {
 
 Template.channels.created = function () {
   // Cache the channel-step arrays as a single object for sound loop
-  Session.rhythm = {};
-  Session.sounds = {};
-  Session.variants = {};
   amplify.subscribe('tick', function (tickCount) {
-    var rhythm = Session.rhythm;
-    var channelIds = Object.keys(rhythm);
+    var channelIds = Object.keys(_rhythm);
     for (var i = channelIds.length - 1; i >= 0; i--) {
       var channelId = channelIds[i];
-      if (rhythm[channelId][tickCount]) {
-        Session.sounds[channelId].play();
+      if (_rhythm[channelId][tickCount]) {
+        _sounds[channelId].play();
       }
     }
     var left = ($(window).width() - $('#top-div').width()) / 2 + 205 + 55 * tickCount;
@@ -141,7 +161,7 @@ Template.channels.events({
     Session.set('mousedown', true);
     Session.set('insideStep', this._id);
     Meteor.call('toggleStep', this._id, !this.active);
-    if (Session.get('sound-on-change')) Session.sounds[this.channelId].play();
+    if (Session.get('sound-on-change')) _sounds[this.channelId].play();
   },
   'mouseup': function () {
     Session.set('mousedown', false);
@@ -156,21 +176,17 @@ Template.channels.events({
 
 Template.channelControls.rendered = function () {
   console.log('controls rendered');
-  var channelId = this.firstNode.dataset.channel;
-  var channel = Channels.findOne(channelId);
-  var sound = Sounds.findOne({name: channel.soundName});
-  var url = sound.variants[channel.selectedSound - 1].url;
+  // var channelId = this.firstNode.dataset.channel;
+  // var channel = Channels.findOne(channelId);
+  // var sound = Sounds.findOne({name: channel.soundName});
+  // var url = sound.variants[channel.selectedSound - 1].url;
 
-  Session.sounds[channel._id] = Session.sounds[channel._id] || newSound(url, channel.volume);
-  Session.variants[url] = Session.variants[url] || newSound(url, 1);
+  // _sounds[channel._id] = _sounds[channel._id] || newSound(url, channel.volume);
+  // _variants[url] = _variants[url] || newSound(url, 1);
 };
 
 Template.channelControls.variants = function () {
   return Sounds.findOne({name: this.soundName}).variants;
-};
-
-var newSound = function (url, volume, autoplay) {
-  return new Howl({ urls: [url], volume: volume, autoplay: autoplay });
 };
 
 Template.channelControls.events({
@@ -191,12 +207,12 @@ Template.channelControls.events({
   'click #variant-menu > li > a > .glyphicon': function (event, template) {
     event.stopPropagation();
     var url = this.url;
-    var existingSound = Session.variants[url];
+    var existingSound = _variants[url];
     if (existingSound) {
       existingSound.play();
     }
     else {
-      Session.variants[url] = newSound(url, 1, true);
+      _variants[url] = newSound(url, 1, true);
     }
   },
   'click #variant-menu > li > a': function (event, template) {
@@ -204,15 +220,15 @@ Template.channelControls.events({
     var channel = Channels.findOne(channelId);
 
     var url = this.url;
-    var existingSound = Session.variants[url];
+    var existingSound = _variants[url];
     if (existingSound) {
       var replacementSound = jQuery.extend({}, existingSound);
       replacementSound._volume = channel.volume;
-      Session.sounds[channelId] = replacementSound;
+      _sounds[channelId] = replacementSound;
     }
     else {
-      Session.sounds[channelId] = newSound(url, channel.volume);
-      Session.variants[url] = newSound(url, 1);
+      _sounds[channelId] = newSound(url, channel.volume);
+      _variants[url] = newSound(url, 1);
     }
     
     Meteor.call('changeSound', channelId, this.name);
@@ -230,11 +246,11 @@ Template.step.getStep = function (stepId) {
 
 Template.step.rendered = function () {
   console.log('step rendered');
-  step = Steps.findOne({_id: this.data});
-  if (step) {
-    Session.rhythm[step.channelId] = Session.rhythm[step.channelId] || [];
-    Session.rhythm[step.channelId][step.position] = step.active;
-  }
+  // step = Steps.findOne({_id: this.data});
+  // if (step) {
+  //   _rhythm[step.channelId] = _rhythm[step.channelId] || [];
+  //   _rhythm[step.channelId][step.position] = step.active;
+  // }
 };
 
 Template.step.events({
@@ -242,7 +258,7 @@ Template.step.events({
     if (Session.get('mousedown') && this._id !== Session.get('insideStep')) {
       Session.set('insideStep', this._id);
       Meteor.call('toggleStep', this._id, !this.active);
-      if (Session.get('sound-on-change')) Session.sounds[this.channelId].play();
+      if (Session.get('sound-on-change')) _sounds[this.channelId].play();
     }
   },
   'mouseleave .step': function (event, template) {
