@@ -60,52 +60,54 @@
   <div class='channels'>
     {{#each channels}}
       <div class='channel'>
-        <div class='channel-controls'>
-          <div class='channel-buttons'>
-            <div class='btn-group'>
-              <div class='dropdown-toggle', data-toggle='dropdown'>
-                <span class='glyphicon glyphicon-remove-circle'></span>
-              </div>
-              <ul class='dropdown-menu' role='menu'>
-                <li><a class='clear-row'>Clear Row</a></li>
-                <!-- <li><a>Remove Channel</a></li> -->
-              </ul>
-            </div>
-            <div class='volume-controls'>
-              <span class='glyphicon glyphicon-volume-down volume'></span>
-              <span class='glyphicon glyphicon-volume-off volume'></span>
-              <span class='glyphicon glyphicon-volume-up volume'></span>
-            </div>
-          </div>
-          <div class='name'>
-            <span class='sound-name'>
-              {{soundName}}
-            </span>
-            <div class="btn-group">
-                <a class="dropdown-toggle" data-toggle="dropdown">
-                  {{selectedSound}}
-                  <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu" id='variant-menu' data-channel='{{_id}}'>
-                  {{#each variants}}
-                    <li><a data-url='{{url}}'>
-                      {{name}}
-                      <span class='glyphicon glyphicon-bell pull-right'></span>
-                    </a><li>
-                  {{/each}}
-                </ul>
-              </div>
-          </div>
-        </div>
+        {{> channelControls}}
         <div class='step-container'>
-          {{#isolate}}
             {{#each stepIds}}
               {{> step}}
             {{/each}}
-          {{/isolate}}
         </div>
       </div>
     {{/each}}
+  </div>
+</template>
+
+<template name='channelControls'>
+  <div class='channel-controls' data-channel='{{_id}}'>
+    <div class='channel-buttons'>
+      <div class='btn-group'>
+        <div class='dropdown-toggle', data-toggle='dropdown'>
+          <span class='glyphicon glyphicon-remove-circle'></span>
+        </div>
+        <ul class='dropdown-menu' role='menu'>
+          <li><a class='clear-row'>Clear Row</a></li>
+          <!-- <li><a>Remove Channel</a></li> -->
+        </ul>
+      </div>
+      <div class='volume-controls'>
+        <span class='glyphicon glyphicon-volume-down volume'></span>
+        <span class='glyphicon glyphicon-volume-off volume'></span>
+        <span class='glyphicon glyphicon-volume-up volume'></span>
+      </div>
+    </div>
+    <div class='name'>
+      <span class='sound-name'>
+        {{soundName}}
+      </span>
+      <div class="btn-group">
+          <a class="dropdown-toggle" data-toggle="dropdown">
+            {{selectedSound}}
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu" id='variant-menu' data-channel='{{_id}}'>
+            {{#each variants}}
+              <li><a data-url='{{url}}'>
+                {{name}}
+                <span class='glyphicon glyphicon-bell pull-right'></span>
+              </a><li>
+            {{/each}}
+          </ul>
+        </div>
+    </div>
   </div>
 </template>
 

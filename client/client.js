@@ -109,13 +109,11 @@ Template.channels.channels = function () {
   return Channels.find({_id: {$in: Session.get('channels')}});
 };
 
-Template.channels.variants = function () {
-  return Sounds.findOne({name: this.soundName}).variants;
-};
-
 Template.channels.created = function () {
   // Cache the channel-step arrays as a single object for sound loop
   Session.rhythm = {};
+  Session.sounds = {};
+  Session.variants = {};
   amplify.subscribe('tick', function (tickCount) {
     var rhythm = Session.rhythm;
     var channelIds = Object.keys(rhythm);
@@ -130,25 +128,8 @@ Template.channels.created = function () {
   });
 };
 
-var newSound = function (url, volume, autoplay) {
-  return new Howl({ urls: [url], volume: volume, autoplay: autoplay });
-};
-
 Template.channels.rendered = function () {
-  console.log('channel rendered');
-  var sounds = Session.sounds || {};
-  Session.sounds = sounds;
-  var variants = Session.variants || {};
-  Session.variants = variants;
-  Channels.find({roomId: Session.get('roomId')})
-    .forEach(function (channel) {
-      var sound = Sounds.findOne({name: channel.soundName});
-      var url = sound.variants[channel.selectedSound - 1].url;
-      sounds[channel._id] = Session.sounds[channel._id] || newSound(url, channel.volume);
-      variants[url] = Session.variants[url] || newSound(url, 1);
-      sounds[channel._id]._volume = channel.volume;
-  });
-  Session.sounds = sounds;
+  console.log('channels rendered');
   $('.loop-indicator').css('height', 55 * Session.get('channels').length - 5);
 };
 
@@ -165,7 +146,34 @@ Template.channels.events({
   'mouseup': function () {
     Session.set('mousedown', false);
     Session.set('insideStep', undefined);
-  },
+  }
+});
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Channel Controls
+
+Template.channelControls.rendered = function () {
+  console.log('controls rendered');
+  var channelId = this.firstNode.dataset.channel;
+  var channel = Channels.findOne(channelId);
+  var sound = Sounds.findOne({name: channel.soundName});
+  var url = sound.variants[channel.selectedSound - 1].url;
+
+  Session.sounds[channel._id] = Session.sounds[channel._id] || newSound(url, channel.volume);
+  Session.variants[url] = Session.variants[url] || newSound(url, 1);
+};
+
+Template.channelControls.variants = function () {
+  return Sounds.findOne({name: this.soundName}).variants;
+};
+
+var newSound = function (url, volume, autoplay) {
+  return new Howl({ urls: [url], volume: volume, autoplay: autoplay });
+};
+
+Template.channelControls.events({
   'click .clear-row': function (event, template) {
     for (var i = this.stepIds.length - 1; i >= 0; i--) {
       Meteor.call('toggleStep', this.stepIds[i], false);
@@ -221,6 +229,7 @@ Template.step.getStep = function (stepId) {
 };
 
 Template.step.rendered = function () {
+  console.log('step rendered');
   step = Steps.findOne({_id: this.data});
   if (step) {
     Session.rhythm[step.channelId] = Session.rhythm[step.channelId] || [];
