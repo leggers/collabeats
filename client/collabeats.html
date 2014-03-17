@@ -111,6 +111,6 @@
 
 <template name='step'>
   {{#with getStep this}}
-    <div class='step{{#if active}} active{{else}} inactive{{/if}}' id='{{_id}}'></div>
+    <div class='step{{#if active}} active{{else}} inactive{{/if}}' data-id='{{_id}}' data-active='{{#if active}}true{{else}}false{{/if}}' data-channel='{{channelId}}'></div>
   {{/with}}
 </template>

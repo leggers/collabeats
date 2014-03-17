@@ -184,6 +184,17 @@ Template.channels.created = function () {
 
 Template.channels.rendered = function () {
   $('.loop-indicator').css('height', 55 * Session.get('channels').length - 5);
+  $(document).on('mouseenter', '.step', function (event) {
+    var data = event.currentTarget.dataset;
+    if (Session.get('mousedown') && data.id !== Session.get('insideStep')) {
+      Session.set('insideStep', data.id);
+      Meteor.call('toggleStep', data.id, data.active !== 'true');
+      if (Session.get('sound-on-change')) _sounds[data.channel].play();
+    }
+  });
+  $(document).on('mouseleave', '.step', function (event) {
+    Session.set('insideStep', undefined);
+  });
 };
 
 Template.channels.events({
@@ -195,17 +206,6 @@ Template.channels.events({
   },
   'mouseup': function () {
     Session.set('mousedown', false);
-    Session.set('insideStep', undefined);
-  },
-  'mouseenter .step': function (event, template) {
-    console.log('inside step');
-    if (Session.get('mousedown') && this._id !== Session.get('insideStep')) {
-      Session.set('insideStep', this._id);
-      Meteor.call('toggleStep', this._id, !this.active);
-      if (Session.get('sound-on-change')) _sounds[this.channelId].play();
-    }
-  },
-  'mouseleave .step': function (event, template) {
     Session.set('insideStep', undefined);
   }
 });
