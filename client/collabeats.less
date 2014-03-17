@@ -45,6 +45,14 @@ a {
     cursor: pointer;
 }
 
+* {
+     user-select: none;
+    -khtml-user-select: none;
+    -o-user-select: none;
+    -moz-user-select: -moz-none;
+    -webkit-user-select: none;
+}
+
 /*******************************************************************************
     Room
 */
@@ -124,11 +132,6 @@ a {
 .channel {
     margin-top: 5px;
     height: 50px;
-     user-select: none;
-    -khtml-user-select: none;
-    -o-user-select: none;
-    -moz-user-select: -moz-none;
-    -webkit-user-select: none;
 }
 
 .channel-controls {
@@ -136,11 +139,6 @@ a {
     background-color: black;
     float: left;
     height: inherit;
-     user-select: none;
-    -khtml-user-select: none;
-    -o-user-select: none;
-    -moz-user-select: -moz-none;
-    -webkit-user-select: none;
 
     .dropdown-toggle {
         cursor: pointer;

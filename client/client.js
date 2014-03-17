@@ -47,6 +47,16 @@ Meteor.startup(function () {
               }
             });
           });
+
+          // Sample and volume maintainance
+          channelObserver = Channels.find({_id: {$in: Session.get('channels')}})
+            .observeChanges({
+              changed: function (id, fields) {
+                if (fields.volume > -1) {
+                  _sounds[id]._volume = fields.volume;
+                }
+              }
+            });
         });
       });
     });
@@ -124,13 +134,6 @@ Template.room.events({
   }
 });
 
-Template.room.rendered = function () {
-  console.log('room rendered');
-  if (Session.get('sound-on-change') && !$('#sound-on-change').is(':checked')) {
-    $('#sound-on-change').click();
-  }
-};
-
 Template.room.looping = function () {
   return Session.get('looping');
 };
@@ -160,14 +163,10 @@ Template.channels.created = function () {
 };
 
 Template.channels.rendered = function () {
-  console.log('channels rendered');
   $('.loop-indicator').css('height', 55 * Session.get('channels').length - 5);
 };
 
 Template.channels.events({
-  // 'click .step': function (event, template) {
-  //   Meteor.call('toggleStep', this._id, !this.active);
-  // },
   'mousedown .step': function (event, template) {
     Session.set('mousedown', true);
     Session.set('insideStep', this._id);
@@ -176,6 +175,17 @@ Template.channels.events({
   },
   'mouseup': function () {
     Session.set('mousedown', false);
+    Session.set('insideStep', undefined);
+  },
+  'mouseenter .step': function (event, template) {
+    console.log('inside step');
+    if (Session.get('mousedown') && this._id !== Session.get('insideStep')) {
+      Session.set('insideStep', this._id);
+      Meteor.call('toggleStep', this._id, !this.active);
+      if (Session.get('sound-on-change')) _sounds[this.channelId].play();
+    }
+  },
+  'mouseleave .step': function (event, template) {
     Session.set('insideStep', undefined);
   }
 });
@@ -186,7 +196,6 @@ Template.channels.events({
 // Channel Controls
 
 Template.channelControls.rendered = function () {
-  console.log('controls rendered');
   // var channelId = this.firstNode.dataset.channel;
   // var channel = Channels.findOne(channelId);
   // var sound = Sounds.findOne({name: channel.soundName});
@@ -254,26 +263,3 @@ Template.channelControls.events({
 Template.step.getStep = function (stepId) {
   return Steps.findOne({_id: stepId});
 };
-
-Template.step.rendered = function () {
-  console.log('step rendered');
-  // step = Steps.findOne({_id: this.data});
-  // if (step) {
-  //   _rhythm[step.channelId] = _rhythm[step.channelId] || [];
-  //   _rhythm[step.channelId][step.position] = step.active;
-  // }
-};
-
-Template.step.events({
-  'mouseenter .step': function (event, template) {
-    console.log('inside step');
-    if (Session.get('mousedown') && this._id !== Session.get('insideStep')) {
-      Session.set('insideStep', this._id);
-      Meteor.call('toggleStep', this._id, !this.active);
-      if (Session.get('sound-on-change')) _sounds[this.channelId].play();
-    }
-  },
-  'mouseleave .step': function (event, template) {
-    Session.set('insideStep', undefined);
-  }
-});

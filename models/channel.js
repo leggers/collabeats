@@ -60,9 +60,10 @@ Meteor.methods({
     Channels.remove({_id: channelId});
   },
   changeChannelVolume: function (channelId, delta) {
-    if (delta > 0 || Channels.findOne(channelId).volume > 0) {
-      Channels.update(channelId, {$inc: {volume: delta}});
-    }
+    var currentVolume = Channels.findOne(channelId).volume;
+    var newVolume = currentVolume + delta;
+    if (newVolume < 0) newVolume = 0;
+    Channels.update(channelId, {$set: {volume: newVolume}});
   },
   changeSound: function (channelId, variantName) {
     Channels.update(channelId, {$set: {selectedSound: variantName}});
