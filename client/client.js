@@ -56,7 +56,7 @@ Meteor.startup(function () {
   });
 });
 
-var newSound = function (url, volume, autoplay) {
+newSound = function (url, volume, autoplay) {
   return new Howl({ urls: [url], volume: volume, autoplay: autoplay });
 };
 
@@ -72,7 +72,7 @@ Template.room.room = function () {
   return Rooms.findOne({name: Session.get('room')});
 };
 
-var loopFunc = function(tickCount) {
+loopFunc = function(tickCount) {
   if (Session.get('looping')) {
     amplify.publish('tick', tickCount);
     setTimeout(function() {
@@ -81,7 +81,7 @@ var loopFunc = function(tickCount) {
   }
 };
 
-var getInterval = function() {
+getInterval = function() {
   return 60/Rooms.findOne({name: Session.get('room')}).tempo*1000/4;
 };
 
@@ -98,7 +98,7 @@ Template.room.events({
     }
   },
   'click #clear': function (event) {
-    Steps.find().forEach(function (step) {
+    Steps.find({active: true}).forEach(function (step) {
       Meteor.call('toggleStep', step._id, false);
     });
   },
