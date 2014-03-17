@@ -215,16 +215,6 @@ Template.channels.events({
 ////////////////////////////////////////////////////////////////////////////////
 // Channel Controls
 
-Template.channelControls.rendered = function () {
-  // var channelId = this.firstNode.dataset.channel;
-  // var channel = Channels.findOne(channelId);
-  // var sound = Sounds.findOne({name: channel.soundName});
-  // var url = sound.variants[channel.selectedSound - 1].url;
-
-  // _sounds[channel._id] = _sounds[channel._id] || newSound(url, channel.volume);
-  // _variants[url] = _variants[url] || newSound(url, 1);
-};
-
 Template.channelControls.variants = function () {
   return Sounds.findOne({name: this.soundName}).variants;
 };
