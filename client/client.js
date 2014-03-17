@@ -3,6 +3,8 @@
 
 Meteor.startup(function () {
   Meteor.subscribe('sounds', function () {
+
+    // Room initialization
     Deps.autorun(function () {
       _rhythm = {}; // cache to prevent database lookups each tick
       _sounds = {}; // mapping of channel ids to their respective sounds
@@ -31,11 +33,19 @@ Meteor.startup(function () {
               _sounds[channelId] = newSound(url, channel.volume);
               _variants[url] = newSound(url, 1);
 
+              // Initial setup of rhythm
               _rhythm[channelId] = [];
-              Steps.find({channelId: channelId}).forEach(function (step) {
-                _rhythm[channelId][step.position] = step.active;
-              });
             }
+
+            // Rhythm maintainance
+            stepObserver = Steps.find({active: true}).observe({
+              added: function (step) {
+                _rhythm[step.channelId][step.position] = true;
+              },
+              removed: function (step) {
+                _rhythm[step.channelId][step.position] = false;
+              }
+            });
           });
         });
       });
@@ -43,6 +53,7 @@ Meteor.startup(function () {
     Session.set('looping', false);
   });
 
+  // Sticky status bar listener
   $(window).load(function () {
     $(window).scroll(function (event) {
       var controlBar = $('.fixed-wrap');
@@ -154,9 +165,9 @@ Template.channels.rendered = function () {
 };
 
 Template.channels.events({
-  'click .step': function (event, template) {
-    Meteor.call('toggleStep', this._id, !this.active);
-  },
+  // 'click .step': function (event, template) {
+  //   Meteor.call('toggleStep', this._id, !this.active);
+  // },
   'mousedown .step': function (event, template) {
     Session.set('mousedown', true);
     Session.set('insideStep', this._id);
@@ -255,6 +266,7 @@ Template.step.rendered = function () {
 
 Template.step.events({
   'mouseenter .step': function (event, template) {
+    console.log('inside step');
     if (Session.get('mousedown') && this._id !== Session.get('insideStep')) {
       Session.set('insideStep', this._id);
       Meteor.call('toggleStep', this._id, !this.active);
