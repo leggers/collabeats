@@ -29,6 +29,11 @@ body {
 
 a {
     cursor: pointer;
+    color: @darkBlue;
+}
+
+a:hover {
+    color: darken(@darkBlue, 10%)
 }
 
 .btn-info {
@@ -153,11 +158,23 @@ a {
 #variant-menu {
     width: 80px;
     min-width: 0;
+
+    .glyphicon {
+        margin-top: 3px;
+    }
 }
 
 .volume-controls {
     float: right;
     margin-right: 5px;
+    height: 100%;
+}
+
+.sound-name {
+    position: relative;
+    font-size: 20px;
+    margin-left: 3px;
+    top: 3px;
 }
 
 /*******************************************************************************
