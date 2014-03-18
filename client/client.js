@@ -168,7 +168,6 @@ Template.channels.channels = function () {
 };
 
 Template.channels.created = function () {
-  // Cache the channel-step arrays as a single object for sound loop
   amplify.subscribe('tick', function (tickCount) {
     var channelIds = Object.keys(_rhythm);
     for (var i = channelIds.length - 1; i >= 0; i--) {
@@ -217,6 +216,10 @@ Template.channels.events({
 
 Template.channelControls.variants = function () {
   return Sounds.findOne({name: this.soundName}).variants;
+};
+
+Template.channelControls.muted = function () {
+  return this.volume === 0;
 };
 
 Template.channelControls.events({
