@@ -215,7 +215,7 @@ Template.channels.events({
 // Channel Controls
 
 Template.channelControls.variants = function () {
-  return Sounds.findOne({name: this.soundName}).variants;;
+  return Sounds.findOne({name: this.soundName}).variants;
 };
 
 Template.channelControls.muted = function () {
