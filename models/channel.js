@@ -53,7 +53,7 @@ Meteor.methods({
   },
   removeChannel: function (channelId) {
     toRemove = Channels.findOne({_id: channelId});
-    Rooms.update({_id: channelId}, {$pull: {channelIds: channelId}});
+    Rooms.update({channelIds: {$in: [channelId]}}, {$pull: {channelIds: channelId}});
     for (var i = 0; i < toRemove.stepIds.length; i++) {
       Steps.remove({_id: toRemove.stepIds[i]});
     }

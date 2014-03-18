@@ -75,6 +75,20 @@ Meteor.startup(function () {
                     });
                   }
                 }
+              },
+              added: function (id, fields) {
+                $('.loop-indicator').height($('.loop-indicator').height() + 55);
+              },
+              removed: function (id, fields) {
+                $('.loop-indicator').height($('.loop-indicator').height() - 55);
+                delete _rhythm[id];
+                delete _sounds[id];
+                var channelIds = Session.get('channels');
+                var index = channelIds.indexOf(id);
+                if (index > -1) {
+                  channelIds.splice(index, 1);
+                  Session.set('channels', channelIds);
+                }
               }
             });
         });
@@ -258,6 +272,9 @@ Template.channelControls.events({
     Steps.find({active: true, _id: {$in: this.stepIds}}).forEach(function (step) {
       Meteor.call('toggleStep', step._id, false);
     });
+  },
+  'click .remove-channel': function () {
+    Meteor.call('removeChannel', this._id);
   },
   'click .glyphicon-volume-down': function (event, template) {
     Meteor.call('changeChannelVolume', this._id, -0.1);
