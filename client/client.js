@@ -224,13 +224,13 @@ Template.channelControls.muted = function () {
 
 Template.channelControls.showVariantsList = function () {
   return Sounds.findOne({name: this.soundName}).variants.length > 1;
-}
+};
 
 Template.channelControls.events({
   'click .clear-row': function (event, template) {
-    for (var i = this.stepIds.length - 1; i >= 0; i--) {
-      Meteor.call('toggleStep', this.stepIds[i], false);
-    }
+    Steps.find({active: true, _id: {$in: this.stepIds}}).forEach(function (step) {
+      Meteor.call('toggleStep', step._id, false);
+    });
   },
   'click .glyphicon-volume-down': function (event, template) {
     Meteor.call('changeChannelVolume', this._id, -0.1);
