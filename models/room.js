@@ -26,10 +26,10 @@ Meteor.methods({
     Rooms.update({_id: roomId}, {$push: {channelIds: channelId}});
   },
   changeRoomTempo: function (roomId, tempo) {
-    Rooms.update({_id: roomId}, {$set: {tempo: tempo}});
+    if (tempo <= 300 && tempo > 0) Rooms.update({_id: roomId}, {$set: {tempo: tempo}});
   },
   deltaRoomTempo: function (roomId, delta) {
-    Rooms.update({_id: roomId}, {$inc: {tempo: delta}});
+    Meteor.call('changeRoomTempo', roomId, Rooms.findOne(roomId).tempo + delta);
   },
   removeRoom: function (roomId) {
     room = Rooms.findOne({_id: roomId});
