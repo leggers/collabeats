@@ -113,6 +113,13 @@ Template.room.room = function () {
   return Rooms.findOne({name: Session.get('room')});
 };
 
+Template.room.swing = function () {
+  var numberOfIs = Math.ceil(Math.abs(this.swing - 1) * 10);
+  var word = 'sw';
+  for (var i = numberOfIs; i >= 0; i--) { word += 'i'; }
+  return word + 'ng';
+};
+
 loopFunc = function(tickCount) {
   if (Session.get('looping')) {
     amplify.publish('tick', tickCount);
@@ -155,6 +162,15 @@ Template.room.events({
   },
   'change #sound-on-change': function (event) {
     Session.set('sound-on-change', event.target.checked);
+  },
+  'click #minus-swing': function () {
+    Meteor.call('deltaSwing', this._id, -0.1);
+  },
+  'click #plus-swing': function () {
+    Meteor.call('deltaSwing', this._id, 0.1);
+  },
+  'click #swing': function () {
+    Meteor.call('setSwing', this._id, 1);
   }
 });
 

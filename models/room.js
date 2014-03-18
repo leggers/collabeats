@@ -41,7 +41,10 @@ Meteor.methods({
     Rooms.remove({_id: roomId});
   },
   setSwing: function (roomId, swing) {
-    if (swing > 0.8 && swing < 1.2) Rooms.update(roomId, {$set: {swing: swing}});
+    if (swing > 0.1 && swing < 2) Rooms.update(roomId, {$set: {swing: swing}});
+  },
+  deltaSwing: function (roomId, delta) {
+    Meteor.call('setSwing', roomId, Rooms.findOne(roomId).swing + delta);
   },
   addRoom: function (name) {
     room = Rooom.insert({name: name, tempo: 120});
