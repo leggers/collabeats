@@ -114,7 +114,7 @@ Template.room.room = function () {
 };
 
 Template.room.swing = function () {
-  var numberOfIs = Math.ceil(Math.abs(this.swing - 1) * 10);
+  var numberOfIs = Math.round(Math.abs(this.swing - 1) * 10);
   var word = 'sw';
   for (var i = numberOfIs; i >= 0; i--) { word += 'i'; }
   return word + 'ng';
