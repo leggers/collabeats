@@ -232,7 +232,8 @@ Meteor.startup(function () {
           position: j,
           volume: 0.5,
           soundName: soundNames[j],
-          selectedSound: '1'
+          selectedSound: '1',
+          swing: 1
         });
         Meteor.call('addChannelToRoom', roomId, channelId);
       }

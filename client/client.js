@@ -117,13 +117,17 @@ loopFunc = function(tickCount) {
   if (Session.get('looping')) {
     amplify.publish('tick', tickCount);
     setTimeout(function() {
-      loopFunc((tickCount+= 1) % 16);
-    }, getInterval());
+      loopFunc((tickCount + 1) % 16);
+    }, getInterval(tickCount));
   }
 };
 
-getInterval = function() {
-  return 60/Rooms.findOne({name: Session.get('room')}).tempo*1000/4;
+getInterval = function(tickCount) {
+  var room = Rooms.findOne({name: Session.get('room')});
+  var tempo = room.tempo;
+  var swing = room.swing;
+  if (tickCount % 2) swing = 2 - swing;
+  return 60/tempo*1000/4*swing;
 };
 
 Template.room.events({
