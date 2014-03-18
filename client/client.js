@@ -83,7 +83,7 @@ Meteor.startup(function () {
     Session.set('looping', false);
   });
 
-  // Sticky status bar listener
+  // Sticky status bar listener & space bar listener
   $(window).load(function () {
     $(window).scroll(function (event) {
       var controlBar = $('.fixed-wrap');
@@ -92,6 +92,13 @@ Meteor.startup(function () {
       }
       else {
         controlBar.removeClass('fixed');
+      }
+    });
+
+    $(window).keypress(function (event) {
+      if (event.keyCode === 32) {
+        event.preventDefault();
+        $('#play').click();
       }
     });
   });
