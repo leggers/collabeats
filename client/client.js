@@ -205,7 +205,7 @@ Template.room.looping = function () {
 // Channels
 
 Template.channels.channels = function () {
-  return Channels.find({_id: {$in: Session.get('channels')}});
+  return Channels.find({_id: {$in: Session.get('channels')}}, {sort: ['position', 'asc']});
 };
 
 Template.channels.created = function () {
@@ -299,6 +299,16 @@ Template.channelControls.events({
   'click #variant-menu > li > a': function (event, template) {
     var channelId = event.currentTarget.parentElement.parentElement.dataset.channel;
     Meteor.call('changeSound', channelId, this.name);
+  },
+  'mouseenter .channel-controls': function (event, template) {
+    var name = template.find('.sound-name');
+    $(name).stop();
+    $(name).animate({left: '0px'}, 100, 'linear');
+  },
+  'mouseleave .channel-controls': function (event, template) {
+    var name = template.find('.sound-name');
+    $(name).stop();
+    $(name).animate({left: '-23px'}, 100, 'linear');
   }
 });
 
