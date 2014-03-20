@@ -46,5 +46,10 @@ Meteor.methods({
   addRoom: function (name) {
     room = Rooom.insert({name: name, tempo: 120});
 
+  },
+  rearrangeChannels: function (roomId, newOrder) {
+    for (var i = newOrder.length - 1; i >= 0; i--) {
+      Channels.update({_id: newOrder[i], roomId: roomId}, {$set: {position: i}});
+    }
   }
 });

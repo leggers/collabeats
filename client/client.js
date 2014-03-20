@@ -268,10 +268,20 @@ Template.channels.events({
   'mouseup': function () {
     Session.set('painting', false);
     Session.set('insideStep', undefined);
-    Session.set('repositioning', false);
     $('html').off('mousemove');
-    _repositioningElement.css('z-index', 1);
-    _repositioningElement.css('opacity', 1);
+    if (Session.get('repositioning')) {
+      _repositioningElement.css('z-index', 1);
+      _repositioningElement.css('opacity', 1);
+      Session.set('repositioning', false);
+      var channels = $('.channel-controls');
+      var newOrder = [];
+      for (var i = 0; i < channels.length - 1; i++) {
+        console.log(i);
+        newOrder[i] = channels[i].dataset.channel;
+        console.log(newOrder[i]);
+      }
+      Meteor.call('rearrangeChannels', currentRoom()._id, newOrder);
+    }
   }
 });
 
