@@ -220,7 +220,12 @@ Meteor.startup(function () {
   }
   var roomId;
   if (Rooms.findOne({name: 'home'}) === undefined) {
-    roomId = Rooms.insert({name: 'home', tempo: 120, channelIds: []});
+    roomId = Rooms.insert({
+      name: 'home',
+      tempo: 120,
+      swing: 1,
+      channelIds: []
+    });
   }
   else {
     roomId = Rooms.findOne({name: 'home'})._id;
