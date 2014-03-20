@@ -304,14 +304,10 @@ Template.channelControls.events({
   'mouseenter .channel-controls': function (event, template) {
     var icon = template.find('.glyphicon-resize-vertical');
     $(icon).show();
-    // $(name).stop();
-    // $(name).animate({left: '0px'}, 100, 'linear');
   },
   'mouseleave .channel-controls': function (event, template) {
     var icon = template.find('.glyphicon-resize-vertical');
     $(icon).hide();
-    // $(name).stop();
-    // $(name).animate({left: '-23px'}, 100, 'linear');
   }
 });
 
