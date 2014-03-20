@@ -251,8 +251,8 @@ Meteor.publish('channels', function (parentRoomId) {
   return Channels.find({roomId: parentRoomId});
 });
 
-Meteor.publish('steps', function (roomId) {
-  return Steps.find({channelId: {$in: Rooms.findOne(roomId).channelIds}});
+Meteor.publish('steps', function (channelIds) {
+  return Steps.find({channelId: {$in: channelIds}});
 });
 
 Meteor.publish('sounds', function () {
@@ -273,7 +273,7 @@ Meteor.methods({
       position: position,
       volume: 0.5
     });
-    Meteor.call('addChannelToRoom', roomId, channelId);
+    Rooms.update(roomId, {$push: {channelIds: channelId}});
   },
   addChannel: function (options) {
     var channelId = Channels.insert({
@@ -294,10 +294,6 @@ Meteor.methods({
       });
       Channels.update(channelId, {$push: {stepIds: stepId}});
     }
-
-    for (var j = 0; j < stepArray.length; j++) {
-      Steps.update({_id: stepArray[j]}, {$set: {channelId: thisChannelId}});
-    }
-    return thisChannelId;
+    return channelId;
   }
 });

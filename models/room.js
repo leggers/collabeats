@@ -24,10 +24,6 @@ Rooms.allow({
 });
 
 Meteor.methods({
-  addChannelToRoom: function (roomId, channelId) {
-    // console.log('addChannelToRoom: ' +  roomId + ', ' + channelId);
-    Rooms.update({_id: roomId}, {$push: {channelIds: channelId}});
-  },
   changeRoomTempo: function (roomId, tempo) {
     if (tempo <= 300 && tempo > 0) Rooms.update({_id: roomId}, {$set: {tempo: tempo}});
   },
