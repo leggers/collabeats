@@ -218,18 +218,15 @@ Meteor.startup(function () {
       }
     }
   }
-  var roomId;
   if (Rooms.findOne({name: 'home'}) === undefined) {
-    roomId = Rooms.insert({
+    Rooms.insert({
       name: 'home',
       tempo: 120,
       swing: 1,
       channelIds: []
     });
   }
-  else {
-    roomId = Rooms.findOne({name: 'home'})._id;
-  }
+    var roomId = Rooms.findOne({name: 'home'})._id;
   if (Channels.find({roomId: roomId}).count() !== 16) {
     for(var j = 0; j < soundNames.length; j++) {
       if (Channels.findOne({soundName: soundNames[j], roomId: roomId}) === undefined) {
@@ -257,7 +254,7 @@ Meteor.publish('sounds', function () {
 
 Meteor.methods({
   newChannel: function (roomId, soundName) {
-    // console.log('newChannel: ' + roomId + ", " + soundName);
+    console.log('newChannel: ' + roomId + ", " + soundName);
     var position = 0;
     var currentChannels = Channels.find({roomId: roomId}, {sort: {position: -1}}).fetch();
     if (currentChannels.length) position = currentChannels[0].position + 1;

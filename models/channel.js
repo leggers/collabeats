@@ -46,5 +46,8 @@ Meteor.methods({
   },
   changeSound: function (channelId, variantName) {
     Channels.update(channelId, {$set: {selectedSound: variantName}});
+  },
+  changePosition: function (channelId, newPosition) {
+    Channels.update(channelId, {$set: {position: newPosition}});
   }
 });

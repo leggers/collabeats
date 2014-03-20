@@ -17,7 +17,7 @@ Meteor.startup(function () {
         tempo = room.tempo;
         Session.set('roomId', room._id);
 
-        Meteor.subscribe('channels', room._id, function () {
+        Meteor.subscribe('channels', currentRoom()._id, function () {
 
           var channelIds = room.channelIds;
           for (var i = channelIds.length - 1; i >= 0; i--) {
@@ -121,7 +121,7 @@ newSound = function (url, volume, autoplay, onload) {
 };
 
 Template.layout.shouldRender = function () {
-  return Rooms.findOne({name: Session.get('room')}) && Sounds.findOne();
+  return currentRoom() && Sounds.findOne();
 };
 
 currentRoom = function () {
@@ -238,11 +238,11 @@ Template.channels.rendered = function () {
   });
   $(document).on('mouseenter', '.drag-box', function (event) {
     if (Session.get('repositioning')) {
-      var toSwap = $(event.currentTarget);
-      var newParent = toSwap.parent();
-      _repositioningParentElement.append(toSwap);
-      newParent.append(_repositioningElement);
-      _repositioningParentElement = newParent;
+      var toSwitchData = event.currentTarget.children[0].dataset;
+      var draggedElemData = _repositioningElement.children()[0].dataset;
+
+      Meteor.call('changePosition', toSwitchData.channel, draggedElemData.position);
+      Meteor.call('changePosition', draggedElemData.channel, toSwitchData.position);
     }
   });
 };
@@ -257,7 +257,6 @@ Template.channels.events({
   'mousedown .sound-name': function (event) {
     Session.set('repositioning', true);
     _repositioningElement = $(event.currentTarget.parentElement.parentElement.parentElement);
-    _repositioningParentElement = _repositioningElement.parent();
     _repositioningElement.css('position', 'absolute');
     _repositioningElement.css('z-index', -1);
     _repositioningElement.css('opacity', 0.5);
@@ -272,15 +271,9 @@ Template.channels.events({
     if (Session.get('repositioning')) {
       _repositioningElement.css('z-index', 1);
       _repositioningElement.css('opacity', 1);
+      _repositioningElement.css('top', 'none');
+      _repositioningElement.css('position', 'none');
       Session.set('repositioning', false);
-      var channels = $('.channel-controls');
-      var newOrder = [];
-      for (var i = 0; i < channels.length - 1; i++) {
-        console.log(i);
-        newOrder[i] = channels[i].dataset.channel;
-        console.log(newOrder[i]);
-      }
-      Meteor.call('rearrangeChannels', currentRoom()._id, newOrder);
     }
   }
 });
