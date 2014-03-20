@@ -12,14 +12,12 @@ Meteor.startup(function () {
 
       var room = Session.get('room') || "home";
       Session.set('room', room);
-      Session.set('channels', []);
       Meteor.subscribe('rooms', room, function () {
         var room = Rooms.findOne({name: Session.get('room')});
         tempo = room.tempo;
         Session.set('roomId', room._id);
 
         var channelIds = room.channelIds;
-        Session.set('channels', channelIds);
         Meteor.subscribe('channels', room._id, function () {
 
           Meteor.subscribe('steps', channelIds, function () {
@@ -50,7 +48,7 @@ Meteor.startup(function () {
           });
 
           // Sample and volume maintainance
-          channelObserver = Channels.find({_id: {$in: Session.get('channels')}})
+          channelObserver = Channels.find({roomId: Session.get('roomId')})
             .observeChanges({
               changed: function (id, fields) {
                 if (fields.volume !== undefined) {
@@ -82,20 +80,11 @@ Meteor.startup(function () {
                 var currHeight = $('.loop-indicator').height();
                 if (currHeight === 0) currHeight = -5;
                 $('.loop-indicator').height(currHeight + 55);
-                var channelIds = Session.get('channels');
-                channelIds.push(id);
-                Session.set('channels', channelIds);
               },
               removed: function (id, fields) {
                 $('.loop-indicator').height($('.loop-indicator').height() - 55);
                 delete _rhythm[id];
                 delete _sounds[id];
-                var channelIds = Session.get('channels');
-                var index = channelIds.indexOf(id);
-                if (index > -1) {
-                  channelIds.splice(index, 1);
-                  Session.set('channels', channelIds);
-                }
               }
             });
         });
@@ -130,7 +119,7 @@ newSound = function (url, volume, autoplay, onload) {
 };
 
 Template.layout.shouldRender = function () {
-  return Session.get('channels') && Session.get('roomId') && Sounds.findOne();
+  return Session.get('roomId') && Sounds.findOne();
 };
 
 
@@ -324,7 +313,7 @@ Template.channelControls.events({
 // Steps
 
 Template.step.getStep = function (stepId) {
-  return Steps.findOne({_id: stepId});
+  return Steps.findOne(stepId);
 };
 
 
