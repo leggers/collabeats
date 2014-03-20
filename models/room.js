@@ -25,7 +25,20 @@ Rooms.allow({
 
 Meteor.methods({
   addChannelToRoom: function (roomId, channelId) {
+    // console.log('addChannelToRoom: ' +  roomId + ', ' + channelId);
     Rooms.update({_id: roomId}, {$push: {channelIds: channelId}});
+  },
+  newChannel: function (roomId, soundName) {
+    // console.log('newChannel: ' + roomId + ", " + soundName);
+    var channelId = Meteor.call('addChannel', {
+      numSteps: 16, // CHANGE TO ROOM LENGTH when applicable!!!!!!!!!!!!!
+      roomId: roomId,
+      soundName: soundName,
+      selectedSound: 1,
+      position: Channels.find({roomId: roomId}, {sort: {position: -1}}).fetch()[0].position+1,
+      volume: 0.5
+    });
+    Meteor.call('addChannelToRoom', roomId, channelId);
   },
   changeRoomTempo: function (roomId, tempo) {
     if (tempo <= 300 && tempo > 0) Rooms.update({_id: roomId}, {$set: {tempo: tempo}});

@@ -11,7 +11,6 @@
     <h1>Collabeats</h1>
     {{#if shouldRender}}
       {{> room}}
-      {{> channels}}
     {{/if}}
     <div class='loop-indicator'></div>
   </div>
@@ -59,6 +58,7 @@
 
         </div>
       </div>
+      {{> channels}}
     {{/with}}
 </template>
 
@@ -108,7 +108,7 @@
             {{selectedSound}}
             <span class="caret"></span>
           </a>
-          <ul class="dropdown-menu" id='variant-menu' data-channel='{{_id}}'>
+          <ul class="dropdown-menu" id='variant-menu' data-channel='{{_id}}' role='menu'>
             {{#each variants}}
               <li><a data-url='{{url}}'>
                 {{name}}
@@ -138,9 +138,9 @@
             Voice
             <span class='caret'></span>
           </a>
-          <ul class='dropdown-menu' id='sound-menu'>
+          <ul class='dropdown-menu' id='sound-menu' role='menu'>
             {{#each sounds}}
-              <li><a data-id='{{_id}}'>
+              <li><a>
                 {{name}}
               </a></li>
             {{/each}}

@@ -12,6 +12,7 @@ Meteor.startup(function () {
 
       var room = Session.get('room') || "home";
       Session.set('room', room);
+      Session.set('channels', []);
       Meteor.subscribe('rooms', room, function () {
         var room = Rooms.findOne({name: Session.get('room')});
         tempo = room.tempo;
@@ -77,9 +78,13 @@ Meteor.startup(function () {
                 }
               },
               added: function (id, fields) {
+                console.log('added: ' + id);
                 var currHeight = $('.loop-indicator').height();
                 if (currHeight === 0) currHeight = -5;
                 $('.loop-indicator').height(currHeight + 55);
+                var channelIds = Session.get('channels');
+                channelIds.push(id);
+                Session.set('channels', channelIds);
               },
               removed: function (id, fields) {
                 $('.loop-indicator').height($('.loop-indicator').height() - 55);
@@ -116,10 +121,6 @@ Meteor.startup(function () {
         event.preventDefault();
         $('#play').click();
       }
-    });
-
-    $('html').click(function () {
-      Session.set('addingChannel', false);
     });
   });
 });
@@ -211,7 +212,7 @@ Template.room.notLooping = function () {
 // Channels
 
 Template.channels.channels = function () {
-  return Channels.find({_id: {$in: Session.get('channels')}}, {sort: ['position', 'asc']});
+  return Channels.find({_id: {$in: this.channelIds}}, {sort: {position: 1}});
 };
 
 Template.channels.created = function () {
@@ -337,13 +338,18 @@ Template.addChannel.addingChannel = function () {
 
 Template.addChannel.sounds = function () {
   var publicSounds = Sounds.find({privateSound: false}).fetch();
-  var privateSounds = Sounds.find({privateSound: true, ownerId: '!!!!!!!'});
+  var privateSounds = Sounds.find({privateSound: true, ownerId: '!!!!!!!'}).fetch();
   return publicSounds.concat(privateSounds);
 };
 
 Template.addChannel.events({
-  'click .add-channel': function (event) {
-    event.stopPropagation();
+  'mouseenter .add-channel': function () {
     Session.set('addingChannel', true);
+  },
+  'mouseleave .add-channel': function () {
+    Session.set('addingChannel', false);
+  },
+  'click #sound-menu li': function (event, template) {
+    Meteor.call('newChannel', Session.get('roomId'), this.name);
   }
 });
