@@ -23,11 +23,11 @@
         <div class='room-controls'>
 
           <button value="Start Loop" id='play' class='btn btn-default'>
-            {{#unless looping}}
+            {{#if notLooping}}
               <span class='glyphicon glyphicon-play'></span>
             {{else}}
               <span class='glyphicon glyphicon-stop'></span>
-            {{/unless}}
+            {{/if}}
           </button>
 
           <div class="btn-group">
@@ -74,6 +74,7 @@
         </div>
       </div>
     {{/each}}
+    {{> addChannel}}
   </div>
 </template>
 
@@ -125,4 +126,29 @@
   {{#with getStep this}}
     <div class='step{{#if active}} active{{else}} inactive{{/if}}' data-id='{{_id}}' data-active='{{#if active}}true{{else}}false{{/if}}' data-channel='{{channelId}}'></div>
   {{/with}}
+</template>
+
+<template name='addChannel'>
+  <div class='channel add-channel'>
+    <div class='channel-controls'>
+      {{#if addingChannel}}
+        Select 
+        <div class='btn-group'>
+          <a class='dropdown-toggle' data-toggle='dropdown'>
+            Voice
+            <span class='caret'></span>
+          </a>
+          <ul class='dropdown-menu' id='sound-menu'>
+            {{#each sounds}}
+              <li><a data-id='{{_id}}'>
+                {{name}}
+              </a></li>
+            {{/each}}
+          </ul>
+        </div>
+      {{else}}
+        <span class='glyphicon glyphicon-plus-sign'></span> Add channel
+      {{/if}}
+    </div>
+  </div>
 </template>

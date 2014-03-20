@@ -68,7 +68,7 @@ a:hover {
 .fixed-wrap {
     height: @height + 10px + 25px;
     position: absolute;
-    width: inherit;
+    width: 1140px;
 }
 
 .room-controls {
@@ -202,6 +202,24 @@ a:hover {
 
 .muted {
     opacity: .5;
+}
+
+.add-channel {
+    opacity: .5;
+
+    -webkit-transition: opacity .2s;
+    -moz-transition: opacity .2s;
+    -o-transition: opacity .2s;
+    transition: opacity .2s;
+
+    .channel-controls {
+        cursor: pointer;
+        font-size: 20px;
+    }
+}
+
+.add-channel:hover {
+    opacity: 1;
 }
 
 /*******************************************************************************

@@ -99,7 +99,7 @@ Meteor.startup(function () {
     Session.set('looping', false);
   });
 
-  // Sticky status bar listener & space bar listener
+  // Some global listeners
   $(window).load(function () {
     $(window).scroll(function (event) {
       var controlBar = $('.fixed-wrap');
@@ -117,6 +117,10 @@ Meteor.startup(function () {
         $('#play').click();
       }
     });
+
+    $('html').click(function () {
+      Session.set('addingChannel', false);
+    });
   });
 });
 
@@ -125,7 +129,7 @@ newSound = function (url, volume, autoplay, onload) {
 };
 
 Template.layout.shouldRender = function () {
-  return Session.get('channels') && Session.get('roomId');
+  return Session.get('channels') && Session.get('roomId') && Sounds.findOne();
 };
 
 
@@ -197,8 +201,8 @@ Template.room.events({
   }
 });
 
-Template.room.looping = function () {
-  return Session.get('looping');
+Template.room.notLooping = function () {
+  return !Session.get('looping');
 };
 
 
@@ -321,3 +325,25 @@ Template.channelControls.events({
 Template.step.getStep = function (stepId) {
   return Steps.findOne({_id: stepId});
 };
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Add Channel
+
+Template.addChannel.addingChannel = function () {
+  return Session.get('addingChannel');
+};
+
+Template.addChannel.sounds = function () {
+  var publicSounds = Sounds.find({privateSound: false}).fetch();
+  var privateSounds = Sounds.find({privateSound: true, ownerId: '!!!!!!!'});
+  return publicSounds.concat(privateSounds);
+};
+
+Template.addChannel.events({
+  'click .add-channel': function (event) {
+    event.stopPropagation();
+    Session.set('addingChannel', true);
+  }
+});
