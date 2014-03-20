@@ -254,7 +254,6 @@ Meteor.publish('sounds', function () {
 
 Meteor.methods({
   newChannel: function (roomId, soundName) {
-    console.log('newChannel: ' + roomId + ", " + soundName);
     var position = 0;
     var currentChannels = Channels.find({roomId: roomId}, {sort: {position: -1}}).fetch();
     if (currentChannels.length) position = currentChannels[0].position + 1;

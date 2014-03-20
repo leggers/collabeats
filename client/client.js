@@ -19,32 +19,20 @@ Meteor.startup(function () {
 
         Meteor.subscribe('channels', currentRoom()._id, function () {
 
-          var channelIds = room.channelIds;
-          for (var i = channelIds.length - 1; i >= 0; i--) {
-            var channelId = channelIds[i];
-
-            var channel = Channels.findOne(channelId);
-            var sound = Sounds.findOne({name: channel.soundName});
-            var url = sound.variants[channel.selectedSound - 1].url;
-
-            _sounds[channelId] = newSound(url, channel.volume);
-            _variants[url] = newSound(url, 1);
-
-            // Initial setup of rhythm
-            _rhythm[channelId] = [];
-          }
-
           // Sample and volume maintainance
-          channelObserver = Channels.find({roomId: room._id})
+          channelChangeObserver = Channels.find({roomId: room._id})
             .observeChanges({
               added: function (id, fields) {
                 var currHeight = $('.loop-indicator').height();
                 if (currHeight === 0) currHeight = -5;
                 $('.loop-indicator').height(currHeight + 55);
+
                 _rhythm[id] = [];
+                addOrUpdateSound(id);
               },
               removed: function (id, fields) {
                 $('.loop-indicator').height($('.loop-indicator').height() - 55);
+
                 delete _rhythm[id];
                 delete _sounds[id];
               },
@@ -53,24 +41,7 @@ Meteor.startup(function () {
                   _sounds[id]._volume = fields.volume;
                 }
                 if (fields.selectedSound) {
-                  var channel = Channels.findOne(id);
-                  var sound = Sounds.findOne({name: channel.soundName});
-                  var url = sound.variants[channel.selectedSound - 1].url;
-                  
-                  var existingSound = _variants[url];
-                  if (existingSound) {
-                    var replacementSound = jQuery.extend({}, existingSound);
-                    replacementSound._volume = channel.volume;
-                    _sounds[id] = replacementSound;
-                  }
-                  else {
-                    newSound(url, channel.volume, false, function () {
-                      _sounds[id] = this;
-                    });
-                    newSound(url, 1, false, function () {
-                      _variants[url] = this;
-                    });
-                  }
+                  addOrUpdateSound(id);
                 }
               }
             });
@@ -116,16 +87,39 @@ Meteor.startup(function () {
   });
 });
 
-newSound = function (url, volume, autoplay, onload) {
-  return new Howl({ urls: [url], volume: volume, autoplay: autoplay, onload: onload });
-};
-
 Template.layout.shouldRender = function () {
   return currentRoom() && Sounds.findOne();
 };
 
 currentRoom = function () {
   return Rooms.findOne({name: Session.get('room')});
+};
+
+addOrUpdateSound = function (channelId) {
+  var channel = Channels.findOne(channelId);
+  var sound = Sounds.findOne({name: channel.soundName});
+  if (sound) {
+    var url = sound.variants[channel.selectedSound - 1].url;
+    
+    var existingSound = _variants[url];
+    if (existingSound) {
+      var replacementSound = jQuery.extend({}, existingSound);
+      replacementSound._volume = channel.volume;
+      _sounds[channelId] = replacementSound;
+    }
+    else {
+      newSound(url, channel.volume, false, function () {
+        _sounds[channelId] = this;
+      });
+      newSound(url, 1, false, function () {
+        _variants[url] = this;
+      });
+    }
+  }
+};
+
+newSound = function (url, volume, autoplay, onload) {
+  return new Howl({ urls: [url], volume: volume, autoplay: autoplay, onload: onload });
 };
 
 
