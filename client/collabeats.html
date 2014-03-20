@@ -131,24 +131,26 @@
 <template name='addChannel'>
   <div class='channel add-channel'>
     <div class='channel-controls'>
-      {{#if addingChannel}}
-        Select 
-        <div class='btn-group'>
-          <a class='dropdown-toggle' data-toggle='dropdown'>
-            Voice
-            <span class='caret'></span>
-          </a>
-          <ul class='dropdown-menu' id='sound-menu' role='menu'>
-            {{#each sounds}}
-              <li><a>
-                {{name}}
-              </a></li>
-            {{/each}}
-          </ul>
-        </div>
-      {{else}}
-        <span class='glyphicon glyphicon-plus-sign'></span> Add channel
-      {{/if}}
+        <div class='add-wrapper'>
+        {{#if addingChannel}}
+          Select 
+          <div class='btn-group'>
+            <a class='dropdown-toggle' data-toggle='dropdown'>
+              Voice
+              <span class='caret'></span>
+            </a>
+            <ul class='dropdown-menu' id='sound-menu' role='menu'>
+              {{#each sounds}}
+                <li><a>
+                  {{name}}
+                </a></li>
+              {{/each}}
+            </ul>
+          </div>
+        {{else}}
+          <span class='glyphicon glyphicon-plus-sign'></span> Add channel
+        {{/if}}
+      </div>
     </div>
   </div>
 </template>

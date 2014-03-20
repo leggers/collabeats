@@ -225,22 +225,13 @@ Meteor.startup(function () {
   else {
     roomId = Rooms.findOne({name: 'home'})._id;
   }
-  // if (Channels.find({roomId: roomId}).count() !== 16) {
-  //   for(var j = 0; j < soundNames.length; j++) {
-  //     if (Channels.findOne({soundName: soundNames[j], roomId: roomId}) === undefined) {
-  //       channelId = Meteor.call('addChannel', {
-  //         numSteps: 16,
-  //         roomId: roomId,
-  //         position: j,
-  //         volume: 0.5,
-  //         soundName: soundNames[j],
-  //         selectedSound: '1',
-  //         swing: 1
-  //       });
-  //       Meteor.call('addChannelToRoom', roomId, channelId);
-  //     }
-  //   }
-  // }
+  if (Channels.find({roomId: roomId}).count() !== 16) {
+    for(var j = 0; j < soundNames.length; j++) {
+      if (Channels.findOne({soundName: soundNames[j], roomId: roomId}) === undefined) {
+        Meteor.call('newChannel', roomId, soundNames[j]);
+      }
+    }
+  }
 });
 
 Meteor.publish('rooms', function (roomName) {
@@ -295,5 +286,10 @@ Meteor.methods({
     }
     Channels.update(channelId, {$set: {stepIds: stepIds}});
     return channelId;
+  },
+  destroyEverything: function () {
+    Steps.remove({});
+    Channels.remove({});
+    Rooms.remove({});
   }
 });

@@ -6,7 +6,6 @@ Meteor.startup(function () {
 
     // Room initialization
     Deps.autorun(function () {
-      console.log('deps');
       _rhythm = {}; // cache to prevent database lookups each tick
       _sounds = {}; // mapping of channel ids to their respective sounds
       _variants = {}; // stores variants of sounds as a mapping of sound urls to their sounds
@@ -39,7 +38,6 @@ Meteor.startup(function () {
           channelObserver = Channels.find({roomId: room._id})
             .observeChanges({
               added: function (id, fields) {
-                console.log('channel added: ' + id);
                 var currHeight = $('.loop-indicator').height();
                 if (currHeight === 0) currHeight = -5;
                 $('.loop-indicator').height(currHeight + 55);
@@ -51,7 +49,6 @@ Meteor.startup(function () {
                 delete _sounds[id];
               },
               changed: function (id, fields) {
-                console.log('channel changed');
                 if (fields.volume !== undefined) {
                   _sounds[id]._volume = fields.volume;
                 }
@@ -81,11 +78,9 @@ Meteor.startup(function () {
           // Rhythm maintainance
           stepObserver = Steps.find({active: true}).observe({
             added: function (step) {
-              console.log('step added');
               _rhythm[step.channelId][step.position] = true;
             },
             removed: function (step) {
-              console.log('step removed');
               _rhythm[step.channelId][step.position] = false;
             }
           });
