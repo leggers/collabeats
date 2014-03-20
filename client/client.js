@@ -201,7 +201,7 @@ Template.room.notLooping = function () {
 // Channels
 
 Template.channels.channels = function () {
-  return Channels.find({_id: {$in: this.channelIds}}, {sort: {position: 1}});
+  return Channels.find({roomId: this._id}, {sort: {position: 1}});
 };
 
 Template.channels.created = function () {

@@ -52,12 +52,14 @@ Meteor.methods({
     return thisChannelId;
   },
   removeChannel: function (channelId) {
-    toRemove = Channels.findOne({_id: channelId});
+    var toRemove = Channels.findOne(channelId);
     Rooms.update({channelIds: {$in: [channelId]}}, {$pull: {channelIds: channelId}});
-    for (var i = 0; i < toRemove.stepIds.length; i++) {
-      Steps.remove({_id: toRemove.stepIds[i]});
+    if (toRemove) {
+        for (var i = 0; i < toRemove.stepIds.length; i++) {
+        Steps.remove({_id: toRemove.stepIds[i]});
+      }
+      Channels.remove(channelId);
     }
-    Channels.remove({_id: channelId});
   },
   changeChannelVolume: function (channelId, delta) {
     var currentVolume = Channels.findOne(channelId).volume;
