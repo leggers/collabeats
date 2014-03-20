@@ -227,7 +227,7 @@ Template.channels.created = function () {
 Template.channels.rendered = function () {
   $(document).on('mouseenter', '.step', function (event) {
     var data = event.currentTarget.dataset;
-    if (Session.get('mousedown') && data.id !== Session.get('insideStep')) {
+    if (Session.get('painting') && data.id !== Session.get('insideStep')) {
       Session.set('insideStep', data.id);
       Meteor.call('toggleStep', data.id, data.active !== 'true');
       if (Session.get('sound-on-change')) _sounds[data.channel].play();
@@ -240,13 +240,13 @@ Template.channels.rendered = function () {
 
 Template.channels.events({
   'mousedown .step': function (event, template) {
-    Session.set('mousedown', true);
+    Session.set('painting', true);
     Session.set('insideStep', this._id);
     Meteor.call('toggleStep', this._id, !this.active);
     if (Session.get('sound-on-change')) _sounds[this.channelId].play();
   },
   'mouseup': function () {
-    Session.set('mousedown', false);
+    Session.set('painting', false);
     Session.set('insideStep', undefined);
   }
 });
