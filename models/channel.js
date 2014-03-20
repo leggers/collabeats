@@ -28,29 +28,6 @@ Channels.allow({
 });
 
 Meteor.methods({
-  addChannel: function (options) {
-    var stepArray = [];
-    for (var i = 0; i < options.numSteps; i++) {
-      stepArray.push(Steps.insert({
-        active: false,
-        lastChangerId: this.userId,
-        position: i
-      }));
-    }
-    thisChannelId = Channels.insert({
-      stepIds: stepArray,
-      roomId: options.roomId,
-      soundName: options.soundName,
-      selectedSound: options.selectedSound,
-      creatorId: this.userId,
-      position: options.position,
-      volume: options.volume
-    });
-    for (var j = 0; j < stepArray.length; j++) {
-      Steps.update({_id: stepArray[j]}, {$set: {channelId: thisChannelId}});
-    }
-    return thisChannelId;
-  },
   removeChannel: function (channelId) {
     var toRemove = Channels.findOne(channelId);
     Rooms.update({channelIds: {$in: [channelId]}}, {$pull: {channelIds: channelId}});

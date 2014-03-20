@@ -225,22 +225,22 @@ Meteor.startup(function () {
   else {
     roomId = Rooms.findOne({name: 'home'})._id;
   }
-  if (Channels.find({roomId: roomId}).count() !== 16) {
-    for(var j = 0; j < soundNames.length; j++) {
-      if (Channels.findOne({soundName: soundNames[j], roomId: roomId}) === undefined) {
-        channelId = Meteor.call('addChannel', {
-          numSteps: 16,
-          roomId: roomId,
-          position: j,
-          volume: 0.5,
-          soundName: soundNames[j],
-          selectedSound: '1',
-          swing: 1
-        });
-        Meteor.call('addChannelToRoom', roomId, channelId);
-      }
-    }
-  }
+  // if (Channels.find({roomId: roomId}).count() !== 16) {
+  //   for(var j = 0; j < soundNames.length; j++) {
+  //     if (Channels.findOne({soundName: soundNames[j], roomId: roomId}) === undefined) {
+  //       channelId = Meteor.call('addChannel', {
+  //         numSteps: 16,
+  //         roomId: roomId,
+  //         position: j,
+  //         volume: 0.5,
+  //         soundName: soundNames[j],
+  //         selectedSound: '1',
+  //         swing: 1
+  //       });
+  //       Meteor.call('addChannelToRoom', roomId, channelId);
+  //     }
+  //   }
+  // }
 });
 
 Meteor.publish('rooms', function (roomName) {
@@ -251,8 +251,8 @@ Meteor.publish('channels', function (parentRoomId) {
   return Channels.find({roomId: parentRoomId});
 });
 
-Meteor.publish('steps', function (channelIds) {
-  return Steps.find({channelId: {$in: channelIds}});
+Meteor.publish('steps', function (roomId) {
+  return Steps.find({channelId: {$in: Rooms.findOne(roomId).channelIds}});
 });
 
 Meteor.publish('sounds', function () {
@@ -262,14 +262,40 @@ Meteor.publish('sounds', function () {
 Meteor.methods({
   newChannel: function (roomId, soundName) {
     // console.log('newChannel: ' + roomId + ", " + soundName);
+    var position = 0;
+    var currentChannels = Channels.find({roomId: roomId}, {sort: {position: -1}}).fetch();
+    if (currentChannels.length) position = currentChannels[0].position + 1;
     var channelId = Meteor.call('addChannel', {
       numSteps: 16, // CHANGE TO ROOM LENGTH when applicable!!!!!!!!!!!!!
       roomId: roomId,
       soundName: soundName,
       selectedSound: 1,
-      position: Channels.find({roomId: roomId}, {sort: {position: -1}}).fetch()[0].position+1,
+      position: position,
       volume: 0.5
     });
     Meteor.call('addChannelToRoom', roomId, channelId);
+  },
+  addChannel: function (options) {
+    var stepArray = [];
+    for (var i = 0; i < options.numSteps; i++) {
+      stepArray.push(Steps.insert({
+        active: false,
+        lastChangerId: this.userId,
+        position: i
+      }));
+    }
+    thisChannelId = Channels.insert({
+      stepIds: stepArray,
+      roomId: options.roomId,
+      soundName: options.soundName,
+      selectedSound: options.selectedSound,
+      creatorId: this.userId,
+      position: options.position,
+      volume: options.volume
+    });
+    for (var j = 0; j < stepArray.length; j++) {
+      Steps.update({_id: stepArray[j]}, {$set: {channelId: thisChannelId}});
+    }
+    return thisChannelId;
   }
 });

@@ -6,6 +6,7 @@ Meteor.startup(function () {
 
     // Room initialization
     Deps.autorun(function () {
+      console.log('deps');
       _rhythm = {}; // cache to prevent database lookups each tick
       _sounds = {}; // mapping of channel ids to their respective sounds
       _variants = {}; // stores variants of sounds as a mapping of sound urls to their sounds
@@ -19,33 +20,6 @@ Meteor.startup(function () {
 
         var channelIds = room.channelIds;
         Meteor.subscribe('channels', room._id, function () {
-
-          Meteor.subscribe('steps', channelIds, function () {
-
-            for (var i = channelIds.length - 1; i >= 0; i--) {
-              var channelId = channelIds[i];
-
-              var channel = Channels.findOne(channelId);
-              var sound = Sounds.findOne({name: channel.soundName});
-              var url = sound.variants[channel.selectedSound - 1].url;
-
-              _sounds[channelId] = newSound(url, channel.volume);
-              _variants[url] = newSound(url, 1);
-
-              // Initial setup of rhythm
-              _rhythm[channelId] = [];
-            }
-
-            // Rhythm maintainance
-            stepObserver = Steps.find({active: true}).observe({
-              added: function (step) {
-                _rhythm[step.channelId][step.position] = true;
-              },
-              removed: function (step) {
-                _rhythm[step.channelId][step.position] = false;
-              }
-            });
-          });
 
           // Sample and volume maintainance
           channelObserver = Channels.find({roomId: Rooms.findOne({name: Session.get('room')})._id})
@@ -76,7 +50,7 @@ Meteor.startup(function () {
                 }
               },
               added: function (id, fields) {
-                console.log('added: ' + id);
+                console.log('channel added: ' + id);
                 var currHeight = $('.loop-indicator').height();
                 if (currHeight === 0) currHeight = -5;
                 $('.loop-indicator').height(currHeight + 55);
@@ -87,6 +61,35 @@ Meteor.startup(function () {
                 delete _sounds[id];
               }
             });
+        });
+        
+        Meteor.subscribe('steps', room._id, function () {
+
+          for (var i = channelIds.length - 1; i >= 0; i--) {
+            var channelId = channelIds[i];
+
+            var channel = Channels.findOne(channelId);
+            var sound = Sounds.findOne({name: channel.soundName});
+            var url = sound.variants[channel.selectedSound - 1].url;
+
+            _sounds[channelId] = newSound(url, channel.volume);
+            _variants[url] = newSound(url, 1);
+
+            // Initial setup of rhythm
+            _rhythm[channelId] = [];
+          }
+
+          // Rhythm maintainance
+          stepObserver = Steps.find().observe({
+            added: function (step) {
+              console.log('step added');
+              _rhythm[step.channelId][step.position] = step.active;
+            },
+            removed: function (step) {
+              console.log('step removed');
+              _rhythm[step.channelId][step.position] = false;
+            }
+          });
         });
       });
     });
