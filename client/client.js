@@ -18,13 +18,40 @@ Meteor.startup(function () {
         tempo = room.tempo;
         Session.set('roomId', room._id);
 
-        var channelIds = room.channelIds;
         Meteor.subscribe('channels', room._id, function () {
 
+          var channelIds = room.channelIds;
+          for (var i = channelIds.length - 1; i >= 0; i--) {
+            var channelId = channelIds[i];
+
+            var channel = Channels.findOne(channelId);
+            var sound = Sounds.findOne({name: channel.soundName});
+            var url = sound.variants[channel.selectedSound - 1].url;
+
+            _sounds[channelId] = newSound(url, channel.volume);
+            _variants[url] = newSound(url, 1);
+
+            // Initial setup of rhythm
+            _rhythm[channelId] = [];
+          }
+
           // Sample and volume maintainance
-          channelObserver = Channels.find({roomId: Rooms.findOne({name: Session.get('room')})._id})
+          channelObserver = Channels.find({roomId: room._id})
             .observeChanges({
+              added: function (id, fields) {
+                console.log('channel added: ' + id);
+                var currHeight = $('.loop-indicator').height();
+                if (currHeight === 0) currHeight = -5;
+                $('.loop-indicator').height(currHeight + 55);
+                _rhythm[id] = [];
+              },
+              removed: function (id, fields) {
+                $('.loop-indicator').height($('.loop-indicator').height() - 55);
+                delete _rhythm[id];
+                delete _sounds[id];
+              },
               changed: function (id, fields) {
+                console.log('channel changed');
                 if (fields.volume !== undefined) {
                   _sounds[id]._volume = fields.volume;
                 }
@@ -48,57 +75,29 @@ Meteor.startup(function () {
                     });
                   }
                 }
-              },
-              added: function (id, fields) {
-                console.log('channel added: ' + id);
-                var currHeight = $('.loop-indicator').height();
-                if (currHeight === 0) currHeight = -5;
-                $('.loop-indicator').height(currHeight + 55);
-              },
-              removed: function (id, fields) {
-                $('.loop-indicator').height($('.loop-indicator').height() - 55);
-                delete _rhythm[id];
-                delete _sounds[id];
               }
             });
+
+          // Rhythm maintainance
+          stepObserver = Steps.find({active: true}).observe({
+            added: function (step) {
+              console.log('step added');
+              _rhythm[step.channelId][step.position] = true;
+            },
+            removed: function (step) {
+              console.log('step removed');
+              _rhythm[step.channelId][step.position] = false;
+            }
+          });
         });
       });
     });
+
+    Deps.autorun(function () {
+      if (currentRoom()) Meteor.subscribe('steps', currentRoom().channelIds);
+    });
+
     Session.set('looping', false);
-  });
-
-  Deps.autorun( function () {
-    var room = currentRoom();
-    if (room) {
-      Meteor.subscribe('steps', room.channelIds, function () {
-
-        for (var i = channelIds.length - 1; i >= 0; i--) {
-          var channelId = channelIds[i];
-
-          var channel = Channels.findOne(channelId);
-          var sound = Sounds.findOne({name: channel.soundName});
-          var url = sound.variants[channel.selectedSound - 1].url;
-
-          _sounds[channelId] = newSound(url, channel.volume);
-          _variants[url] = newSound(url, 1);
-
-          // Initial setup of rhythm
-          _rhythm[channelId] = [];
-        }
-
-        // Rhythm maintainance
-        stepObserver = Steps.find().observe({
-          added: function (step) {
-            console.log('step added');
-            _rhythm[step.channelId][step.position] = step.active;
-          },
-          removed: function (step) {
-            console.log('step removed');
-            _rhythm[step.channelId][step.position] = false;
-          }
-        });
-      });
-    }
   });
 
   // Some global listeners

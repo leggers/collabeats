@@ -276,8 +276,8 @@ Meteor.methods({
     Rooms.update(roomId, {$push: {channelIds: channelId}});
   },
   addChannel: function (options) {
+    var stepIds = [];
     var channelId = Channels.insert({
-      stepIds: [],
       roomId: options.roomId,
       soundName: options.soundName,
       selectedSound: options.selectedSound,
@@ -286,14 +286,14 @@ Meteor.methods({
       volume: options.volume
     });
     for (var i = 0; i < options.numSteps; i++) {
-      var stepId = Steps.insert({
+      stepIds.push(Steps.insert({
         active: false,
         lastChangerId: this.userId,
         position: i,
         channelId: channelId
-      });
-      Channels.update(channelId, {$push: {stepIds: stepId}});
+      }));
     }
+    Channels.update(channelId, {$set: {stepIds: stepIds}});
     return channelId;
   }
 });
