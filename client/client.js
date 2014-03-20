@@ -48,7 +48,7 @@ Meteor.startup(function () {
           });
 
           // Sample and volume maintainance
-          channelObserver = Channels.find({roomId: Session.get('roomId')})
+          channelObserver = Channels.find({roomId: Rooms.findOne({name: Session.get('room')})._id})
             .observeChanges({
               changed: function (id, fields) {
                 if (fields.volume !== undefined) {
@@ -119,7 +119,7 @@ newSound = function (url, volume, autoplay, onload) {
 };
 
 Template.layout.shouldRender = function () {
-  return Session.get('roomId') && Sounds.findOne();
+  return Rooms.findOne({name: Session.get('room')}) && Sounds.findOne();
 };
 
 
@@ -339,6 +339,6 @@ Template.addChannel.events({
     Session.set('addingChannel', false);
   },
   'click #sound-menu li': function (event, template) {
-    Meteor.call('newChannel', Session.get('roomId'), this.name);
+    Meteor.call('newChannel', Rooms.findOne({name: Session.get('room')})._id, this.name);
   }
 });
