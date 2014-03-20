@@ -77,7 +77,9 @@ Meteor.startup(function () {
                 }
               },
               added: function (id, fields) {
-                $('.loop-indicator').height($('.loop-indicator').height() + 55);
+                var currHeight = $('.loop-indicator').height();
+                if (currHeight === 0) currHeight = -5;
+                $('.loop-indicator').height(currHeight + 55);
               },
               removed: function (id, fields) {
                 $('.loop-indicator').height($('.loop-indicator').height() - 55);
@@ -223,7 +225,6 @@ Template.channels.created = function () {
 };
 
 Template.channels.rendered = function () {
-  $('.loop-indicator').css('height', 55 * Session.get('channels').length - 5);
   $(document).on('mouseenter', '.step', function (event) {
     var data = event.currentTarget.dataset;
     if (Session.get('mousedown') && data.id !== Session.get('insideStep')) {
