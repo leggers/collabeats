@@ -236,6 +236,15 @@ Template.channels.rendered = function () {
   $(document).on('mouseleave', '.step', function (event) {
     Session.set('insideStep', undefined);
   });
+  $(document).on('mouseenter', '.drag-box', function (event) {
+    if (Session.get('repositioning')) {
+      var toSwap = $(event.currentTarget);
+      var newParent = toSwap.parent();
+      _repositioningParentElement.append(toSwap);
+      newParent.append(_repositioningElement);
+      _repositioningParentElement = newParent;
+    }
+  });
 };
 
 Template.channels.events({
@@ -245,9 +254,24 @@ Template.channels.events({
     Meteor.call('toggleStep', this._id, !this.active);
     if (Session.get('sound-on-change')) _sounds[this.channelId].play();
   },
+  'mousedown .sound-name': function (event) {
+    Session.set('repositioning', true);
+    _repositioningElement = $(event.currentTarget.parentElement.parentElement.parentElement);
+    _repositioningParentElement = _repositioningElement.parent();
+    _repositioningElement.css('position', 'absolute');
+    _repositioningElement.css('z-index', -1);
+    _repositioningElement.css('opacity', 0.5);
+    $('html').mousemove(function (event) {
+      _repositioningElement.css('top', event.pageY - 40);
+    });
+  },
   'mouseup': function () {
     Session.set('painting', false);
     Session.set('insideStep', undefined);
+    Session.set('repositioning', false);
+    $('html').off('mousemove');
+    _repositioningElement.css('z-index', 1);
+    _repositioningElement.css('opacity', 1);
   }
 });
 
@@ -303,11 +327,11 @@ Template.channelControls.events({
   },
   'mouseenter .channel-controls': function (event, template) {
     var icon = template.find('.glyphicon-resize-vertical');
-    $(icon).show();
+    if (!Session.get('repositioning')) $(icon).show();
   },
   'mouseleave .channel-controls': function (event, template) {
     var icon = template.find('.glyphicon-resize-vertical');
-    $(icon).hide();
+    if (!Session.get('repositioning')) $(icon).hide();
   }
 });
 

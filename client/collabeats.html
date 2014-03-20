@@ -66,11 +66,13 @@
   <div class='channels'>
     {{#each channels}}
       <div class='channel'>
-        {{> channelControls}}
-        <div class='step-container'>
-          {{#each stepIds}}
-            {{> step}}
-          {{/each}}
+        <div class='drag-box'>
+          {{> channelControls}}
+          <div class='step-container'>
+            {{#each stepIds}}
+              {{> step}}
+            {{/each}}
+          </div>
         </div>
       </div>
     {{/each}}
