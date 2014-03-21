@@ -155,7 +155,7 @@ getInterval = function(tickCount) {
 };
 
 Template.room.events({
-  'click button#play': function(event) {
+  'click button#play': function() {
     if (Session.get('looping')) {
       Session.set('looping', false);
       $('.loop-indicator').hide();
@@ -166,16 +166,19 @@ Template.room.events({
       $('.loop-indicator').show();
     }
   },
-  'click #clear': function (event) {
+  'click #clear': function () {
     Steps.find({active: true}).forEach(function (step) {
       Meteor.call('toggleStep', step._id, false);
     });
   },
-  'click #slower': function (event) {
+  'click #slower': function () {
     Meteor.call('deltaRoomTempo', this._id, -5);
   },
-  'click #faster': function (event) {
+  'click #faster': function () {
     Meteor.call('deltaRoomTempo', this._id, 5);
+  },
+  'click #tempo': function () {
+    Meteor.call('changeRoomTempo', this._id, 120);
   },
   'change #sound-on-change': function (event) {
     Session.set('sound-on-change', event.target.checked);
