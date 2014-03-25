@@ -227,13 +227,13 @@ Meteor.startup(function () {
     });
   }
     var roomId = Rooms.findOne({name: 'home'})._id;
-  if (Channels.find({roomId: roomId}).count() !== 16) {
-    for(var j = 0; j < soundNames.length; j++) {
-      if (Channels.findOne({soundName: soundNames[j], roomId: roomId}) === undefined) {
-        Meteor.call('newChannel', roomId, soundNames[j]);
-      }
-    }
-  }
+  // if (Channels.find({roomId: roomId}).count() !== 16) {
+  //   for(var j = 0; j < soundNames.length; j++) {
+  //     if (Channels.findOne({soundName: soundNames[j], roomId: roomId}) === undefined) {
+  //       Meteor.call('newChannel', roomId, soundNames[j]);
+  //     }
+  //   }
+  // }
 });
 
 Meteor.publish('rooms', function (roomName) {
