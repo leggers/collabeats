@@ -310,7 +310,7 @@ Template.channelControls.events({
   'click .glyphicon-volume-off': function (event, template) {
     Meteor.call('changeChannelVolume', this._id, -this.volume || 0.5);
   },
-  'click #variant-menu > li > a > .glyphicon': function (event, template) {
+  'click #variant-menu > li > a > span > .glyphicon': function (event, template) {
     event.stopPropagation();
     var url = this.url;
     var existingSound = _variants[url];
@@ -318,7 +318,12 @@ Template.channelControls.events({
       existingSound.play();
     }
     else {
-      _variants[url] = newSound(url, 1, true);
+      var loadingGif = $(event.currentTarget.previousElementSibling).show();
+      var bell = $(event.currentTarget).hide();
+      _variants[url] = newSound(url, 1, true, function () {
+        loadingGif.hide();
+        bell.show();
+      });
     }
   },
   'click #variant-menu > li > a': function (event, template) {

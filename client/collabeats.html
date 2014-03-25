@@ -114,7 +114,10 @@
             {{#each variants}}
               <li><a data-url='{{url}}'>
                 {{name}}
-                <span class='glyphicon glyphicon-bell pull-right'></span>
+                <span class='pull-right'>
+                  <img src="/ajax-loader.gif" style='display:none;'>
+                  <span class='glyphicon glyphicon-bell'></span>
+                </span>
               </a></li>
             {{/each}}
           </ul>
