@@ -302,10 +302,11 @@ Template.channelControls.muted = function () {
 
 Template.channelControls.volumeBarStyle = function () {
   var height = this.volume * 50;
+  if (this.muted) height = 0;
   if (height > 50) height = 50;
 
   var margin = 50 - height;
-  
+
   return 'height:' + height + 'px;margin-top:' + margin + 'px;';
 };
 
