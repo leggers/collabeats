@@ -10,3 +10,7 @@ jquery
 amplify
 less
 bootstrap3-less
+accounts-ui
+accounts-facebook
+accounts-google
+accounts-password

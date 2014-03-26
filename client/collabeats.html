@@ -9,6 +9,8 @@
 <template name="layout">
   <div class='container' id='top-div'>
     <h1>Collabeats</h1>
+    {{> loginButtons}}
+
     {{#if shouldRender}}
       {{> room}}
     {{/if}}
