@@ -11,6 +11,5 @@ amplify
 less
 bootstrap3-less
 accounts-facebook
-accounts-google
 accounts-password
 accounts-ui
