@@ -263,7 +263,8 @@ Meteor.methods({
       soundName: soundName,
       selectedSound: 1,
       position: position,
-      volume: 0.5
+      volume: 0.5,
+      muted: false
     });
     Rooms.update(roomId, {$push: {channelIds: channelId}});
   },
@@ -275,7 +276,8 @@ Meteor.methods({
       selectedSound: options.selectedSound,
       creatorId: this.userId,
       position: options.position,
-      volume: options.volume
+      volume: options.volume,
+      muted: options.muted
     });
     for (var i = 0; i < options.numSteps; i++) {
       stepIds.push(Steps.insert({

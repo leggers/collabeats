@@ -43,6 +43,14 @@ Meteor.startup(function () {
                 if (fields.selectedSound) {
                   addOrUpdateSound(id);
                 }
+                if (fields.muted !== undefined) {
+                  if (fields.muted) {
+                    _sounds[id]._volume = 0;
+                  }
+                  else {
+                    _sounds[id]._volume = Channels.findOne(id).volume;
+                  }
+                }
               }
             });
 
@@ -284,9 +292,9 @@ Template.channelControls.variants = function () {
   return Sounds.findOne({name: this.soundName}).variants;
 };
 
-Template.channelControls.muted = function () {
-  return this.volume === 0;
-};
+// Template.channelControls.muted = function () {
+//   return this.volume === 0;
+// };
 
 Template.channelControls.showVariantsList = function () {
   return Sounds.findOne({name: this.soundName}).variants.length > 1;
@@ -308,7 +316,7 @@ Template.channelControls.events({
     Meteor.call('changeChannelVolume', this._id, 0.1);
   },
   'click .glyphicon-volume-off': function (event, template) {
-    Meteor.call('changeChannelVolume', this._id, -this.volume || 0.5);
+    Meteor.call('setChannelMute', this._id, !this.muted);
   },
   'click #variant-menu > li > a > span > .glyphicon': function (event, template) {
     event.stopPropagation();

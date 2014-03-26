@@ -9,6 +9,7 @@
   creatorId: person who added the channel
   position: vertical ordering of channels in a room
   volume: channel volume
+  muted: boolean indicating if channel is muted
 */
 
 Channels = new Meteor.Collection('channels');
@@ -49,5 +50,8 @@ Meteor.methods({
   },
   changePosition: function (channelId, newPosition) {
     Channels.update(channelId, {$set: {position: newPosition}});
+  },
+  setChannelMute: function (channelId, muted) {
+    Channels.update(channelId, {$set: {muted: muted}});
   }
 });
