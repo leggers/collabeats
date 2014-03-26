@@ -42,7 +42,7 @@ Meteor.methods({
   changeChannelVolume: function (channelId, delta) {
     var currentVolume = Channels.findOne(channelId).volume;
     var newVolume = currentVolume + delta;
-    if (newVolume < 0) newVolume = 0;
+    if (newVolume < .1) newVolume = 0;
     Channels.update(channelId, {$set: {volume: newVolume}});
   },
   changeSound: function (channelId, variantName) {

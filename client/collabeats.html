@@ -82,6 +82,7 @@
 
 <template name='channelControls'>
   <div class='channel-controls {{#if muted}}muted{{/if}}' data-channel='{{_id}}' data-position='{{position}}'>
+    <div class='volume-indicator' style='{{volumeBarStyle}}'></div>
     <div class='channel-buttons'>
       <div class='btn-group'>
         <div class='dropdown-toggle' data-toggle='dropdown'>
@@ -124,7 +125,6 @@
         </div>
       {{/if}}
     </div>
-    <div class='volume-indicator pull-right'></div>
   </div>
 </template>
 

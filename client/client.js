@@ -296,6 +296,19 @@ Template.channelControls.showVariantsList = function () {
   return Sounds.findOne({name: this.soundName}).variants.length > 1;
 };
 
+Template.channelControls.muted = function () {
+  return this.muted || this.volume === 0;
+};
+
+Template.channelControls.volumeBarStyle = function () {
+  var height = this.volume * 50;
+  if (height > 50) height = 50;
+
+  var margin = 50 - height;
+  
+  return 'height:' + height + 'px;margin-top:' + margin + 'px;';
+};
+
 Template.channelControls.events({
   'click .clear-row': function (event, template) {
     Steps.find({active: true, _id: {$in: this.stepIds}}).forEach(function (step) {
