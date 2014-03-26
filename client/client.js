@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Startup & Layout
+// Data subscriptions, starup events, global helpers
 
 Meteor.startup(function () {
   Meteor.subscribe('sounds', function () {
@@ -95,10 +95,6 @@ Meteor.startup(function () {
   });
 });
 
-Template.layout.shouldRender = function () {
-  return currentRoom() && Sounds.findOne();
-};
-
 currentRoom = function () {
   return Rooms.findOne({name: Session.get('room')});
 };
@@ -129,6 +125,23 @@ addOrUpdateSound = function (channelId) {
 newSound = function (url, volume, autoplay, onload) {
   return new Howl({ urls: [url], volume: volume, autoplay: autoplay, onload: onload });
 };
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Layout
+
+Template.layout.shouldRender = function () {
+  return currentRoom() && Sounds.findOne();
+};
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Site Meta
+
+
+
 
 
 ////////////////////////////////////////////////////////////////////////////////

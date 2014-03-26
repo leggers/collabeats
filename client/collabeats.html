@@ -1,5 +1,5 @@
 <head>
-  <title>collabeats</title>
+  <title>Collabeats</title>
 </head>
 
 <body>
@@ -8,13 +8,18 @@
 
 <template name="layout">
   <div class='container' id='top-div'>
-    <h1>Collabeats</h1>
-    {{> loginButtons}}
-
+    {{> siteMeta}}
     {{#if shouldRender}}
       {{> room}}
     {{/if}}
     <div class='loop-indicator'></div>
+  </div>
+</template>
+
+<template name='siteMeta'>
+  <div class='site-meta'>
+    <h1>Collabeats</h1>
+    {{> loginButtons}}
   </div>
 </template>
 
