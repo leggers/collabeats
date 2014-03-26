@@ -238,8 +238,8 @@ Template.channels.rendered = function () {
       var toSwitchData = event.currentTarget.children[0].dataset;
       var draggedElemData = _repositioningElement.children()[0].dataset;
 
-      Meteor.call('changePosition', toSwitchData.channel, draggedElemData.position);
-      Meteor.call('changePosition', draggedElemData.channel, toSwitchData.position);
+      Meteor.call('changePosition', toSwitchData.channel, Number(draggedElemData.position));
+      Meteor.call('changePosition', draggedElemData.channel, Number(toSwitchData.position));
     }
   });
 };
