@@ -292,10 +292,6 @@ Template.channelControls.variants = function () {
   return Sounds.findOne({name: this.soundName}).variants;
 };
 
-// Template.channelControls.muted = function () {
-//   return this.volume === 0;
-// };
-
 Template.channelControls.showVariantsList = function () {
   return Sounds.findOne({name: this.soundName}).variants.length > 1;
 };
