@@ -140,7 +140,9 @@ Template.layout.shouldRender = function () {
 ////////////////////////////////////////////////////////////////////////////////
 // Site Meta
 
-
+Accounts.ui.config({
+  passwordSignupFields: 'USERNAME_AND_OPTIONAL_EMAIL'
+});
 
 
 
