@@ -26,47 +26,51 @@
 <template name='room'>
     {{#with room}}
       <div class='fixed-wrap'>
-        <div class='room-controls'>
-
-          <button value="Start Loop" id='play' class='btn btn-default'>
-            {{#if notLooping}}
-              <span class='glyphicon glyphicon-play'></span>
-            {{else}}
-              <span class='glyphicon glyphicon-stop'></span>
-            {{/if}}
-          </button>
-
-          <div class="btn-group">
-            <button type="button" class="btn btn-default" id='slower'><span class='glyphicon glyphicon-chevron-down'></span></button>
-            <button type="button" class="btn btn-default" id='tempo'>{{tempo}} bpm</button>
-            <button type="button" class="btn btn-default" id='faster'><span class='glyphicon glyphicon-chevron-up'></span></button>
-          </div>
-
-          <div class="btn-group">
-            <button type="button" class="btn btn-default" id='minus-swing'><span class='glyphicon glyphicon-minus'></span></button>
-            <button type="button" class="btn btn-default" id='swing'>{{swing}}</button>
-            <button type="button" class="btn btn-default" id='plus-swing'><span class='glyphicon glyphicon-plus'></span></button>
-          </div>
-
-          <!-- <input type='text' value='{{name}}' id='room-name'/> -->
-
-          <ul class='navbar-right'>
-            <div class='btn-group' id='options'>
-              <button type='button' class='btn btn-info' data-toggle='dropdown'>
-                Options <span class='caret'></span>
-              </button>
-              <ul class='dropdown-menu' role='menu'>
-                <li> Sound on change: <input type='checkbox' id='sound-on-change'/></li>
-              </ul>
-            </div>
-
-            <button id='clear' class='btn btn-warning'>Clear All</button>
-          </ul>
-
-        </div>
+        {{> roomControls}}
       </div>
       {{> channels}}
     {{/with}}
+</template>
+
+<template name='roomControls'>
+  <div class='room-controls'>
+
+    <button value="Start Loop" id='play' class='btn btn-default'>
+      {{#if notLooping}}
+        <span class='glyphicon glyphicon-play'></span>
+      {{else}}
+        <span class='glyphicon glyphicon-stop'></span>
+      {{/if}}
+    </button>
+
+    <div class="btn-group">
+      <button type="button" class="btn btn-default" id='slower'><span class='glyphicon glyphicon-chevron-down'></span></button>
+      <button type="button" class="btn btn-default" id='tempo'>{{tempo}} bpm</button>
+      <button type="button" class="btn btn-default" id='faster'><span class='glyphicon glyphicon-chevron-up'></span></button>
+    </div>
+
+    <div class="btn-group">
+      <button type="button" class="btn btn-default" id='minus-swing'><span class='glyphicon glyphicon-minus'></span></button>
+      <button type="button" class="btn btn-default" id='swing'>{{swing}}</button>
+      <button type="button" class="btn btn-default" id='plus-swing'><span class='glyphicon glyphicon-plus'></span></button>
+    </div>
+
+    <!-- <input type='text' value='{{name}}' id='room-name'/> -->
+
+    <ul class='navbar-right'>
+      <div class='btn-group' id='options'>
+        <button type='button' class='btn btn-info' data-toggle='dropdown'>
+          Options <span class='caret'></span>
+        </button>
+        <ul class='dropdown-menu' role='menu'>
+          <li> Sound on change: <input type='checkbox' id='sound-on-change'/></li>
+        </ul>
+      </div>
+
+      <button id='clear' class='btn btn-warning'>Clear All</button>
+    </ul>
+
+  </div>
 </template>
 
 <template name='channels'>

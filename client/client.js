@@ -153,7 +153,7 @@ Template.room.room = function () {
   return currentRoom();
 };
 
-Template.room.swing = function () {
+Template.roomControls.swing = function () {
   var numberOfIs = Math.round(Math.abs(this.swing - 1) * 10);
   var word = 'sw';
   for (var i = numberOfIs; i >= 0; i--) { word += 'i'; }
@@ -177,7 +177,7 @@ getInterval = function(tickCount) {
   return 60/tempo*1000/4*swing;
 };
 
-Template.room.events({
+Template.roomControls.events({
   'click button#play': function() {
     if (Session.get('looping')) {
       Session.set('looping', false);
@@ -217,7 +217,7 @@ Template.room.events({
   }
 });
 
-Template.room.notLooping = function () {
+Template.roomControls.notLooping = function () {
   return !Session.get('looping');
 };
 
