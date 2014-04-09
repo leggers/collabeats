@@ -55,15 +55,17 @@
       <button type="button" class="btn btn-default" id='plus-swing'><span class='glyphicon glyphicon-plus'></span></button>
     </div>
 
-    <!-- <input type='text' value='{{name}}' id='room-name'/> -->
-
     <ul class='navbar-right'>
+      Current Room: {{name}}
       <div class='btn-group' id='options'>
         <button type='button' class='btn btn-info' data-toggle='dropdown'>
-          Options <span class='caret'></span>
+          Room Options <span class='caret'></span>
         </button>
         <ul class='dropdown-menu' role='menu'>
-          <li> Sound on change: <input type='checkbox' id='sound-on-change'/></li>
+          <li role="presentation"> Global (affect everyone)</li>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation"> Local (only affect you)</li>
+          <li role="presentation"> Sound on change: <input type='checkbox' id='sound-on-change'/></li>
         </ul>
       </div>
 
