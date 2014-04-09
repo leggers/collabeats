@@ -19,7 +19,6 @@
 <template name='siteMeta'>
   <div class='site-meta'>
     <h1>Collabeats</h1>
-    {{> loginButtons}}
   </div>
 </template>
 
@@ -56,8 +55,8 @@
     </div>
 
     <ul class='navbar-right'>
-      Current Room: {{name}}
-      <div class='btn-group' id='options'>
+      <!-- Current Room: {{name}} -->
+<!--       <div class='btn-group' id='options'>
         <button type='button' class='btn btn-info' data-toggle='dropdown'>
           Room Options <span class='caret'></span>
         </button>
@@ -67,7 +66,7 @@
           <li role="presentation"> Local (only affect you)</li>
           <li role="presentation"> Sound on change: <input type='checkbox' id='sound-on-change'/></li>
         </ul>
-      </div>
+      </div> -->
 
       <button id='clear' class='btn btn-warning'>Clear All</button>
     </ul>
