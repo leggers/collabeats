@@ -239,7 +239,10 @@ Template.channels.created = function () {
         _sounds[channelId].play();
       }
     }
-    var left = ($(window).width() - $('#top-div').width()) / 2 + 205 + 55 * tickCount;
+    var distanceToFirstStep = ($(window).width() - $('#top-div').width()) / 2 + 205;
+    var distanceToCurrentTick = 55 * tickCount;
+    var countOffset = Math.floor( tickCount/4 ) * 5;
+    var left = distanceToFirstStep + distanceToCurrentTick + countOffset;
     $('.loop-indicator').css('left', left);
   });
 };
