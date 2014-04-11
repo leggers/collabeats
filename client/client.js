@@ -351,6 +351,9 @@ Template.channelControls.events({
   'click .glyphicon-volume-off': function (event, template) {
     Meteor.call('setChannelMute', this._id, !this.muted);
   },
+  'click .glyphicon-play': function (event, template) {
+    _sounds[this._id].play();
+  },
   'click #variant-menu > li > a > span > .glyphicon': function (event, template) {
     event.stopPropagation();
     var url = this.url;
