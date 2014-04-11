@@ -55,23 +55,23 @@
     </div>
 
     <ul class='navbar-right'>
-      Current Room: {{name}}
-<!--       <div class='btn-group' id='options'>
+      <div class='dropdown room-options'>
         <button type='button' class='btn btn-info' data-toggle='dropdown'>
-          Room Options <span class='caret'></span>
+          Current Room: {{name}} <span class='caret'></span>
         </button>
         <ul class='dropdown-menu' role='menu'>
-          <li role="presentation"> Global (affect everyone)</li>
-          <li role="presentation" class="divider"></li>
-          <li role="presentation"> Local (only affect you)</li>
+          
           <li role="presentation"> Sound on change: <input type='checkbox' id='sound-on-change'/></li>
-        </ul>
-      </div> -->
 
-      <button id='new-room' class='btn btn-warning'>
-        <img src="/ajax-loader.gif" class='loading' style='display:none;'>
-        <span class='text'>New Room</span>
-      </button>
+          <li role="presentation" class="divider"></li>
+
+          <li role="presentation" id='new-room'>
+            <img src="/ajax-loader.gif" class='loading' style='display:none;'>
+            <span class='text'>New Room</span>
+          </li>
+          
+        </ul>
+      </div>
     </ul>
 
   </div>
