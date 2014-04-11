@@ -42,9 +42,5 @@ Meteor.methods({
   },
   deltaSwing: function (roomId, delta) {
     Meteor.call('setSwing', roomId, Rooms.findOne(roomId).swing + delta);
-  },
-  addRoom: function (name) {
-    room = Rooom.insert({name: name, tempo: 120});
-
   }
 });

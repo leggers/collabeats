@@ -55,7 +55,7 @@
     </div>
 
     <ul class='navbar-right'>
-      <!-- Current Room: {{name}} -->
+      Current Room: {{name}}
 <!--       <div class='btn-group' id='options'>
         <button type='button' class='btn btn-info' data-toggle='dropdown'>
           Room Options <span class='caret'></span>
@@ -68,7 +68,10 @@
         </ul>
       </div> -->
 
-      <button id='clear' class='btn btn-warning'>Clear All</button>
+      <button id='new-room' class='btn btn-warning'>
+        <img src="/ajax-loader.gif" class='loading' style='display:none;'>
+        <span class='text'>New Room</span>
+      </button>
     </ul>
 
   </div>

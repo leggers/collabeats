@@ -53,5 +53,15 @@ Meteor.methods({
   },
   setChannelMute: function (channelId, muted) {
     Channels.update(channelId, {$set: {muted: muted}});
+  },
+  newRoom: function () {
+    var newRoomId = new Meteor.Collection.ObjectID();
+    var newRoomIdString = newRoomId._str;
+    Meteor.call('addRoom', newRoomIdString);
+    return newRoomIdString;
+  },
+  renameRoom: function (roomId, name) {
+    // WANT THESE TO BE UNIQUE
+    Rooms.update(roomId, {$set: {name: name}});
   }
 });

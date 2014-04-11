@@ -189,9 +189,14 @@ Template.roomControls.events({
       $('.loop-indicator').show();
     }
   },
-  'click #clear': function () {
-    Steps.find({active: true}).forEach(function (step) {
-      Meteor.call('toggleStep', step._id, false);
+  'click #new-room': function () {
+    $('#new-room > .text').hide();
+    $('#new-room > .loading').show();
+    channelChangeObserver.stop();
+    stepObserver.stop();
+    var newRoomId = Meteor.call('newRoom', function (err, data) {
+      if (err) console.log(err);
+      Session.set('room', data);
     });
   },
   'click #slower': function () {

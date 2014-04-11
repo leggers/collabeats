@@ -206,6 +206,7 @@ Meteor.startup(function () {
       {name: '7', url: folder + 'hi-tom/hi-tom0007.mp3'}
     ]
   };
+
   var soundNames = Object.keys(soundsData);
   if (Sounds.find().count() != soundNames.length) {
     for (var i = soundNames.length - 1; i >= 0; i--) {
@@ -219,21 +220,9 @@ Meteor.startup(function () {
     }
   }
   if (Rooms.findOne({name: 'home'}) === undefined) {
-    Rooms.insert({
-      name: 'home',
-      tempo: 120,
-      swing: 1,
-      channelIds: []
-    });
+    var roomId = Meteor.call('newRoom');
+    Meteor.call('renameRoom', roomId, 'home');
   }
-    var roomId = Rooms.findOne({name: 'home'})._id;
-  // if (Channels.find({roomId: roomId}).count() !== 16) {
-  //   for(var j = 0; j < soundNames.length; j++) {
-  //     if (Channels.findOne({soundName: soundNames[j], roomId: roomId}) === undefined) {
-  //       Meteor.call('newChannel', roomId, soundNames[j]);
-  //     }
-  //   }
-  // }
 });
 
 Meteor.publish('rooms', function (roomName) {
@@ -253,6 +242,21 @@ Meteor.publish('sounds', function () {
 });
 
 Meteor.methods({
+  addRoom: function (roomId) {
+    Rooms.insert({
+      _id: roomId,
+      name: roomId,
+      tempo: 120,
+      swing: 1,
+      channelIds: []
+    });
+
+    Sounds.find().forEach(function (sound) {
+      if (Channels.findOne({soundName: sound.name, roomId: roomId}) === undefined) {
+        Meteor.call('newChannel', roomId, sound.name);
+      }
+    });
+  },
   newChannel: function (roomId, soundName) {
     var position = 0;
     var currentChannels = Channels.find({roomId: roomId}, {sort: {position: -1}}).fetch();
