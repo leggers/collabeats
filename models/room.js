@@ -1,8 +1,8 @@
 // Data model for a room containing a sequencer
 
 /*
-  Each channel is a doc in the Rooms collection:
-  channelIds: array of channelIds in the channel
+  Each room is a doc in the Rooms collection:
+  channelIds: array of channelIds in the room
   name: room name
   tempo: speed of the beat
   swing: "swing" amount (delays e and a 16ths)
