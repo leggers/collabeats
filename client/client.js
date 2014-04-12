@@ -194,7 +194,7 @@ Template.roomControls.events({
     $('#new-room > .loading').show();
     channelChangeObserver.stop();
     stepObserver.stop();
-    var newRoomId = Meteor.call('newRoom', function (err, data) {
+    Meteor.call('newRoom', function (err, data) {
       if (err) console.log(err);
       Session.set('room', data);
     });
