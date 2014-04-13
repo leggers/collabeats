@@ -54,6 +54,18 @@
       <button type="button" class="btn btn-default" id='plus-swing'><span class='glyphicon glyphicon-plus'></span></button>
     </div>
 
+    <div class="btn-group">
+      <button type='button' class='btn btn-default' id='subtract-page'>
+        <span class='glyphicon glyphicon-minus-sign'></span>
+      </button>
+      {{#each pageNumbers}}
+        <button type='button' class='btn btn-default page-selector' id='page-{{this}}'>{{this}}</button>
+      {{/each}}
+      <button type='button' class='btn btn-default' id='add-page'>
+        <span class='glyphicon glyphicon-plus-sign' id='add-page'></span>
+      </button>
+    </div>
+
     <ul class='navbar-right'>
       <div class='dropdown room-options'>
         <button type='button' class='btn btn-info' data-toggle='dropdown'>
@@ -84,7 +96,7 @@
         <div class='drag-box'>
           {{> channelControls}}
           <div class='step-container'>
-            {{#each stepIds}}
+            {{#each thisPageSteps}}
               {{> step}}
             {{/each}}
           </div>

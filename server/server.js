@@ -248,7 +248,8 @@ Meteor.methods({
       name: roomId,
       tempo: 120,
       swing: 1,
-      channelIds: []
+      channelIds: [],
+      ticks: 20
     });
 
     Sounds.find().forEach(function (sound) {
@@ -259,10 +260,11 @@ Meteor.methods({
   },
   newChannel: function (roomId, soundName) {
     var position = 0;
+    var channelLength = Rooms.findOne(roomId).ticks;
     var currentChannels = Channels.find({roomId: roomId}, {sort: {position: -1}}).fetch();
     if (currentChannels.length) position = currentChannels[0].position + 1;
     var channelId = Meteor.call('addChannel', {
-      numSteps: 16, // CHANGE TO ROOM LENGTH when applicable!!!!!!!!!!!!!
+      numSteps: channelLength,
       roomId: roomId,
       soundName: soundName,
       selectedSound: 1,

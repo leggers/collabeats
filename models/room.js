@@ -7,7 +7,7 @@
   tempo: speed of the beat
   swing: "swing" amount (delays e and a 16ths)
     explained super well: http://www.attackmagazine.com/technique/passing-notes/daw-drum-machine-swing/
-  length: length (in 16ths) of the room's beat
+  ticks: length (in 16ths) of the room's beat
 */
 
 Rooms = new Meteor.Collection('rooms');

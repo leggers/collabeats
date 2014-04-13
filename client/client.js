@@ -2,6 +2,7 @@
 // Data subscriptions, starup events, global helpers
 
 Meteor.startup(function () {
+  Session.set('page', 1);
   Meteor.subscribe('sounds', function () {
 
     // Room initialization
@@ -160,6 +161,11 @@ Template.roomControls.swing = function () {
   return word + 'ng';
 };
 
+Template.roomControls.pageNumbers = function () {
+  var numberOfPages = Math.ceil(this.ticks / 16);
+  return _.range(1, numberOfPages + 1);
+};
+
 loopFunc = function(tickCount) {
   if (Session.get('looping')) {
     amplify.publish('tick', tickCount);
@@ -219,6 +225,10 @@ Template.roomControls.events({
   },
   'click #swing': function () {
     Meteor.call('setSwing', this._id, 1);
+  },
+  'click .page-selector': function () {
+    console.log(this.valueOf());
+    Session.set('page', this.valueOf());
   }
 });
 
@@ -233,6 +243,13 @@ Template.roomControls.notLooping = function () {
 
 Template.channels.channels = function () {
   return Channels.find({roomId: this._id}, {sort: {position: 1}});
+};
+
+Template.channels.thisPageSteps = function () {
+  var allStepIds = this.stepIds;
+  var stepIndexToStart = (Session.get('page') - 1) * 16;
+  var stepIndexToEnd = Session.get('page') * 16 - 1;
+  return allStepIds.slice(stepIndexToStart, stepIndexToEnd + 1);
 };
 
 Template.channels.created = function () {
