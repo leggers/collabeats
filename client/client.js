@@ -460,6 +460,10 @@ Template.step.pageNum = function () {
   return Math.floor(this.position / 16) + 1;
 };
 
+Template.step.firstPage = function () {
+  return Template.step.pageNum.call(this) == 1;
+}
+
 
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -157,7 +157,7 @@
 
 <template name='step'>
   {{#with getStep this}}
-    <div class='step{{#if active}} active{{else}} inactive{{/if}}' data-id='{{_id}}' data-active='{{#if active}}true{{else}}false{{/if}}' data-channel='{{channelId}}' data-page='{{pageNum}}' style='display:none;'></div>
+    <div class='step{{#if active}} active{{else}} inactive{{/if}}' data-id='{{_id}}' data-active='{{#if active}}true{{else}}false{{/if}}' data-channel='{{channelId}}' data-page='{{pageNum}}' style='display:{{#unless firstPage}}none{{/unless}};'></div>
   {{/with}}
 </template>
 
