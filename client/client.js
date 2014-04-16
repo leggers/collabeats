@@ -292,6 +292,13 @@ Template.roomControls.events({
     $(event.currentTarget).addClass('disabled');
     Meteor.call('addPage', this._id);
     $(event.currentTarget).removeClass('disabled');
+  },
+  'click #clear': function () {
+    _.each(Steps.find({active: true}).fetch(),
+      function (step) {
+        Meteor.call('toggleStep', step._id, false);
+      }
+    );
   }
 });
 
