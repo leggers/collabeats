@@ -12,7 +12,7 @@
     {{#if shouldRender}}
       {{> room}}
     {{/if}}
-    <div class='loop-indicator'></div>
+    <div class='loop-indicator' style='display:{{displayIndicator}};'></div>
   </div>
 </template>
 
@@ -81,7 +81,7 @@
             <img src="/ajax-loader.gif" class='loading' style='display:none;'>
             <span class='text'>New Room</span>
           </li>
-          
+
         </ul>
       </div>
     </ul>
@@ -133,7 +133,7 @@
       </span>
       {{#if showVariantsList}}
         <div class="btn-group pull-right">
-          <span class='glyphicon glyphicon-play'></span> 
+          <span class='glyphicon glyphicon-play'></span>
           <a class="dropdown-toggle" data-toggle="dropdown">
             {{selectedSound}}
             <span class="caret"></span>
