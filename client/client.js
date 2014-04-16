@@ -158,7 +158,6 @@ Template.layout.created = function () {
       var distanceToCurrentTick = 55 * visualTick;
       var countOffset = Math.floor( visualTick/4 ) * 5;
       var left = distanceToFirstStep + distanceToCurrentTick + countOffset;
-      console.log(left);
       loopIndicator.css('left', left);
       loopIndicator.show();
     }
@@ -279,10 +278,10 @@ Template.roomControls.events({
     Meteor.call('setSwing', this._id, 1);
   },
   'click .page-selector': function () {
-    $(".step[data-page='" + Session.get('page') + "']").hide()
+    $(".step[data-page='" + Session.get('page') + "']").hide();
     var pageNumber = this.valueOf();
     Session.set('page', pageNumber);
-    $(".step[data-page='" + Session.get('page') + "']").show()
+    $(".step[data-page='" + Session.get('page') + "']").show();
     $('.page-selector').removeClass('active');
     $('#page-' + pageNumber).addClass('active');
   },
