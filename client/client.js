@@ -279,8 +279,10 @@ Template.roomControls.events({
     Meteor.call('setSwing', this._id, 1);
   },
   'click .page-selector': function () {
+    $(".step[data-page='" + Session.get('page') + "']").hide()
     var pageNumber = this.valueOf();
     Session.set('page', pageNumber);
+    $(".step[data-page='" + Session.get('page') + "']").show()
     $('.page-selector').removeClass('active');
     $('#page-' + pageNumber).addClass('active');
   },
@@ -453,9 +455,8 @@ Template.step.getStep = function (stepId) {
   return Steps.findOne(stepId);
 };
 
-Template.step.showStep = function (position) {
-  var page = Math.floor(position / 16);
-  return Session.get('page') - 1 === page;
+Template.step.pageNum = function () {
+  return Math.floor(this.position / 16) + 1;
 };
 
 
