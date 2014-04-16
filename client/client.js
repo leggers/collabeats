@@ -288,8 +288,10 @@ Template.roomControls.events({
   'click #subtract-page': function () {
     Meteor.call('removePage', this._id);
   },
-  'click #add-page': function () {
+  'click #add-page': function (event) {
+    $(event.currentTarget).addClass('disabled');
     Meteor.call('addPage', this._id);
+    $(event.currentTarget).removeClass('disabled');
   }
 });
 
@@ -471,6 +473,10 @@ Template.addChannel.sounds = function () {
   var publicSounds = Sounds.find({privateSound: false}).fetch();
   var privateSounds = Sounds.find({privateSound: true, ownerId: '!!!!!!!'}).fetch();
   return publicSounds.concat(privateSounds);
+};
+
+Template.addChannel.rendered = function () {
+  $('.step[data-page="1"]').show();
 };
 
 Template.addChannel.events({

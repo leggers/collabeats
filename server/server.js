@@ -291,15 +291,16 @@ Meteor.methods({
     return channelId;
   },
   addPage: function (roomId) {
+    console.log('add page');
     var room = Rooms.findOne(roomId);
     _.each(room.channelIds,
       function (channelId, list, index) {
         var channel = Channels.findOne(channelId);
-        var startNumSteps = channel.stepIds.length;
+        var startPosition = channel.stepIds.length;
         _.each(_.range(16),
-          function (number, list, index) {
+          function (distance, list, index) {
             var stepId = new Meteor.Collection.ObjectID()._str;
-            Meteor.call('addStepToChannel', channelId, startNumSteps + number, stepId);
+            Meteor.call('addStepToChannel', channelId, startPosition + distance, stepId);
           }
         );
       }
