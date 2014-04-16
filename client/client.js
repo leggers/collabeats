@@ -10,7 +10,6 @@ Meteor.startup(function () {
       _rhythm = {}; // cache to prevent database lookups each tick
       _sounds = {}; // mapping of channel ids to their respective sounds
       _variants = {}; // stores variants of sounds as a mapping of sound urls to their sounds
-      numberOfTicks = 1; // initialization
 
       var room = Session.get('room') || "home";
       Session.set('room', room);
@@ -137,6 +136,39 @@ Template.layout.shouldRender = function () {
 };
 
 
+Template.layout.created = function () {
+  amplify.subscribe('tick', function (tickCount) {
+
+    // Playing sounds
+    var channelIds = Object.keys(_rhythm);
+    for (var i = channelIds.length - 1; i >= 0; i--) {
+      var channelId = channelIds[i];
+      if (_rhythm[channelId][tickCount]) {
+        _sounds[channelId].play();
+      }
+    }
+
+    // Moving loop indicator
+    var showIndicator = ((Session.get('page') - 1) * 16 - 1 < tickCount
+      && tickCount < Session.get('page') * 16);
+    console.log(tickCount);
+    var loopIndicator = $('.loop-indicator');
+    if (showIndicator) {
+      var distanceToFirstStep = ($(window).width() - $('#top-div').width()) / 2 + 205;
+      var visualTick = tickCount % 16;
+      var distanceToCurrentTick = 55 * visualTick;
+      var countOffset = Math.floor( visualTick/4 ) * 5;
+      var left = distanceToFirstStep + distanceToCurrentTick + countOffset;
+      console.log(left);
+      loopIndicator.css('left', left);
+      loopIndicator.show();
+    }
+    else
+      loopIndicator.hide();
+
+  });
+};
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Site Meta
@@ -191,12 +223,10 @@ Template.roomControls.events({
   'click button#play': function() {
     if (Session.get('looping')) {
       Session.set('looping', false);
-      $('.loop-indicator').hide();
     }
     else {
       Session.set('looping', true);
       loopFunc(0);
-      $('.loop-indicator').show();
     }
   },
   'click #new-room': function () {
@@ -259,23 +289,6 @@ Template.channels.thisPageSteps = function () {
   var stepIndexToStart = (Session.get('page') - 1) * 16;
   var stepIndexToEnd = Session.get('page') * 16 - 1;
   return allStepIds.slice(stepIndexToStart, stepIndexToEnd + 1);
-};
-
-Template.channels.created = function () {
-  amplify.subscribe('tick', function (tickCount) {
-    var channelIds = Object.keys(_rhythm);
-    for (var i = channelIds.length - 1; i >= 0; i--) {
-      var channelId = channelIds[i];
-      if (_rhythm[channelId][tickCount]) {
-        _sounds[channelId].play();
-      }
-    }
-    var distanceToFirstStep = ($(window).width() - $('#top-div').width()) / 2 + 205;
-    var distanceToCurrentTick = 55 * tickCount;
-    var countOffset = Math.floor( tickCount/4 ) * 5;
-    var left = distanceToFirstStep + distanceToCurrentTick + countOffset;
-    $('.loop-indicator').css('left', left);
-  });
 };
 
 Template.channels.rendered = function () {
