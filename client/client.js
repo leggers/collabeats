@@ -151,7 +151,6 @@ Template.layout.created = function () {
     // Moving loop indicator
     var showIndicator = ((Session.get('page') - 1) * 16 - 1 < tickCount
       && tickCount < Session.get('page') * 16);
-    console.log(tickCount);
     var loopIndicator = $('.loop-indicator');
     if (showIndicator) {
       var distanceToFirstStep = ($(window).width() - $('#top-div').width()) / 2 + 205;
@@ -165,6 +164,20 @@ Template.layout.created = function () {
     }
     else
       loopIndicator.hide();
+
+    var pageButtons = $('.page-selector');
+    var currentTickPage = Math.floor(tickCount / 16);
+    for (var i = pageButtons.length - 1; i >= 0; i--) {
+      var button = $(pageButtons[i]);
+      if (button.text() == currentTickPage + 1) {
+        button.addClass('playing-page');
+        // button.addClass('active');
+      }
+      else {
+        button.removeClass('playing-page');
+        // button.removeClass('active');
+      }
+    };
 
   });
 };
@@ -223,6 +236,7 @@ Template.roomControls.events({
   'click button#play': function() {
     if (Session.get('looping')) {
       Session.set('looping', false);
+      $('.page-selector').removeClass('playing-page');
     }
     else {
       Session.set('looping', true);
@@ -261,7 +275,10 @@ Template.roomControls.events({
     Meteor.call('setSwing', this._id, 1);
   },
   'click .page-selector': function () {
-    Session.set('page', this.valueOf());
+    var pageNumber = this.valueOf();
+    Session.set('page', pageNumber);
+    $('.page-selector').removeClass('active');
+    $('#page-' + pageNumber).addClass('active');
   },
   'click #subtract-page': function () {
     Meteor.call('removePage', this._id);
