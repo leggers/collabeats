@@ -462,7 +462,7 @@ Template.step.pageNum = function () {
 
 Template.step.firstPage = function () {
   return Template.step.pageNum.call(this) == 1;
-}
+};
 
 
 
