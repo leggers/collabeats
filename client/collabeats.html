@@ -59,7 +59,7 @@
         <span class='glyphicon glyphicon-minus-sign'></span>
       </button>
       {{#each pageNumbers}}
-        <button type='button' class='btn btn-default page-selector' id='page-{{this}}'>{{this}}</button>
+        <button type='button' class='btn btn-default page-selector {{#if active this}}active{{/if}}' id='page-{{this}}'>{{this}}</button>
       {{/each}}
       <button type='button' class='btn btn-default' id='add-page'>
         <span class='glyphicon glyphicon-plus-sign' id='add-page'></span>

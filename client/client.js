@@ -167,7 +167,7 @@ Template.layout.created = function () {
 
     var pageButtons = $('.page-selector');
     var currentTickPage = Math.floor(tickCount / 16);
-    for (var i = pageButtons.length - 1; i >= 0; i--) {
+    for (i = pageButtons.length - 1; i >= 0; i--) {
       var button = $(pageButtons[i]);
       if (button.text() == currentTickPage + 1) {
         button.addClass('playing-page');
@@ -177,7 +177,7 @@ Template.layout.created = function () {
         button.removeClass('playing-page');
         // button.removeClass('active');
       }
-    };
+    }
 
   });
 };
@@ -197,6 +197,10 @@ Accounts.ui.config({
 
 Template.room.room = function () {
   return currentRoom();
+};
+
+Template.roomControls.active = function (num) {
+  return num === Session.get('page');
 };
 
 Template.roomControls.swing = function () {
