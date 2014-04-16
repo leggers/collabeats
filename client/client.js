@@ -453,6 +453,11 @@ Template.step.getStep = function (stepId) {
   return Steps.findOne(stepId);
 };
 
+Template.step.showStep = function (position) {
+  var page = Math.floor(position / 16);
+  return Session.get('page') - 1 === page;
+};
+
 
 
 ////////////////////////////////////////////////////////////////////////////////
