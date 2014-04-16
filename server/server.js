@@ -249,7 +249,7 @@ Meteor.methods({
       tempo: 120,
       swing: 1,
       channelIds: [],
-      ticks: 20
+      ticks: 16
     });
 
     Sounds.find().forEach(function (sound) {
@@ -257,6 +257,8 @@ Meteor.methods({
         Meteor.call('newChannel', roomId, sound.name);
       }
     });
+
+    Meteor.call('addPage', roomId);
   },
   newChannel: function (roomId, soundName) {
     var position = 0;
@@ -275,7 +277,6 @@ Meteor.methods({
     Rooms.update(roomId, {$push: {channelIds: channelId}});
   },
   addChannel: function (options) {
-    var stepIds = [];
     var channelId = Channels.insert({
       roomId: options.roomId,
       soundName: options.soundName,
@@ -283,18 +284,49 @@ Meteor.methods({
       creatorId: this.userId,
       position: options.position,
       volume: options.volume,
-      muted: options.muted
+      muted: options.muted,
+      stepIds: []
     });
-    for (var i = 0; i < options.numSteps; i++) {
-      stepIds.push(Steps.insert({
-        active: false,
-        lastChangerId: this.userId,
-        position: i,
-        channelId: channelId
-      }));
-    }
-    Channels.update(channelId, {$set: {stepIds: stepIds}});
     return channelId;
+  },
+  addPage: function (roomId) {
+    console.log('addPage');
+    var room = Rooms.findOne(roomId);
+    _.each(room.channelIds,
+      function (channelId, list, index) {
+        var channel = Channels.findOne(channelId);
+        var startNumSteps = channel.stepIds.length;
+        _.each(_.range(16),
+          function (number, list, index) {
+            var stepId = new Meteor.Collection.ObjectID()._str;
+            Meteor.call('addStepToChannel', channelId, startNumSteps + number, stepId);
+          }
+        );
+      }
+    );
+  },
+  addStepToChannel: function (channelId, position, stepId) {
+    var toPush = Steps.insert({
+      _id: stepId || new Meteor.Collection.ObjectID()._str,
+      active: false,
+      lastChangerId: this.userId,
+      position: position,
+      channelId: channelId
+    });
+    Channels.update(channelId, {$push: {stepIds: toPush}});
+  },
+  removePage: function (roomId) {
+    var room = Rooms.findOne(roomId);
+    _.each(room.channelIds,
+      function (channelId, list, index) {
+        var stepIds = Channels.findOne(channelId).stepIds;
+        var toPull = _.last(stepIds, 16);
+        for (var i = toPull.length - 1; i >= 0; i--) {
+          Channels.update(channelId, {$pull: {stepIds: toPull[i]}});
+          Steps.remove(toPull[i]);
+        };
+      }
+    );
   },
   destroyEverything: function () {
     Steps.remove({});

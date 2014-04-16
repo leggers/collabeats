@@ -10,6 +10,7 @@ Meteor.startup(function () {
       _rhythm = {}; // cache to prevent database lookups each tick
       _sounds = {}; // mapping of channel ids to their respective sounds
       _variants = {}; // stores variants of sounds as a mapping of sound urls to their sounds
+      numberOfTicks = 1; // initialization
 
       var room = Session.get('room') || "home";
       Session.set('room', room);
@@ -105,7 +106,6 @@ addOrUpdateSound = function (channelId) {
   var sound = Sounds.findOne({name: channel.soundName});
   if (sound) {
     var url = sound.variants[channel.selectedSound - 1].url;
-    
     var existingSound = _variants[url];
     if (existingSound) {
       var replacementSound = jQuery.extend({}, existingSound);
@@ -162,15 +162,19 @@ Template.roomControls.swing = function () {
 };
 
 Template.roomControls.pageNumbers = function () {
-  var numberOfPages = Math.ceil(this.ticks / 16);
-  return _.range(1, numberOfPages + 1);
+  var channel = Channels.findOne({roomId: currentRoom()._id});
+  if(channel) {
+    numberOfTicks = channel.stepIds.length;
+    var numberOfPages = Math.ceil(numberOfTicks / 16);
+    return _.range(1, numberOfPages + 1);
+  }
 };
 
 loopFunc = function(tickCount) {
   if (Session.get('looping')) {
     amplify.publish('tick', tickCount);
     setTimeout(function() {
-      loopFunc((tickCount + 1) % 16);
+      loopFunc((tickCount + 1) % numberOfTicks);
     }, getInterval(tickCount));
   }
 };
@@ -227,8 +231,13 @@ Template.roomControls.events({
     Meteor.call('setSwing', this._id, 1);
   },
   'click .page-selector': function () {
-    console.log(this.valueOf());
     Session.set('page', this.valueOf());
+  },
+  'click #subtract-page': function () {
+    Meteor.call('removePage', this._id);
+  },
+  'click #add-page': function () {
+    Meteor.call('addPage', this._id);
   }
 });
 
