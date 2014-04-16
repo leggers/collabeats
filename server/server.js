@@ -272,7 +272,8 @@ Meteor.methods({
       selectedSound: 1,
       position: position,
       volume: 0.5,
-      muted: false
+      muted: false,
+      stepIds: []
     });
     Rooms.update(roomId, {$push: {channelIds: channelId}});
   },
@@ -290,7 +291,6 @@ Meteor.methods({
     return channelId;
   },
   addPage: function (roomId) {
-    console.log('addPage');
     var room = Rooms.findOne(roomId);
     _.each(room.channelIds,
       function (channelId, list, index) {
