@@ -291,7 +291,6 @@ Meteor.methods({
     return channelId;
   },
   addPage: function (roomId) {
-    console.log('add page');
     var room = Rooms.findOne(roomId);
     _.each(room.channelIds,
       function (channelId, list, index) {
@@ -325,7 +324,7 @@ Meteor.methods({
         for (var i = toPull.length - 1; i >= 0; i--) {
           Channels.update(channelId, {$pull: {stepIds: toPull[i]}});
           Steps.remove(toPull[i]);
-        };
+        }
       }
     );
   },
