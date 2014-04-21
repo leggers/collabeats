@@ -278,12 +278,17 @@ Template.roomControls.events({
     Meteor.call('setSwing', this._id, 1);
   },
   'click .page-selector': function () {
-    $(".step[data-page='" + Session.get('page') + "']").hide();
+    var visibleStepSelector = getStepSelector();
+    var visibleSteps = $(visibleStepSelector);
+
     var pageNumber = this.valueOf();
     Session.set('page', pageNumber);
-    $(".step[data-page='" + Session.get('page') + "']").show();
     $('.page-selector').removeClass('active');
     $('#page-' + pageNumber).addClass('active');
+
+    var toShowStepSelector = getStepSelector();
+    var hiddenSteps = $(toShowStepSelector);
+    hideVisibleStepsAndShowHiddenSteps(visibleSteps, hiddenSteps);
   },
   'click #subtract-page': function () {
     Meteor.call('removePage', this._id);
@@ -306,6 +311,23 @@ Template.roomControls.notLooping = function () {
   return !Session.get('looping');
 };
 
+var getStepSelector = function () {
+  return ".step[data-page='" + Session.get('page') + "']";
+};
+
+var hideVisibleStepsAndShowHiddenSteps = function (visibleSteps, hiddenSteps) {
+  // first cull to steps we want
+  var visibleSteps = stepsJqueryObject.filter(":visible");
+  var hiddenSteps = stepsJqueryObject.filter(":hidden");
+
+  if (visibleSteps !== [] && hiddenSteps !== []) {
+    visibleSteps.first().hide();
+    hiddenSteps.first().show();
+    setTimeout(function () {
+      hideVisibleStepsAndShowHiddenSteps(visibleSteps);
+    }, 0);
+  }
+};
 
 
 ////////////////////////////////////////////////////////////////////////////////
