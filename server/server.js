@@ -262,8 +262,8 @@ Meteor.methods({
   },
   newChannel: function (roomId, soundName) {
     var position = 0;
-    var channelLength = Rooms.findOne(roomId).ticks;
     var currentChannels = Channels.find({roomId: roomId}, {sort: {position: -1}}).fetch();
+    var channelLength = currentChannels[0].stepIds.length;
     if (currentChannels.length) position = currentChannels[0].position + 1;
     var channelId = Meteor.call('addChannel', {
       numSteps: channelLength,
