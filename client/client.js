@@ -317,8 +317,8 @@ var getStepSelector = function () {
 
 var hideVisibleStepsAndShowHiddenSteps = function (visibleSteps, hiddenSteps) {
   // first cull to steps we want
-  var visibleSteps = stepsJqueryObject.filter(":visible");
-  var hiddenSteps = stepsJqueryObject.filter(":hidden");
+  visibleSteps = stepsJqueryObject.filter(":visible");
+  hiddenSteps = stepsJqueryObject.filter(":hidden");
 
   if (visibleSteps !== [] && hiddenSteps !== []) {
     visibleSteps.first().hide();
