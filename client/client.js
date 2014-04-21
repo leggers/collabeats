@@ -317,14 +317,14 @@ var getStepSelector = function () {
 
 var hideVisibleStepsAndShowHiddenSteps = function (visibleSteps, hiddenSteps) {
   // first cull to steps we want
-  visibleSteps = stepsJqueryObject.filter(":visible");
-  hiddenSteps = stepsJqueryObject.filter(":hidden");
+  visibleSteps = visibleSteps.filter(":visible");
+  hiddenSteps = hiddenSteps.filter(":hidden");
 
   if (visibleSteps !== [] && hiddenSteps !== []) {
     visibleSteps.first().hide();
     hiddenSteps.first().show();
     setTimeout(function () {
-      hideVisibleStepsAndShowHiddenSteps(visibleSteps);
+      hideVisibleStepsAndShowHiddenSteps(visibleSteps, hiddenSteps);
     }, 0);
   }
 };
