@@ -278,17 +278,19 @@ Template.roomControls.events({
     Meteor.call('setSwing', this._id, 1);
   },
   'click .page-selector': function () {
-    var visibleStepSelector = getStepSelector();
-    var visibleSteps = $(visibleStepSelector);
+    if (!Session.get('changingPages')) {
+      Session.set('changingPages', true);
+      var oldPageNumber = Session.get('page');
+      var newPageNumber = this.valueOf();
 
-    var pageNumber = this.valueOf();
-    Session.set('page', pageNumber);
-    $('.page-selector').removeClass('active');
-    $('#page-' + pageNumber).addClass('active');
+      // change step indicator
+      Session.set('page', newPageNumber);
+      $('.page-selector').removeClass('active');
+      $('#page-' + newPageNumber).addClass('active');
 
-    var toShowStepSelector = getStepSelector();
-    var hiddenSteps = $(toShowStepSelector);
-    hideVisibleStepsAndShowHiddenSteps(visibleSteps, hiddenSteps);
+      var channelIds = _.keys(_sounds);
+      changePagesByChannel(channelIds, oldPageNumber, newPageNumber);
+    }
   },
   'click #subtract-page': function () {
     Meteor.call('removePage', this._id);
@@ -311,8 +313,24 @@ Template.roomControls.notLooping = function () {
   return !Session.get('looping');
 };
 
-var getStepSelector = function () {
-  return ".step[data-page='" + Session.get('page') + "']";
+var getChannelStepsOnPage = function (channelId, page) {
+  var channel = $("div[data-channel='" + channelId + "']").parent();
+  var steps = channel.find(".step[data-page='" + page + "']");
+  return  steps;
+};
+
+var changePagesByChannel = function (channelIds, oldPageNumber, newPageNumber) {
+  if (channelIds.length) {
+    var toChange = channelIds.pop();
+    getChannelStepsOnPage(toChange, oldPageNumber).hide();
+    getChannelStepsOnPage(toChange, newPageNumber).show();
+    setTimeout(function () {
+      changePagesByChannel(channelIds, oldPageNumber, newPageNumber);
+    }, 0);
+  }
+  else {
+    Session.set('changingPages', false);
+  }
 };
 
 var hideVisibleStepsAndShowHiddenSteps = function (visibleSteps, hiddenSteps) {
