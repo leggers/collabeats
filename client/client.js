@@ -93,6 +93,19 @@ Meteor.startup(function () {
         $('#play').click();
       }
     });
+
+    $(window).mouseup(function () {
+      Session.set('painting', false);
+      Session.set('insideStep', undefined);
+      $('html').off('mousemove');
+      if (Session.get('repositioning')) {
+        _repositioningElement.css('z-index', 1);
+        _repositioningElement.css('opacity', 1);
+        _repositioningElement.css('top', 'none');
+        _repositioningElement.css('position', 'none');
+        Session.set('repositioning', false);
+      }
+    })
   });
 });
 
@@ -401,18 +414,6 @@ Template.channels.events({
     $('html').mousemove(function (event) {
       _repositioningElement.css('top', event.pageY - 40);
     });
-  },
-  'mouseup': function () {
-    Session.set('painting', false);
-    Session.set('insideStep', undefined);
-    $('html').off('mousemove');
-    if (Session.get('repositioning')) {
-      _repositioningElement.css('z-index', 1);
-      _repositioningElement.css('opacity', 1);
-      _repositioningElement.css('top', 'none');
-      _repositioningElement.css('position', 'none');
-      Session.set('repositioning', false);
-    }
   }
 });
 
