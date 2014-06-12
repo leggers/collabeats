@@ -105,12 +105,15 @@ Meteor.startup(function () {
         _repositioningElement.css('position', 'none');
         Session.set('repositioning', false);
       }
-    })
+    });
   });
 });
 
 currentRoom = function () {
-  return Rooms.findOne({name: Session.get('room')});
+  var roomName = 'home';
+  if (Meteor.user())
+    roomName = Meteor.user().profile.currentRoom;
+  return Rooms.findOne({name: roomName});
 };
 
 addOrUpdateSound = function (channelId) {
