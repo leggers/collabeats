@@ -213,10 +213,6 @@ Template.roomControls.active = function (num) {
   return num === Session.get('page');
 };
 
-Template.roomControls.loggedIn = function () {
-  return Meteor.user() !== null;
-};
-
 Template.roomControls.swing = function () {
   var numberOfIs = Math.round(Math.abs(this.swing - 1) * 10);
   var word = 'sw';
