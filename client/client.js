@@ -324,6 +324,9 @@ Template.roomControls.events({
   },
   'click #login-buttons-button': function () {
     $('#login-link-text').click();
+  },
+  'click .logout': function () {
+    Meteor.logout();
   }
 });
 
