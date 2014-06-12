@@ -202,8 +202,6 @@ Accounts.ui.config({
   passwordSignupFields: 'USERNAME_AND_OPTIONAL_EMAIL'
 });
 
-
-
 ////////////////////////////////////////////////////////////////////////////////
 // Rooms
 
@@ -213,6 +211,10 @@ Template.room.room = function () {
 
 Template.roomControls.active = function (num) {
   return num === Session.get('page');
+};
+
+Template.roomControls.loggedIn = function () {
+  return Meteor.user() !== null;
 };
 
 Template.roomControls.swing = function () {
@@ -319,6 +321,9 @@ Template.roomControls.events({
         Meteor.call('toggleStep', step._id, false);
       }
     );
+  },
+  'click #login-buttons-button': function () {
+    $('#login-link-text').click();
   }
 });
 
